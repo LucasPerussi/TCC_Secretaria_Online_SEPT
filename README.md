@@ -1,6 +1,6 @@
-# API Wetalk.it
+# Secretaria Online SEPT - UFPR
 
-Trata-se de uma interface de comunicação entre o sistema da Wetalk, aplicativo e integrações com terceiros.
+Trata-se da API com as funções lógicas da implementação da nova secretaria online do SEPT, que consiste na parte prática do trabalho de conclusão de curso de nossa equipe, na graduação de TADS da UFPR.
 
 Para instalar as dependências: 
 
@@ -25,7 +25,7 @@ Para iniciar o servidor em produção:
 ```browser
   http://localhost:3000
   http://localhost:3000/users
-  http://localhost:3000/projects
+  http://localhost:3000/auth
 ```
 
 ## Tecnologias utilizadas:

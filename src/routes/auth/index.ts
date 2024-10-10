@@ -46,12 +46,12 @@ routerAuth.post('/login', async (req, res) => {
             console.log(code)
         }
         const token = jwt.sign({
-            user: user.id.toString(), 
-            role: user.funcao, 
+            user: user.id.toString(),
+            role: user.funcao,
             client: 'API'
-          }, code, {
+        }, code, {
             expiresIn: '2h',
-          });
+        });
 
         var roleText = ''
         switch (user.funcao) {
@@ -173,58 +173,56 @@ async function checkCanCreateuser(email: string, registro: string) {
 
 async function sessionGenerator(usuario: number, req: Request) {
     const randomCode: string = generateRandomCode(8);
-  
+
     try {
-      const dataAtual = new Date();
-  
-      let ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
-      
-      if (Array.isArray(ip)) {
-        ip = ip[0];
-      }
-  
-      const ipInfo = await getIpInfo(ip as string); // Garantir que o ip é uma string
-  
-      const saveSession = await prisma.logins.create({
-        data: {
-          chave_sessao: randomCode,
-          usuario,
-          data: dataAtual,
-          local: ipInfo,
-          ip: ip ?? 'unset'
+        const dataAtual = new Date();
+
+        let ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+
+        if (Array.isArray(ip)) {
+            ip = ip[0];
         }
-      });
-  
-      return randomCode;
+
+        const ipInfo = await getIpInfo(ip as string); // Garantir que o ip é uma string
+
+        const saveSession = await prisma.logins.create({
+            data: {
+                chave_sessao: randomCode,
+                usuario,
+                data: dataAtual,
+                local: ipInfo,
+                ip: ip ?? 'unset'
+            }
+        });
+
+        return randomCode;
     } catch (error) {
-      console.log(error);
-      return 'Error';
+        console.log(error);
+        return 'Error';
     }
-  }
-  
-  // Função para pegar as informações do IP usando a API ipinfo.io
+}
+
+// Função para pegar as informações do IP usando a API ipinfo.io
 async function getIpInfo(ip: string): Promise<string> {
     // Verifica se o IP é localhost (IPv4 ou IPv6)
     if (ip === '::1' || ip === '127.0.0.1') {
-      return 'Localhost';
+        return 'Localhost';
     }
-  
+
     try {
-      const response = await axios.get(`https://ipinfo.io/${ip}/json?token=YOUR_TOKEN_HERE`);
-      const { city, region, country } = response.data;
-      return `${city}, ${region}, ${country}`;
+        const response = await axios.get(`https://ipinfo.io/${ip}/json?token=YOUR_TOKEN_HERE`);
+        const { city, region, country } = response.data;
+        return `${city}, ${region}, ${country}`;
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        // Trata o erro específico do Axios
-        console.error('Erro ao buscar informações do IP (Axios):', error.response?.data || error.message);
-      } else {
-        // Trata erros genéricos
-        console.error('Erro ao buscar informações do IP:', (error as Error).message);
-      }
-      return 'Informações de IP não disponíveis';
+        if (axios.isAxiosError(error)) {
+            console.error('Erro ao buscar informações do IP (Axios):', error.response?.data || error.message);
+        } else {
+            console.error('Erro ao buscar informações do IP:', (error as Error).message);
+        }
+        return 'Informações de IP não disponíveis';
     }
-  }
-  
+}
+
 
 function generateRandomCode(length: number) {
     return crypto.randomBytes(length).toString('hex');
