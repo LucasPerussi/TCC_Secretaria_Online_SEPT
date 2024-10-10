@@ -18,7 +18,7 @@ checkEmailQueue();
 
 // ***** Configuração dos middlewares
 app.use(express.json());
-app.use(bigIntMiddleware); // Middleware para conversão de BigInt para string
+// app.use(bigIntMiddleware); // Middleware para conversão de BigInt para string
 app.use(cors());
 app.use(logger('dev'));
 

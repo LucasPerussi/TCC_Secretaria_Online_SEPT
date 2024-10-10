@@ -1,34 +1,33 @@
 import mysql, { RowDataPacket } from 'mysql2/promise';
 import nodemailer from 'nodemailer';
 import { SentMessageInfo } from 'nodemailer';
+import { Logger } from './logger';
 
 interface MinhaTabelaRow extends RowDataPacket {
-  fem_id: number;
-  fem_identifier: string;
-  fem_receiver: string;
-  fem_title: string;
-  fem_operation: number;
-  fem_body: string;
-  fem_status: number;
-  fem_date: Date;
-  fem_user: number;
-  fem_sensitive: number;
-  fem_priority: number;
+  id: number;
+  identificador: string;
+  destinatario: string;
+  titulo: string;
+  operacao: number;
+  corpo: string;
+  status: string;
+  data: Date;
+  usuario: number;
+  sensivel: number;
 }
 interface Feedbacker extends RowDataPacket {
-  fem_id: number;
-  fem_identifier: string;
-  fem_receiver: string;
- 
+  id: number;
+  identificador: string;
+  destinatario: string;
 }
 
 let ultimaVerificacao: Date = new Date();
 
 const pool = mysql.createPool({
     host: '104.131.174.207',
-    user: 'wwweta_api',
-    password: 'dtp9SNSppdkkjLnDseGSQgavuPszXVD3VWSsugMMczE9JULQianyAxozxQZqJPK3k5XytFQ9UEiSz',
-    database: 'wwweta_suporte',
+    user: 'geral',
+    password: '6@/[sazOBnaN8!gv',
+    database: 'tcc',
   });  
 
 let transporter = nodemailer.createTransport({
@@ -48,44 +47,42 @@ let transporter = nodemailer.createTransport({
 export async function checkEmailQueue(): Promise<void> {
   try {
     const [rows] = await pool.query<MinhaTabelaRow[]>(
-      'SELECT * FROM fila_emails WHERE fem_status = 1 ORDER BY fem_date ASC',
+      'SELECT * FROM fila_emails WHERE status = 1 ORDER BY data ASC',
       [ultimaVerificacao]
     );
 
     if (rows.length > 0) {
       console.log(`Encontrados ${rows.length} novos registros.`);
+      Logger('sendEmail', `Encontrados ${rows.length} novos registros.`, "info")
+
       for (const email of rows) {
         await processarEmail(email);
-        ultimaVerificacao = email.fem_date;
+        ultimaVerificacao = email.data;
       }
     } 
-    // else {
-    //   console.log('Nenhum novo registro encontrado.');
-    // }
   } catch (error) {
     console.error('Erro durante a verificação de novos registros:', error);
+    Logger('sendEmail', `Erro durante a verificação de novos registros ${error}`, "error")
+
   } finally {
-    setTimeout(checkEmailQueue, 60000); // Verifica novamente após 1 minuto
+    setTimeout(checkEmailQueue, 30000); // Verifica novamente após 30 segundos
   }
 }
 
 async function processarEmail(email: MinhaTabelaRow): Promise<void> {
   try {
-    console.log(`Enviando email para ${email.fem_receiver} com o título "${email.fem_title}"...`);
-    sendEmail(email.fem_receiver, email.fem_title, email.fem_body, email.fem_id);
+    console.log(`Enviando email para ${email.destinatario} com o título "${email.titulo}"...`);
+    Logger('sendEmail', `Enviando email para ${email.destinatario} com o título "${email.titulo}"...`, "info")
+    sendEmail(email.destinatario, email.titulo, email.corpo, email.id);
 
-    // await pool.execute(
-    //   'UPDATE fila_emails SET fem_status = ? WHERE fem_id = ?',
-    //   [2, email.fem_id] // Supondo que '2' signifique "enviado"
-    // );
-    // console.log(`Email ${email.fem_id} enviado com sucesso.`);
   } catch (error) {
-    console.error(`Erro ao processar email ${email.fem_id}:`, error);
+    console.error(`Erro ao processar email ${email.id}:`, error);
+    Logger('sendEmail', `Erro ao processar email ${email.id}: ${error}`, "error")
+
   }
 }
 
 async function sendEmail(email: string | string[], subject: string, body: string, id: number): Promise<void> {
-  console.log("caiu no sendEmail");
     if (typeof email === 'string') {
         email = email.split(',').map(e => e.trim());
     }
@@ -97,25 +94,26 @@ async function sendEmail(email: string | string[], subject: string, body: string
         html: body
     };
     try {
-        console.log("caiu no try");
-
         await transporter.sendMail(mailOptions);
-        updateEmailStatus(id, "200", "Email enviado com sucesso!");
+        updateEmailStatus(id, "200");
+        Logger('sendEmail', "Email enviado com sucesso!", "success")
     } catch (error) {
         if (error instanceof Error) {
-
             console.error('Erro ao enviar email:', error.message);
-            updateEmailStatus(id, "500", error.message);
+            updateEmailStatus(id, "500");
+            Logger('sendEmail', error.message, "error")
+
         } else {
             console.error('Erro ao enviar email: Erro desconhecido');
-            updateEmailStatus(id, "504", "Erro desconhecido");
+            updateEmailStatus(id, "504");
+            Logger('sendEmail', "Erro desconhecido", "error")
         }
     }
 };
 
-async function updateEmailStatus(id: number, status: string, message: string): Promise<void> {
+async function updateEmailStatus(id: number, status: string): Promise<void> {
     await pool.execute(
-      'UPDATE fila_emails SET fem_status = ?, fem_status_message = ? WHERE fem_id = ?',
-      [status, message, id]
+      'UPDATE fila_emails SET status = ? WHERE id = ?',
+      [status, id]
     );
 }

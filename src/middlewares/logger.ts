@@ -1,16 +1,15 @@
-// import winston from 'winston';
+import { PrismaClient } from '@prisma/client'
 
-// const logRegister = winston.createLogger({
-//   level: 'info',
-//   format: winston.format.simple(),
-//   transports: [
-//     new winston.transports.File({ filename: 'api.log' })
-//   ]
-// });
+const prisma = new PrismaClient()
 
-// // Redefinir o console.log
-// console.log = (message: any) => {
-//     logRegister.info(message);
-// };
-
-// export default logRegister;
+export const Logger = async (funcao: string, mensagem: string, status: string, usuario?: number) => {
+    const registerLog = await prisma.logs.create({
+        data: {
+            funcao,
+            mensagem,
+            usuario: usuario ?? null,
+            status
+        }
+    })
+    return registerLog;
+};

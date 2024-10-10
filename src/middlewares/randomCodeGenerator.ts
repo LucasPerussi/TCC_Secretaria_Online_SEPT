@@ -1,7 +1,7 @@
 
 const crypto = require('crypto');
 
-export const codeGenerator = (length: number) => {
+export const codeGenerator = async (length: number) => {
     var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     var code = '';
     for (var i = 0; i < length; i++) {
@@ -10,7 +10,7 @@ export const codeGenerator = (length: number) => {
     return code;
 };
 
-export const numberGenerator = (length: number) => {
+export const numberGenerator = async (length: number) => {
     var chars = '0123456789';
     var code = '';
     for (var i = 0; i < length; i++) {
@@ -19,7 +19,7 @@ export const numberGenerator = (length: number) => {
     return code;
 };
 
-export const HashMD5Generator = (data: string) => {
+export const HashMD5Generator = async (data: string) => {
     const hash = crypto.createHash('md5');
     hash.update(data);
     return hash.digest('hex');

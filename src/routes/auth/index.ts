@@ -1,13 +1,18 @@
 import { Router, Request } from 'express';
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient, Prisma } from '@prisma/client';  
 import { extractUserDataFromToken, validateJWT } from '../../middlewares/JWTVerifier';
+import { TimelineTypes, TimelineTypeInfo } from '../../enum/timeline';
+
 import axios from 'axios';
+import { Logger } from '../../middlewares/logger';
+import { Timeline } from '../../middlewares/timeline';
+import { SendEmail } from '../../middlewares/sendEmail';
+import { EmailTypes } from '../../enum/emails';
 
 const prisma = new PrismaClient()
 const crypto = require('crypto');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-
 
 interface CreateUserRequest {
     email: string;
@@ -88,7 +93,6 @@ routerAuth.post('/login', async (req, res) => {
     }
 });
 
-
 routerAuth.post('/create', async (req, res) => {
     const { email, senha, nome, sobrenome, nascimento, registro }: CreateUserRequest = req.body;
 
@@ -96,11 +100,11 @@ routerAuth.post('/create', async (req, res) => {
         const canCreateUser = await checkCanCreateuser(email, registro);
 
         if (!canCreateUser.canCreate) {
-            console.log(canCreateUser.reason + ' email:' + email + ' registro: ' + registro);
+            Logger('auth/create', `400 - Erro - Motivo: ${canCreateUser.reason} | email: ${email} | registro: ${registro}`,"error");
+            console.log(`Motivo: ${canCreateUser.reason} | email: ${email} | registro: ${registro}`);
             return res.status(400).json({ message: canCreateUser.reason });
         }
 
-        // Hash da senha
         const hashedPassword = await bcrypt.hash(senha, 10);
 
         const createdUser = await prisma.usuario.create({
@@ -111,11 +115,11 @@ routerAuth.post('/create', async (req, res) => {
                 sobrenome,
                 nascimento: new Date(nascimento),
                 criado_em: new Date(),
-                funcao: 1,
+                funcao: 1, 
                 registro,
-                foto: '',
-                status_usuario: 1,
-                status_curso: 1,
+                foto: '', 
+                status_usuario: 1, 
+                status_curso: 1, 
             },
             select: {
                 id: true,
@@ -129,13 +133,22 @@ routerAuth.post('/create', async (req, res) => {
             },
         });
 
+        Logger('auth/create', `Usuário criado com sucesso! ${JSON.stringify({ user: createdUser })}`, "success", createdUser.id);
+        Timeline('Bem vindo(a) à secretaria online do SEPT!', createdUser.id.toString(), 'Sua conta foi registrada com sucesso e atrelada ao registro ' + registro, Number(TimelineTypes.ACCOUNT_CREATION), createdUser.id);
+        SendEmail(createdUser.email, 'Bem-vindo(a) à secretaria online do SEPT!', 'Este é um teste!', Number(createdUser.id), Number(EmailTypes.ACCOUNT_CREATION));
+
         res.status(201).json({ user: createdUser });
     } catch (error) {
-        console.error('Erro durante a criação de usuário:', error);
-        res.status(500).json({ message: 'Erro interno do servidor.' });
+        if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
+            Logger('auth/create', `400 - Erro - O ${error.meta?.target} já está em uso.`,"error");
+            res.status(400).json({ message: `O ${error.meta?.target} já está em uso.` });
+        } else {
+            Logger('auth/create', `500 - Erro - O ${error}`, "error");
+            console.error('Erro durante a criação de usuário:', error);
+            res.status(500).json({ message: 'Erro interno do servidor.' });
+        }
     }
 });
-
 
 async function checkCanCreateuser(email: string, registro: string) {
 
@@ -183,7 +196,7 @@ async function sessionGenerator(usuario: number, req: Request) {
             ip = ip[0];
         }
 
-        const ipInfo = await getIpInfo(ip as string); // Garantir que o ip é uma string
+        const ipInfo = await getIpInfo(ip as string);
 
         const saveSession = await prisma.logins.create({
             data: {
@@ -222,7 +235,6 @@ async function getIpInfo(ip: string): Promise<string> {
         return 'Informações de IP não disponíveis';
     }
 }
-
 
 function generateRandomCode(length: number) {
     return crypto.randomBytes(length).toString('hex');
