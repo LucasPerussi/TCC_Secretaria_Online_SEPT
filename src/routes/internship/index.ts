@@ -154,14 +154,14 @@ routerInternship.get('/all/:user', validateJWT, async (req, res) => {
         })
 
         if (InternshipData) {
-            Logger(`GET - COMPANY - internships/${user}`, `200 - Found and Authorized`, "success");
+            Logger(`GET - INTERNSHIP - internships/${user}`, `200 - Found and Authorized`, "success");
             res.status(200).send(JSON.stringify(InternshipData));
         } else {
-            Logger(`GET - COMPANY - internships/${user}`, `404 - Not Found`, "error");
+            Logger(`GET - INTERNSHIP - internships/${user}`, `404 - Not Found`, "error");
             res.status(404).send({ error: true, message: 'Internship not found!' });
         }
     } catch (error) {
-        Logger(`GET - COMPANY - internships/${user}`, `Error fetching requested user. ${JSON.stringify(error)} `, "error");
+        Logger(`GET - INTERNSHIP - internships/${user}`, `Error fetching requested user. ${JSON.stringify(error)} `, "error");
         res.status(500).json({ message: 'Error fetching requested user.' });
     }
 });

@@ -26,7 +26,7 @@ model curso {
   nome                               String    @db.VarChar(255)
   descricao                          String    @db.VarChar(255)
   coordenador                        Int
-  criado_em                          DateTime  @db.DateTime(0)
+  criado_em                          DateTime  @default(now()) @db.DateTime(0)
   identificador                      String    @unique(map: "identificador") @db.VarChar(10)
   horas_formativas                   Int?
   semestres                          Int?
@@ -113,15 +113,17 @@ model etapas_processo {
 model horas_formativas {
   id                                                   Int      @id @default(autoincrement())
   aluno                                                Int
-  servidor_avaliador                                   Int
+  servidor_avaliador                                   Int?
   data_envio                                           DateTime @db.DateTime(0)
   data_evento                                          DateTime @db.Date
   descricao                                            String?  @db.VarChar(255)
   tipo                                                 Int
   status_aprovacao                                     Int      @default(1)
   comprovante                                          String?  @db.Text
+  horas_solicitadas                                    Float
+  horas_concedidas                                     Float?
   usuario_horas_formativas_alunoTousuario              usuario  @relation("horas_formativas_alunoTousuario", fields: [aluno], references: [id], onUpdate: Restrict, map: "horas_formativas_ibfk_1")
-  usuario_horas_formativas_servidor_avaliadorTousuario usuario  @relation("horas_formativas_servidor_avaliadorTousuario", fields: [servidor_avaliador], references: [id], onUpdate: Restrict, map: "horas_formativas_ibfk_2")
+  usuario_horas_formativas_servidor_avaliadorTousuario usuario? @relation("horas_formativas_servidor_avaliadorTousuario", fields: [servidor_avaliador], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "horas_formativas_ibfk_2")
 
   @@index([aluno], map: "aluno")
   @@index([servidor_avaliador], map: "servidor_avaliador")

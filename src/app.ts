@@ -10,6 +10,7 @@ import { routerSystem } from './routes/system/index'
 import { routerInternship } from './routes/internship/index'
 import { routerCompanies } from './routes/company/index'
 import { routerCourses } from './routes/courses/index'
+import { routerTrainingHours } from './routes/trainingHours/index'
 
 import { checkEmailQueue } from './middlewares/checkEmailQueue';
 
@@ -33,4 +34,5 @@ app.use('/system', routerSystem)
 app.use('/internship', routerInternship)
 app.use('/companies', routerCompanies)
 app.use('/courses', routerCourses)
+app.use('/hours', routerTrainingHours)
 
