@@ -25,15 +25,15 @@ routerCompanies.post('/new', validateJWT, async (req, res) => {
                 tipo: tipo ? tipo : 99
             }
         })
-        Logger('internship/new-company', `200 - Nova empresa cadastrada: ${newCompany.nome}`, "success");
+        Logger('GET - COMPANY -/new', `200 - Nova empresa cadastrada: ${newCompany.nome}`, "success");
         res.status(200).send({ message: 'Empresa criada com sucesso!', empresa: { newCompany } });
     } catch (error) {
         if (error instanceof Error) {
-            Logger('internship/new-company', `500 - Erro ao cadastrar nova empresa: ${error.message}`, "error");
+            Logger('GET - COMPANY - /new', `500 - Erro ao cadastrar nova empresa: ${error.message}`, "error");
             console.error('Erro ao cadastrar empresa:', error.message);
             res.status(500).send({ message: 'Erro ao enviar email', error: error.message });
         } else {
-            Logger('internship/new-company', `500 - Erro ao cadastrar nova empresa: ${JSON.stringify(error)}`, "error");
+            Logger('GET - COMPANY - /new', `500 - Erro ao cadastrar nova empresa: ${JSON.stringify(error)}`, "error");
             console.error('Erro ao ecadastrar empresa: Erro desconhecido');
             res.status(500).send({ message: 'Erro ao enviar email', error: 'Erro desconhecido' });
         }

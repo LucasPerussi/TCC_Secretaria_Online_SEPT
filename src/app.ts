@@ -9,6 +9,7 @@ import { routerAuth } from './routes/auth/index';
 import { routerSystem } from './routes/system/index'
 import { routerInternship } from './routes/internship/index'
 import { routerCompanies } from './routes/company/index'
+import { routerCourses } from './routes/courses/index'
 
 import { checkEmailQueue } from './middlewares/checkEmailQueue';
 
@@ -31,4 +32,5 @@ app.use('/auth', routerAuth);
 app.use('/system', routerSystem)
 app.use('/internship', routerInternship)
 app.use('/companies', routerCompanies)
+app.use('/courses', routerCourses)
 
