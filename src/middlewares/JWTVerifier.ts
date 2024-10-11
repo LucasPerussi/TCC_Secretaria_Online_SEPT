@@ -20,7 +20,7 @@ export const getSessionKey = async (user: number) => {
     try {
         const session = await prisma.logins.findFirst({
             where: {
-                usuario: user
+                usuario: Number(user)
             },
             select: {
                 chave_sessao: true
@@ -30,13 +30,16 @@ export const getSessionKey = async (user: number) => {
         if (session) {
             return session.chave_sessao;
         } else {
+            console.warn('No session found for user:', user);
             return null;
         }
         
     } catch (error) {
-        throw new Error('Error finding the session key');
+        console.error('Error in getSessionKey:', error);
+        throw error; // Rethrow the original error
     }
 };
+
 
 export const validateJWT = async (req: Request, res: Response, next: NextFunction) => {
     const token = req.header('Authorization');

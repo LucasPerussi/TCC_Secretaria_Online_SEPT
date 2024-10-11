@@ -45,6 +45,12 @@ routerAuth.post('/login', async (req, res) => {
             return res.status(401).json({ message: 'Senha incorreta.' });
         }
 
+        const deleteSessionsUser = await prisma.logins.deleteMany({
+            where: {
+                usuario: user.id
+            }
+        });
+
         const code: string = await sessionGenerator(Number(user.id), req)
         if (code === "Error") {
             res.status(505).json({ message: 'Erro interno do servidor. Entre em contato com o suporte' });
@@ -55,7 +61,7 @@ routerAuth.post('/login', async (req, res) => {
             role: user.funcao,
             client: 'API'
         }, code, {
-            expiresIn: '2h',
+            expiresIn: '24h',
         });
 
         var roleText = ''
