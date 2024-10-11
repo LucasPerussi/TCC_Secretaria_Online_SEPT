@@ -7,6 +7,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+datasource test {
+  provider = "mysql"
+  url      = env("DATABASE_URL_TESTS")
+}
+
 model comentarios {
   id                                      Int      @id @default(autoincrement())
   processo                                Int

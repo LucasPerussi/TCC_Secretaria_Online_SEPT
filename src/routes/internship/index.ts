@@ -1,14 +1,11 @@
 import { Router } from 'express';
 import { extractUserDataFromToken, validateJWT } from '../../middlewares/JWTVerifier';
-import { PrismaClient } from '@prisma/client';
+import prisma from '../../../prismaClient'; // Adjust the path as necessary
 import { Logger } from '../../middlewares/logger';
 import { numberGenerator } from '../../middlewares/randomCodeGenerator';
 import { addMonths, parseISO } from 'date-fns';
 import { CheckUserExists } from '../../middlewares/checkUserExists';
 import { CheckEmpresaExists } from '../../middlewares/checkCompanyExists';
-
-
-const prisma = new PrismaClient();
 
 export const routerInternship = Router()
 

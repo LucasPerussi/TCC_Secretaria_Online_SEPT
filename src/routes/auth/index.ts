@@ -1,4 +1,5 @@
 import { Router, Request } from 'express';
+import prisma from '../../../prismaClient'; 
 import { PrismaClient, Prisma } from '@prisma/client';  
 import { extractUserDataFromToken, validateJWT } from '../../middlewares/JWTVerifier';
 import { TimelineTypes, TimelineTypeInfo } from '../../enum/timeline';
@@ -9,7 +10,6 @@ import { Timeline } from '../../middlewares/timeline';
 import { SendEmail } from '../../middlewares/sendEmail';
 import { EmailTypes } from '../../enum/emails';
 
-const prisma = new PrismaClient()
 const crypto = require('crypto');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
