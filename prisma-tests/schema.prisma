@@ -1,47 +1,13 @@
-generator client {
-  provider = "prisma-client-js"
-}
-
-datasource db {
+datasource test {
   provider = "mysql"
-  url      = env("DATABASE_URL")
-}
-
-model comentarios {
-  id                                      Int      @id @default(autoincrement())
-  processo                                Int
-  usuario                                 Int
-  comentario                              String   @db.VarChar(255)
-  data                                    DateTime @db.DateTime(0)
-  processo_comentarios_processoToprocesso processo @relation("comentarios_processoToprocesso", fields: [processo], references: [id], onUpdate: Restrict, map: "comentarios_ibfk_1")
-  usuario_comentarios_usuarioTousuario    usuario  @relation("comentarios_usuarioTousuario", fields: [usuario], references: [id], onUpdate: Restrict, map: "comentarios_ibfk_2")
-
-  @@index([processo], map: "processo")
-  @@index([usuario], map: "usuario")
-}
-
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
-model curso {
-  id                                 Int       @id @default(autoincrement())
-  nome                               String    @db.VarChar(255)
-  descricao                          String    @db.VarChar(255)
-  coordenador                        Int
-  criado_em                          DateTime  @default(now()) @db.DateTime(0)
-  identificador                      String    @unique(map: "identificador") @db.VarChar(10)
-  horas_formativas                   Int?
-  semestres                          Int?
-  usuario_curso_coordenadorTousuario usuario   @relation("curso_coordenadorTousuario", fields: [coordenador], references: [id], onUpdate: Restrict, map: "curso_fk_coordenador")
-  mural                              mural[]
-  usuario_usuario_cursoTocurso       usuario[] @relation("usuario_cursoTocurso")
-
-  @@index([coordenador], map: "curso_fk_coordenador")
+  url      = env("DATABASE_URL_TESTS")
 }
 
 model campos_solicitacao {
   id                 Int                  @id @default(autoincrement())
   tipo               Int
-  nome               String               @db.VarChar(255)
-  nome_exibicao      String               @db.VarChar(255)
+  nome               String               @test.VarChar(255)
+  nome_exibicao      String               @test.VarChar(255)
   tipo_processo      Int
   tipos_campos       tipos_campos         @relation(fields: [tipo], references: [id], onUpdate: Restrict, map: "campos_solicitacao_ibfk_1")
   tipo_solicitacao   tipo_solicitacao     @relation(fields: [tipo_processo], references: [id], onUpdate: Restrict, map: "campos_solicitacao_ibfk_2")
@@ -54,8 +20,8 @@ model campos_solicitacao {
 
 model codigos {
   id                               Int      @id @default(autoincrement())
-  codigo                           String   @db.VarChar(60)
-  data_solicitacao                 DateTime @db.DateTime(0)
+  codigo                           String   @test.VarChar(60)
+  data_solicitacao                 DateTime @test.DateTime(0)
   usuario                          Int
   status                           Int
   usuario_codigos_usuarioTousuario usuario  @relation("codigos_usuarioTousuario", fields: [usuario], references: [id], onUpdate: Restrict, map: "codigos_ibfk_1")
@@ -63,19 +29,48 @@ model codigos {
   @@index([usuario], map: "usuario")
 }
 
+model comentarios {
+  id                                      Int      @id @default(autoincrement())
+  processo                                Int
+  usuario                                 Int
+  comentario                              String   @test.VarChar(255)
+  data                                    DateTime @test.DateTime(0)
+  processo_comentarios_processoToprocesso processo @relation("comentarios_processoToprocesso", fields: [processo], references: [id], onUpdate: Restrict, map: "comentarios_ibfk_1")
+  usuario_comentarios_usuarioTousuario    usuario  @relation("comentarios_usuarioTousuario", fields: [usuario], references: [id], onUpdate: Restrict, map: "comentarios_ibfk_2")
+
+  @@index([processo], map: "processo")
+  @@index([usuario], map: "usuario")
+}
+
+model curso {
+  id                                 Int       @id @default(autoincrement())
+  nome                               String    @test.VarChar(255)
+  descricao                          String    @test.VarChar(255)
+  coordenador                        Int
+  criado_em                          DateTime  @default(now()) @test.DateTime(0)
+  identificador                      String    @unique(map: "identificador") @test.VarChar(10)
+  horas_formativas                   Int?
+  semestres                          Int?
+  usuario_curso_coordenadorTousuario usuario   @relation("curso_coordenadorTousuario", fields: [coordenador], references: [id], onUpdate: Restrict, map: "curso_fk_coordenador")
+  mural                              mural[]
+  usuario_usuario_cursoTocurso       usuario[] @relation("usuario_cursoTocurso")
+
+  @@index([coordenador], map: "curso_fk_coordenador")
+}
+
 model empresas {
   id            Int       @id @default(autoincrement())
-  nome          String    @db.VarChar(100)
-  cnpj          String?   @unique(map: "cnpj") @db.VarChar(20)
-  email_contato String?   @db.VarChar(255)
+  nome          String    @test.VarChar(100)
+  cnpj          String?   @test.VarChar(20)
+  email_contato String?   @test.VarChar(255)
   tipo          Int       @default(99)
   estagio       estagio[]
 }
 
 model enum_etapas {
   id              Int               @id @default(autoincrement())
-  nome            String            @default("50") @db.VarChar(255)
-  label           String            @default("100") @db.VarChar(255)
+  nome            String            @default("50") @test.VarChar(255)
+  label           String            @default("100") @test.VarChar(255)
   padrao          Int               @default(1)
   etapas_processo etapas_processo[]
 }
@@ -86,10 +81,10 @@ model estagio {
   professor_orientador                          Int
   codigo_estagio                                Int
   empresa                                       Int
-  area_atuacao                                  String   @db.VarChar(100)
-  data_inicio                                   DateTime @db.Date
-  data_renovacao                                DateTime @db.Date
-  documentos_referencia                         String?  @db.Text
+  area_atuacao                                  String   @test.VarChar(100)
+  data_inicio                                   DateTime @test.Date
+  data_renovacao                                DateTime @test.Date
+  documentos_referencia                         String?  @test.Text
   status                                        Int      @default(1)
   usuario_estagio_alunoTousuario                usuario  @relation("estagio_alunoTousuario", fields: [aluno], references: [id], onUpdate: Restrict, map: "estagio_ibfk_1")
   usuario_estagio_professor_orientadorTousuario usuario  @relation("estagio_professor_orientadorTousuario", fields: [professor_orientador], references: [id], onUpdate: Restrict, map: "estagio_ibfk_2")
@@ -110,16 +105,29 @@ model etapas_processo {
   @@index([tipo], map: "tipo")
 }
 
+model fila_emails {
+  id            Int      @id @default(autoincrement())
+  identificador String   @test.VarChar(15)
+  destinatario  String   @test.VarChar(255)
+  titulo        String   @test.VarChar(100)
+  operacao      Int
+  corpo         String   @test.Text
+  status        String   @default("1") @test.VarChar(3)
+  data          DateTime @default(now()) @test.DateTime(0)
+  usuario       Int?
+  sensivel      Int      @default(1)
+}
+
 model horas_formativas {
   id                                                   Int      @id @default(autoincrement())
   aluno                                                Int
   servidor_avaliador                                   Int?
-  data_envio                                           DateTime @db.DateTime(0)
-  data_evento                                          DateTime @db.Date
-  descricao                                            String?  @db.VarChar(255)
+  data_envio                                           DateTime @test.DateTime(0)
+  data_evento                                          DateTime @test.Date
+  descricao                                            String?  @test.VarChar(255)
   tipo                                                 Int
   status_aprovacao                                     Int      @default(1)
-  comprovante                                          String?  @db.Text
+  comprovante                                          String?  @test.Text
   horas_solicitadas                                    Float
   horas_concedidas                                     Float?
   usuario_horas_formativas_alunoTousuario              usuario  @relation("horas_formativas_alunoTousuario", fields: [aluno], references: [id], onUpdate: Restrict, map: "horas_formativas_ibfk_1")
@@ -132,11 +140,11 @@ model horas_formativas {
 model logins {
   id                              Int      @id @default(autoincrement())
   usuario                         Int
-  data                            DateTime @db.DateTime(0)
-  local                           String   @db.VarChar(100)
-  chave_sessao                    String   @db.VarChar(60)
+  data                            DateTime @test.DateTime(0)
+  local                           String   @test.VarChar(100)
+  chave_sessao                    String   @test.VarChar(60)
   status                          Int      @default(1)
-  ip                              String?  @db.VarChar(15)
+  ip                              String?  @test.VarChar(15)
   usuario_logins_usuarioTousuario usuario  @relation("logins_usuarioTousuario", fields: [usuario], references: [id], onUpdate: Restrict, map: "logins_ibfk_1")
 
   @@index([usuario], map: "usuario")
@@ -144,10 +152,10 @@ model logins {
 
 model logs {
   id                            Int      @id @default(autoincrement())
-  funcao                        String   @db.VarChar(50)
-  mensagem                      String   @db.VarChar(255)
+  funcao                        String   @test.VarChar(50)
+  mensagem                      String   @test.VarChar(255)
   usuario                       Int?
-  status                        String   @db.VarChar(20)
+  status                        String   @test.VarChar(20)
   usuario_logs_usuarioTousuario usuario? @relation("logs_usuarioTousuario", fields: [usuario], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "logs_ibfk_1")
 
   @@index([usuario], map: "usuario")
@@ -155,11 +163,11 @@ model logs {
 
 model mural {
   id            Int      @id @default(autoincrement())
-  titulo        String   @db.VarChar(100)
-  descricao     String   @db.Text
-  identificador String   @db.VarChar(50)
+  titulo        String   @test.VarChar(100)
+  descricao     String   @test.Text
+  identificador String   @test.VarChar(50)
   autor         Int
-  data          DateTime @db.DateTime(0)
+  data          DateTime @test.DateTime(0)
   curso_alvo    Int
   visivel       Int      @default(1)
   usuario       usuario  @relation(fields: [autor], references: [id], onUpdate: Restrict, map: "mural_ibfk_1")
@@ -171,8 +179,8 @@ model mural {
 
 model opcoes_de_campos {
   id                 Int                @id @default(autoincrement())
-  nome               String             @db.VarChar(255)
-  label              String             @db.VarChar(255)
+  nome               String             @test.VarChar(255)
+  label              String             @test.VarChar(255)
   tipo               Int
   campo_pai          Int
   tipos_campos       tipos_campos       @relation(fields: [tipo], references: [id], onUpdate: Restrict, map: "opcoes_de_campos_ibfk_1")
@@ -184,16 +192,16 @@ model opcoes_de_campos {
 
 model processo {
   id                                                           Int                  @id @default(autoincrement())
-  titulo                                                       String               @db.VarChar(100)
-  descricao                                                    String               @db.VarChar(255)
+  titulo                                                       String               @test.VarChar(100)
+  descricao                                                    String               @test.VarChar(255)
   identificador                                                Int
   aluno                                                        Int
-  data_abertura                                                DateTime             @db.DateTime(0)
+  data_abertura                                                DateTime             @test.DateTime(0)
   servidor_responsavel                                         Int
   professor_avaliador                                          Int
   status                                                       Int                  @default(1)
-  justificativa_conclusao                                      String?              @db.VarChar(255)
-  data_limite_resolucao                                        DateTime?            @db.DateTime(0)
+  justificativa_conclusao                                      String?              @test.VarChar(255)
+  data_limite_resolucao                                        DateTime?            @test.DateTime(0)
   tipo_solicitacao                                             Int
   etapa_atual                                                  Int
   comentarios_comentarios_processoToprocesso                   comentarios[]        @relation("comentarios_processoToprocesso")
@@ -215,7 +223,7 @@ model respostas_processo {
   id                                             Int                @id @default(autoincrement())
   processo                                       Int
   campo                                          Int
-  resposta                                       String             @db.VarChar(255)
+  resposta                                       String             @test.VarChar(255)
   usuario                                        Int
   processo_respostas_processo_processoToprocesso processo           @relation("respostas_processo_processoToprocesso", fields: [processo], references: [id], onUpdate: Restrict, map: "respostas_processo_ibfk_1")
   campos_solicitacao                             campos_solicitacao @relation(fields: [campo], references: [id], onUpdate: Restrict, map: "respostas_processo_ibfk_2")
@@ -229,9 +237,9 @@ model respostas_processo {
 model tentativas_login {
   id                                        Int      @id @default(autoincrement())
   usuario                                   Int
-  data_tentativa                            DateTime @db.DateTime(0)
-  ip                                        String?  @db.VarChar(255)
-  status                                    String   @db.VarChar(50)
+  data_tentativa                            DateTime @test.DateTime(0)
+  ip                                        String?  @test.VarChar(255)
+  status                                    String   @test.VarChar(50)
   usuario_tentativas_login_usuarioTousuario usuario  @relation("tentativas_login_usuarioTousuario", fields: [usuario], references: [id], onUpdate: Restrict, map: "tentativas_login_ibfk_1")
 
   @@index([usuario], map: "usuario")
@@ -240,9 +248,9 @@ model tentativas_login {
 model timelines {
   id                                 Int     @id @default(autoincrement())
   usuario                            Int
-  referencia                         String  @db.VarChar(60)
-  titulo                             String  @db.VarChar(100)
-  descricao                          String  @db.VarChar(255)
+  referencia                         String  @test.VarChar(60)
+  titulo                             String  @test.VarChar(100)
+  descricao                          String  @test.VarChar(255)
   tipo                               Int
   usuario_timelines_usuarioTousuario usuario @relation("timelines_usuarioTousuario", fields: [usuario], references: [id], onUpdate: Restrict, map: "timelines_ibfk_1")
 
@@ -251,16 +259,16 @@ model timelines {
 
 model tipo_solicitacao {
   id                                                   Int                  @id @default(autoincrement())
-  nome                                                 String               @db.VarChar(100)
-  fluxograma                                           String               @db.VarChar(255)
+  nome                                                 String               @test.VarChar(100)
+  fluxograma                                           String               @test.VarChar(255)
   campos_solicitacao                                   campos_solicitacao[]
   processo_processo_tipo_solicitacaoTotipo_solicitacao processo[]           @relation("processo_tipo_solicitacaoTotipo_solicitacao")
 }
 
 model tipos_campos {
   id                 Int                  @id @default(autoincrement())
-  nome               String               @db.VarChar(100)
-  etiqueta           String               @db.VarChar(255)
+  nome               String               @test.VarChar(100)
+  etiqueta           String               @test.VarChar(255)
   obrigatorio        Int                  @default(1)
   tipo_dado          Int
   campo_padrao       Int                  @default(1)
@@ -270,15 +278,15 @@ model tipos_campos {
 
 model usuario {
   id                                                            Int                  @id @default(autoincrement())
-  email                                                         String               @unique(map: "email") @db.VarChar(255)
-  senha                                                         String               @db.VarChar(255)
-  registro                                                      String               @unique(map: "registro") @db.VarChar(15)
-  nome                                                          String               @db.VarChar(40)
-  sobrenome                                                     String               @db.VarChar(70)
-  nascimento                                                    DateTime             @db.Date
-  criado_em                                                     DateTime             @db.DateTime(0)
+  email                                                         String               @unique(map: "email") @test.VarChar(255)
+  senha                                                         String               @test.VarChar(255)
+  registro                                                      String               @unique(map: "registro") @test.VarChar(15)
+  nome                                                          String               @test.VarChar(40)
+  sobrenome                                                     String               @test.VarChar(70)
+  nascimento                                                    DateTime             @test.Date
+  criado_em                                                     DateTime             @test.DateTime(0)
   funcao                                                        Int                  @default(1)
-  foto                                                          String               @db.VarChar(255)
+  foto                                                          String               @test.VarChar(255)
   status_usuario                                                Int                  @default(1)
   curso                                                         Int?
   status_curso                                                  Int                  @default(1)
@@ -301,17 +309,4 @@ model usuario {
   curso_usuario_cursoTocurso                                    curso?               @relation("usuario_cursoTocurso", fields: [curso], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "usuario_fk_curso")
 
   @@index([curso], map: "usuario_fk_curso")
-}
-
-model fila_emails {
-  id            Int      @id @default(autoincrement())
-  identificador String   @db.VarChar(15)
-  destinatario  String   @db.VarChar(255)
-  titulo        String   @db.VarChar(100)
-  operacao      Int
-  corpo         String   @db.Text
-  status        String   @default("1") @db.VarChar(3)
-  data          DateTime @default(now()) @db.DateTime(0)
-  usuario       Int?
-  sensivel      Int      @default(1)
 }

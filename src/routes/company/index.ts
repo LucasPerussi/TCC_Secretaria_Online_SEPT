@@ -14,6 +14,12 @@ routerCompanies.get('/', (req, res) => res.send('API de empresas'))
 
 routerCompanies.post('/new', validateJWT, async (req, res) => {
     let { nome, cnpj, emailContato, tipo } = req.body;
+    if (!nome || nome.trim() === '') {
+        return res.status(400).send({ message: 'Nome é obrigatório.' });
+    }
+    if (!cnpj || cnpj.trim() === '') {
+        return res.status(400).send({ message: 'CNPJ é obrigatório.' });
+    }
     try {
         const newCompany = await prisma.empresas.create({
             data: {

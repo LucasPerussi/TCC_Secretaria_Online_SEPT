@@ -2,12 +2,13 @@ import { PrismaClient } from '@prisma/client';
 
 let prisma: PrismaClient;
 
-if (process.env.NODE_ENV === 'test') {
-  prisma = new PrismaClient({
-    datasources: { db: { url: process.env.DATABASE_URL_TESTS } },
-  });
-} else {
-  prisma = new PrismaClient();
-}
+const databaseUrl =
+  process.env.NODE_ENV === 'test'
+    ? process.env.DATABASE_URL_TESTS
+    : process.env.DATABASE_URL;
+
+prisma = new PrismaClient({
+  datasources: { db: { url: databaseUrl } },
+});
 
 export default prisma;

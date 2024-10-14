@@ -1,7 +1,6 @@
-import { PrismaClient } from '@prisma/client'
+import prisma from '../../prismaClient'; // Adjust the path as necessary
 import { codeGenerator } from './randomCodeGenerator';
 
-const prisma = new PrismaClient()
 
 export const SendEmail = async (destinatario: string, titulo: string, corpo: string,  usuario: number, operacao: number) => {
 

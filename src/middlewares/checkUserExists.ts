@@ -1,6 +1,4 @@
-import { PrismaClient } from '@prisma/client'
-
-const prisma = new PrismaClient()
+import prisma from '../../prismaClient'; // Adjust the path as necessary
 
 export const CheckUserExists = async (user: number) => {
     const alunoExists = await prisma.usuario.findUnique({
