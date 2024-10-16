@@ -4,6 +4,7 @@
   "description": "",
   "main": "server.ts",
   "scripts": {
+    "build": "tsc",
     "start": "ts-node src/server.ts",
     "test": "cross-env NODE_ENV=test jest",
     "dev": "nodemon --exec ts-node src/server.ts"
@@ -26,7 +27,7 @@
     "prisma": "^5.5.2",
     "supertest": "^7.0.0",
     "ts-jest": "^29.2.5",
-    "ts-node": "^10.9.1",
+    "ts-node": "^10.9.2",
     "typescript": "^5.2.2"
   },
   "dependencies": {
