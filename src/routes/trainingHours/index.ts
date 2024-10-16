@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { validateJWT } from '../../middlewares/JWTVerifier';
-import prisma from '../../../prismaClient'; // Adjust the path as necessary
+import prisma from '../../prismaClient'; // Adjust the path as necessary
 import { Logger } from '../../middlewares/logger';
 
 interface CreateHours {

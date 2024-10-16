@@ -1,5 +1,5 @@
 import { Router, Request } from 'express';
-import prisma from '../../../prismaClient'; 
+import prisma from '../../prismaClient'; 
 import { PrismaClient, Prisma } from '@prisma/client';  
 import { extractUserDataFromToken, validateJWT } from '../../middlewares/JWTVerifier';
 import { TimelineTypes, TimelineTypeInfo } from '../../enum/timeline';

@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt, { Secret } from 'jsonwebtoken'; // Import 'Secret' type from 'jsonwebtoken'
-import prisma from '../../prismaClient'; // Adjust the path as necessary
+import prisma from '../prismaClient'; // Adjust the path as necessary
 
 
 export const extractUserFromToken = (token: string) => {

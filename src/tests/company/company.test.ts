@@ -4,7 +4,7 @@ jest.mock('axios', () => ({
 
 import request from 'supertest';
 import { app } from '../../../src/app';
-import prisma from '../../../prismaClient';
+import prisma from '../../prismaClient';
 
 // Função de delay
 function delay(ms: number) {

@@ -1,4 +1,4 @@
-import prisma from '../../prismaClient'; // Adjust the path as necessary
+import prisma from '../prismaClient'; // Adjust the path as necessary
 
 
 export const Logger = async (funcao: string, mensagem: string, status: string, usuario?: number) => {

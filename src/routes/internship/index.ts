@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { extractUserDataFromToken, validateJWT } from '../../middlewares/JWTVerifier';
-import prisma from '../../../prismaClient'; // Adjust the path as necessary
+import prisma from '../../prismaClient'; // Adjust the path as necessary
 import { Logger } from '../../middlewares/logger';
 import { numberGenerator } from '../../middlewares/randomCodeGenerator';
 import { addMonths, parseISO } from 'date-fns';

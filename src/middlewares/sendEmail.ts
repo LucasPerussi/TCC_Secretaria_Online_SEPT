@@ -1,4 +1,4 @@
-import prisma from '../../prismaClient'; // Adjust the path as necessary
+import prisma from '../prismaClient'; // Adjust the path as necessary
 import { codeGenerator } from './randomCodeGenerator';
 
 
