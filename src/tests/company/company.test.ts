@@ -83,49 +83,49 @@ describe('Company API', () => {
     });
   });
 
-  // describe('GET /companies/id/:id', () => {
-  //   it('deve retornar os dados de uma empresa específica', async () => {
-  //     const response = await request(app)
-  //       .get(`/companies/id/${createdCompanyId}`)
-  //       .set('Authorization', `${token}`);
+  describe('GET /companies/id/:id', () => {
+    it('deve retornar os dados de uma empresa específica', async () => {
+      const response = await request(app)
+        .get(`/companies/id/${createdCompanyId}`)
+        .set('Authorization', `${token}`);
 
-  //     console.log('Response da empresa específica:', response.body); // Depuração
-  //     expect(response.status).toBe(200);
-  //     expect(response.body).toHaveProperty('id', createdCompanyId); // Verificar o ID correto
-  //   });
+      console.log('Response da empresa específica:', response.body); // Depuração
+      expect(response.status).toBe(200);
+      expect(response.body).toHaveProperty('id', createdCompanyId); // Verificar o ID correto
+    });
 
-  //   it('deve retornar erro ao buscar uma empresa inexistente', async () => {
-  //     const invalidId = 999999; // ID que não existe
-  //     const response = await request(app)
-  //       .get(`/companies/id/${invalidId}`)
-  //       .set('Authorization', `${token}`);
+    it('deve retornar erro ao buscar uma empresa inexistente', async () => {
+      const invalidId = 999999; // ID que não existe
+      const response = await request(app)
+        .get(`/companies/id/${invalidId}`)
+        .set('Authorization', `${token}`);
 
-  //     expect(response.status).toBe(404);
-  //     expect(response.body).toHaveProperty('message', 'Company not found!');
-  //   });
-  // });
+      expect(response.status).toBe(404);
+      expect(response.body).toHaveProperty('message', 'Company not found!');
+    });
+  });
 
-  // describe('GET /companies/all', () => {
-  //   it('deve retornar todas as empresas', async () => {
-  //     const response = await request(app)
-  //       .get('/companies/all')
-  //       .set('Authorization', `${token}`);
+  describe('GET /companies/all', () => {
+    it('deve retornar todas as empresas', async () => {
+      const response = await request(app)
+        .get('/companies/all')
+        .set('Authorization', `${token}`);
 
-  //     // Exibe a resposta para depuração
-  //     console.log('Response Body:', response.body);
+      // Exibe a resposta para depuração
+      console.log('Response Body:', response.body);
 
-  //     // Verifica o status
-  //     expect(response.status).toBe(200);
+      // Verifica o status
+      expect(response.status).toBe(200);
 
-  //     // Verifica se a resposta é um array (o que você espera)
-  //     expect(Array.isArray(response.body)).toBe(true);
+      // Verifica se a resposta é um array (o que você espera)
+      expect(Array.isArray(response.body)).toBe(true);
 
-  //     // Verifica se há pelo menos uma empresa no array
-  //     expect(response.body.length).toBeGreaterThan(0);
+      // Verifica se há pelo menos uma empresa no array
+      expect(response.body.length).toBeGreaterThan(0);
 
-  //     // Verifica a estrutura de um item no array
-  //     expect(response.body[0]).toHaveProperty('id');
-  //     expect(response.body[0]).toHaveProperty('nome');
-  //   });
-  // });
+      // Verifica a estrutura de um item no array
+      expect(response.body[0]).toHaveProperty('id');
+      expect(response.body[0]).toHaveProperty('nome');
+    });
+  });
 });
