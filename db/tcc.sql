@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 11-Out-2024 às 21:59
--- Versão do servidor: 10.4.27-MariaDB
--- versão do PHP: 7.4.33
+-- Generation Time: Nov 07, 2024 at 09:28 PM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,13 +18,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Banco de dados: `tcc`
+-- Database: `tcc`
 --
 
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `campos_solicitacao`
+-- Table structure for table `campos_solicitacao`
 --
 
 CREATE TABLE `campos_solicitacao` (
@@ -38,7 +38,7 @@ CREATE TABLE `campos_solicitacao` (
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `codigos`
+-- Table structure for table `codigos`
 --
 
 CREATE TABLE `codigos` (
@@ -52,7 +52,7 @@ CREATE TABLE `codigos` (
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `comentarios`
+-- Table structure for table `comentarios`
 --
 
 CREATE TABLE `comentarios` (
@@ -66,7 +66,7 @@ CREATE TABLE `comentarios` (
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `curso`
+-- Table structure for table `curso`
 --
 
 CREATE TABLE `curso` (
@@ -81,7 +81,7 @@ CREATE TABLE `curso` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Extraindo dados da tabela `curso`
+-- Dumping data for table `curso`
 --
 
 INSERT INTO `curso` (`id`, `nome`, `descricao`, `coordenador`, `criado_em`, `identificador`, `horas_formativas`, `semestres`) VALUES
@@ -91,7 +91,7 @@ INSERT INTO `curso` (`id`, `nome`, `descricao`, `coordenador`, `criado_em`, `ide
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `empresas`
+-- Table structure for table `empresas`
 --
 
 CREATE TABLE `empresas` (
@@ -103,18 +103,16 @@ CREATE TABLE `empresas` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Extraindo dados da tabela `empresas`
+-- Dumping data for table `empresas`
 --
 
 INSERT INTO `empresas` (`id`, `nome`, `cnpj`, `email_contato`, `tipo`) VALUES
-(1, 'Apple', '23.000.000/0001-35', 'perussilucas@apple.com', 1),
-(2, 'Apple', '23.000.000/0001-35', 'perussilucas@apple.com', 1),
-(3, 'Apple', '23.000.000/0001-35', 'perussilucas@apple.com', 1);
+(1, 'Apple', '23.000.000/0001-35', 'perussilucas@apple.com', 1);
 
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `enum_etapas`
+-- Table structure for table `enum_etapas`
 --
 
 CREATE TABLE `enum_etapas` (
@@ -124,10 +122,18 @@ CREATE TABLE `enum_etapas` (
   `padrao` int(11) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `enum_etapas`
+--
+
+INSERT INTO `enum_etapas` (`id`, `nome`, `label`, `padrao`) VALUES
+(1, 'Aprovação de professor', 'Etapa de aprovação de professor', 1),
+(2, 'Aprovação de admin', 'Etapa de aprovação de admin', 0);
+
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `estagio`
+-- Table structure for table `estagio`
 --
 
 CREATE TABLE `estagio` (
@@ -144,7 +150,7 @@ CREATE TABLE `estagio` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Extraindo dados da tabela `estagio`
+-- Dumping data for table `estagio`
 --
 
 INSERT INTO `estagio` (`id`, `aluno`, `professor_orientador`, `codigo_estagio`, `empresa`, `area_atuacao`, `data_inicio`, `data_renovacao`, `documentos_referencia`, `status`) VALUES
@@ -156,7 +162,7 @@ INSERT INTO `estagio` (`id`, `aluno`, `professor_orientador`, `codigo_estagio`, 
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `etapas_processo`
+-- Table structure for table `etapas_processo`
 --
 
 CREATE TABLE `etapas_processo` (
@@ -168,7 +174,7 @@ CREATE TABLE `etapas_processo` (
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `fila_emails`
+-- Table structure for table `fila_emails`
 --
 
 CREATE TABLE `fila_emails` (
@@ -185,17 +191,20 @@ CREATE TABLE `fila_emails` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Extraindo dados da tabela `fila_emails`
+-- Dumping data for table `fila_emails`
 --
 
 INSERT INTO `fila_emails` (`id`, `identificador`, `destinatario`, `titulo`, `operacao`, `corpo`, `status`, `data`, `usuario`, `sensivel`) VALUES
-(1, 'i0f0A5OiSTqfjjJ', 'perussilucas@hotmail.com', 'Bem-vindo(a) à secretaria online do SEPT!', 1, 'Este é um teste!', '1', '2024-10-10 20:05:21', 24, 1),
-(2, 'DvuMdiR90VtDLLl', 'professor@hotmail.com', 'Bem-vindo(a) à secretaria online do SEPT!', 1, 'Este é um teste!', '1', '2024-10-11 14:06:56', 25, 1);
+(1, 'i0f0A5OiSTqfjjJ', 'perussilucas@hotmail.com', 'Bem-vindo(a) à secretaria online do SEPT!', 1, 'Este é um teste!', '200', '2024-10-10 20:05:21', 24, 1),
+(2, 'DvuMdiR90VtDLLl', 'professor@hotmail.com', 'Bem-vindo(a) à secretaria online do SEPT!', 1, 'Este é um teste!', '200', '2024-10-11 14:06:56', 25, 1),
+(3, 'rpuQTmqtCV8FQyA', 'proffdgdfgessor@hotmail.com', 'Bem-vindo(a) à secretaria online do SEPT!', 1, 'Este é um teste!', '200', '2024-10-23 17:48:20', 26, 1),
+(4, '62gHmF4MlWqwof3', 'perussilucas@icloud.com', 'Bem-vindo(a) à secretaria online do SEPT!', 1, 'Este é um teste!', '200', '2024-10-23 18:10:46', 27, 1),
+(5, 'bShdgy6fDhtlPQG', 'math_fiori@hotmail.com', 'Bem-vindo(a) à secretaria online do SEPT!', 1, 'Este é um teste!', '200', '2024-11-04 18:43:21', 28, 1);
 
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `horas_formativas`
+-- Table structure for table `horas_formativas`
 --
 
 CREATE TABLE `horas_formativas` (
@@ -213,7 +222,7 @@ CREATE TABLE `horas_formativas` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Extraindo dados da tabela `horas_formativas`
+-- Dumping data for table `horas_formativas`
 --
 
 INSERT INTO `horas_formativas` (`id`, `aluno`, `servidor_avaliador`, `data_envio`, `data_evento`, `descricao`, `tipo`, `status_aprovacao`, `comprovante`, `horas_solicitadas`, `horas_concedidas`) VALUES
@@ -222,7 +231,7 @@ INSERT INTO `horas_formativas` (`id`, `aluno`, `servidor_avaliador`, `data_envio
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `logins`
+-- Table structure for table `logins`
 --
 
 CREATE TABLE `logins` (
@@ -232,20 +241,22 @@ CREATE TABLE `logins` (
   `local` varchar(100) NOT NULL,
   `chave_sessao` varchar(60) NOT NULL,
   `status` int(11) NOT NULL DEFAULT 1,
-  `ip` varchar(15) DEFAULT NULL
+  `ip` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Extraindo dados da tabela `logins`
+-- Dumping data for table `logins`
 --
 
 INSERT INTO `logins` (`id`, `usuario`, `data`, `local`, `chave_sessao`, `status`, `ip`) VALUES
-(12, 24, '2024-10-11 14:47:36', 'Localhost', '9287e9573fc969f4', 1, '::1');
+(20, 27, '2024-10-23 18:12:01', 'Informações de IP não disponíveis', 'ca1d5764e6c9d761', 1, '2001:1284:f502:b70b:d93d:8631:d939:4d1,172.69.11.122'),
+(29, 28, '2024-11-04 22:16:44', 'Informações de IP não disponíveis', '5065707f39d20735', 1, '2804:14c:8786:874e:2c89:df4b:94fc:52e5,172.68.206.131'),
+(30, 24, '2024-11-07 18:34:38', 'Localhost', '1cc0c3f4380eed12', 1, '::1');
 
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `logs`
+-- Table structure for table `logs`
 --
 
 CREATE TABLE `logs` (
@@ -257,7 +268,7 @@ CREATE TABLE `logs` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Extraindo dados da tabela `logs`
+-- Dumping data for table `logs`
 --
 
 INSERT INTO `logs` (`id`, `funcao`, `mensagem`, `usuario`, `status`) VALUES
@@ -320,12 +331,65 @@ INSERT INTO `logs` (`id`, `funcao`, `mensagem`, `usuario`, `status`) VALUES
 (69, 'DELETE - HOURS - id/2', '200 - Found and Authorized', NULL, 'success'),
 (70, 'DELETE - HOURS - id/2', '200 - Found and Authorized', NULL, 'success'),
 (71, 'DELETE - HOURS - id/2', '200 - Found and Authorized', NULL, 'success'),
-(72, 'DELETE - HOURS - id/2', '500 - Error fetching record: \nInvalid `prisma.horas_formativas.delete()` invocation in\nC:\\api-tcc\\src\\routes\\trainingHours\\index.ts:56:64\n\n  53 routerTrainingHours.delete(\'/id/:id\', validateJWT, async (req, res) => {\n  54     const recordId = Number(req.p', NULL, 'error');
+(72, 'DELETE - HOURS - id/2', '500 - Error fetching record: \nInvalid `prisma.horas_formativas.delete()` invocation in\nC:\\api-tcc\\src\\routes\\trainingHours\\index.ts:56:64\n\n  53 routerTrainingHours.delete(\'/id/:id\', validateJWT, async (req, res) => {\n  54     const recordId = Number(req.p', NULL, 'error'),
+(73, 'auth/create', '400 - Erro - Motivo: Email já cadastrado para outro usuário! | email: perussilucas@hotmail.com | registro: GRR20193759', NULL, 'error'),
+(74, 'auth/create', 'Usuário criado com sucesso! {\"user\":{\"id\":26,\"email\":\"proffdgdfgessor@hotmail.com\",\"nome\":\"Lucas\",\"sobrenome\":\"Professor\",\"nascimento\":\"1999-07-28T00:00:00.000Z\",\"registro\":\"PRF20df193759\",\"funcao\":1,\"status_usuario\":1}}', 26, 'success'),
+(75, 'auth/create', '400 - Erro - Motivo: Email já cadastrado para outro usuário! | email: proffdgdfgessor@hotmail.com | registro: PRF20df193759', NULL, 'error'),
+(76, 'sendEmail', 'Encontrados 1 novos registros.', NULL, 'info'),
+(77, 'sendEmail', 'Enviando email para proffdgdfgessor@hotmail.com com o título \"Bem-vindo(a) à secretaria online do SEPT!\"...', NULL, 'info'),
+(78, 'sendEmail', 'Email enviado com sucesso!', NULL, 'success'),
+(79, 'auth/create', '400 - Erro - Motivo: Email já cadastrado para outro usuário! | email: perussilucas@hotmail.com | registro: perussilucas@hotmail.com', NULL, 'error'),
+(80, 'auth/create', '400 - Erro - Motivo: Email já cadastrado para outro usuário! | email: perussilucas@hotmail.com | registro: PODGKJSFD0IHJ', NULL, 'error'),
+(81, 'auth/create', '400 - Erro - Motivo: Email já cadastrado para outro usuário! | email: perussilucas@hotmail.com | registro: PODGKJSFD0IHJ', NULL, 'error'),
+(82, 'auth/create', '400 - Erro - Motivo: Email já cadastrado para outro usuário! | email: perussilucas@hotmail.com | registro: PODGKJSFD0IHJ', NULL, 'error'),
+(83, 'auth/create', '400 - Erro - Motivo: Email já cadastrado para outro usuário! | email: perussilucas@hotmail.com | registro: asfdsgfadsgh', NULL, 'error'),
+(84, 'auth/create', '400 - Erro - Motivo: Email já cadastrado para outro usuário! | email: perussilucas@hotmail.com | registro: perussilucas@hotmail.com', NULL, 'error'),
+(85, 'auth/create', '400 - Erro - Motivo: Email já cadastrado para outro usuário! | email: perussilucas@hotmail.com | registro: perussilucas@hotmail.com', NULL, 'error'),
+(86, 'auth/create', '400 - Erro - Motivo: Email já cadastrado para outro usuário! | email: perussilucas@hotmail.com | registro: perussilucas@hotmail.com', NULL, 'error'),
+(87, 'auth/create', '400 - Erro - Motivo: Email já cadastrado para outro usuário! | email: perussilucas@hotmail.com | registro: perussilucas@hotmail.com', NULL, 'error'),
+(88, 'auth/create', '500 - Erro - O PrismaClientKnownRequestError: \nInvalid `prisma.usuario.create()` invocation:\n\n\nThe provided value for the column is too long for the column\'s type. Column: registro', NULL, 'error'),
+(89, 'auth/create', '400 - Erro - Motivo: Registro já atrelado a outro usuário! | email: perussilucas@gmail.com | registro: GRR20193759', NULL, 'error'),
+(90, 'auth/create', '400 - Erro - Motivo: Email já cadastrado para outro usuário! | email: perussilucas@hotmail.com | registro: GRR20193759', NULL, 'error'),
+(91, 'auth/create', '400 - Erro - Motivo: Email já cadastrado para outro usuário! | email: perussilucas@hotmail.com | registro: GRR20193759', NULL, 'error'),
+(92, 'auth/create', '400 - Erro - Motivo: Registro já atrelado a outro usuário! | email: perussilucas@icloud.com | registro: GRR20193759', NULL, 'error'),
+(93, 'auth/create', 'Usuário criado com sucesso! {\"user\":{\"id\":27,\"email\":\"perussilucas@icloud.com\",\"nome\":\"Lucas\",\"sobrenome\":\"Perussi\",\"nascimento\":\"1999-07-28T00:00:00.000Z\",\"registro\":\"GRR20193750\",\"funcao\":1,\"status_usuario\":1}}', 27, 'success'),
+(94, 'sendEmail', 'Encontrados 1 novos registros.', NULL, 'info'),
+(95, 'sendEmail', 'Enviando email para perussilucas@icloud.com com o título \"Bem-vindo(a) à secretaria online do SEPT!\"...', NULL, 'info'),
+(96, 'sendEmail', 'Email enviado com sucesso!', NULL, 'success'),
+(97, 'auth/create', 'Usuário criado com sucesso! {\"user\":{\"id\":28,\"email\":\"math_fiori@hotmail.com\",\"nome\":\"Matheus\",\"sobrenome\":\"Fiori\",\"nascimento\":\"2002-01-22T00:00:00.000Z\",\"registro\":\"GRR20211618\",\"funcao\":1,\"status_usuario\":1}}', 28, 'success'),
+(98, 'sendEmail', 'Encontrados 1 novos registros.', NULL, 'info'),
+(99, 'sendEmail', 'Enviando email para math_fiori@hotmail.com com o título \"Bem-vindo(a) à secretaria online do SEPT!\"...', NULL, 'info'),
+(100, 'auth/create', '400 - Erro - Motivo: Email já cadastrado para outro usuário! | email: math_fiori@hotmail.com | registro: GRR20211618', NULL, 'error'),
+(101, 'sendEmail', 'Email enviado com sucesso!', NULL, 'success'),
+(102, 'POST - STEPS - NEW', '{\"id\":1,\"nome\":\"Aprovação de professor\",\"label\":\"Etapa de aprovação de professor\",\"padrao\":1}', NULL, 'success'),
+(103, 'POST - STEPS - NEW', '{\"id\":2,\"nome\":\"Aprovação de admin\",\"label\":\"Etapa de aprovação de admin\",\"padrao\":0}', NULL, 'success'),
+(104, 'GET - INTERNSHIP - id/1', '200 - Found and Authorized', NULL, 'success'),
+(105, 'GET - STEPS - id/1', '200 - Found and Authorized', NULL, 'success'),
+(106, 'GET - STEPS - all', '200 - Found and Authorized', NULL, 'success'),
+(107, 'GET - STEPS - all-default', '200 - Found and Authorized', NULL, 'success'),
+(108, 'POST - FIELDS - new-type', '{\"id\":1,\"nome\":\"Aprovação de admin\",\"etiqueta\":\"Etapa de aprovação de admin\",\"obrigatorio\":0,\"tipo_dado\":1,\"campo_padrao\":0}', NULL, 'success'),
+(109, 'GET - FIELDS - field-type-id/1', '200 - Found and Authorized', NULL, 'success'),
+(110, 'POST - FIELDS - new-type', '{\"id\":2,\"nome\":\"Apasdasdasdn\",\"etiqueta\":\"Etapa de aprovação de admin\",\"obrigatorio\":0,\"tipo_dado\":1,\"campo_padrao\":0}', NULL, 'success'),
+(111, 'GET - FIELDS - all-field-types', '200 - Found and Authorized', NULL, 'success'),
+(112, 'POST - REQUEST TYPE - new', '{\"id\":1,\"nome\":\"processo 1\",\"fluxograma\":\"url\"}', NULL, 'success'),
+(113, 'GET - REQUEST TYPE - id/1', '200 - Found and Authorized', NULL, 'success'),
+(114, 'GET - REQUEST TYPE - all', '200 - Found and Authorized', NULL, 'success'),
+(115, 'POST - REQUEST TYPE - new', '{\"id\":2,\"nome\":\"processo 2\",\"fluxograma\":\"url\"}', NULL, 'success'),
+(116, 'GET - REQUEST TYPE - all', '200 - Found and Authorized', NULL, 'success'),
+(117, 'POST - REQUEST TYPE - new', '\nInvalid `prisma.tipo_solicitacao.create()` invocation in\nC:\\api-tcc\\src\\routes\\requestType\\index.ts:14:55\n\n  11 let { nome, fluxograma } = req.body;\n  12 \n  13 try {\n→ 14     const request = await prisma.tipo_solicitacao.create({\n           data: {\n     ', NULL, 'error'),
+(118, 'POST - MURAL - new', '\nInvalid `prisma.mural.create()` invocation in\nC:\\api-tcc\\src\\routes\\mural\\index.ts:16:42\n\n  13 \n  14 try {\n  15     const identificador = await codeGenerator(8);\n→ 16     const mural = await prisma.mural.create(\nForeign key constraint failed on the field', NULL, 'error'),
+(119, 'POST - MURAL - new', '\nInvalid `prisma.mural.create()` invocation in\nC:\\api-tcc\\src\\routes\\mural\\index.ts:16:42\n\n  13 \n  14 try {\n  15     let identificador = await codeGenerator(20);\n→ 16     const mural = await prisma.mural.create(\nForeign key constraint failed on the field:', NULL, 'error'),
+(120, 'POST - MURAL - new', '{\"id\":3,\"titulo\":\"Publicação de teste\",\"descricao\":\"textinho de descricao\",\"identificador\":\"JWnlSXm428KQSKqpYs16\",\"autor\":24,\"data\":\"2024-11-07T20:14:20.000Z\",\"curso_alvo\":1,\"visivel\":1}', NULL, 'success'),
+(121, 'GET - MURAL - id/1', '404 - Not Found', NULL, 'error'),
+(122, 'GET - MURAL - id/1', '404 - Not Found', NULL, 'error'),
+(123, 'GET - MURAL - id/3', '200 - Found and Authorized', NULL, 'success'),
+(124, 'GET - MURAL - all', '200 - Found and Authorized', NULL, 'success'),
+(125, 'GET - MURAL - identifier/JWnlSXm428KQSKqpYs16', '200 - Found and Authorized', NULL, 'success');
 
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `mural`
+-- Table structure for table `mural`
 --
 
 CREATE TABLE `mural` (
@@ -334,15 +398,22 @@ CREATE TABLE `mural` (
   `descricao` text NOT NULL,
   `identificador` varchar(50) NOT NULL,
   `autor` int(11) NOT NULL,
-  `data` datetime NOT NULL,
+  `data` datetime NOT NULL DEFAULT current_timestamp(),
   `curso_alvo` int(11) NOT NULL,
   `visivel` int(11) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `mural`
+--
+
+INSERT INTO `mural` (`id`, `titulo`, `descricao`, `identificador`, `autor`, `data`, `curso_alvo`, `visivel`) VALUES
+(3, 'Publicação de teste', 'textinho de descricao', 'JWnlSXm428KQSKqpYs16', 24, '2024-11-07 20:14:20', 1, 1);
+
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `opcoes_de_campos`
+-- Table structure for table `opcoes_de_campos`
 --
 
 CREATE TABLE `opcoes_de_campos` (
@@ -356,7 +427,7 @@ CREATE TABLE `opcoes_de_campos` (
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `processo`
+-- Table structure for table `processo`
 --
 
 CREATE TABLE `processo` (
@@ -378,7 +449,7 @@ CREATE TABLE `processo` (
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `respostas_processo`
+-- Table structure for table `respostas_processo`
 --
 
 CREATE TABLE `respostas_processo` (
@@ -392,7 +463,7 @@ CREATE TABLE `respostas_processo` (
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `tentativas_login`
+-- Table structure for table `tentativas_login`
 --
 
 CREATE TABLE `tentativas_login` (
@@ -406,7 +477,7 @@ CREATE TABLE `tentativas_login` (
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `timelines`
+-- Table structure for table `timelines`
 --
 
 CREATE TABLE `timelines` (
@@ -419,17 +490,20 @@ CREATE TABLE `timelines` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Extraindo dados da tabela `timelines`
+-- Dumping data for table `timelines`
 --
 
 INSERT INTO `timelines` (`id`, `usuario`, `referencia`, `titulo`, `descricao`, `tipo`) VALUES
 (2, 24, '24', 'Bem vindo(a) à secretaria online do SEPT!', 'Sua conta foi registrada com sucesso e atrelada ao registro GRR20193759', 1),
-(3, 25, '25', 'Bem vindo(a) à secretaria online do SEPT!', 'Sua conta foi registrada com sucesso e atrelada ao registro PRF20193759', 1);
+(3, 25, '25', 'Bem vindo(a) à secretaria online do SEPT!', 'Sua conta foi registrada com sucesso e atrelada ao registro PRF20193759', 1),
+(4, 26, '26', 'Bem vindo(a) à secretaria online do SEPT!', 'Sua conta foi registrada com sucesso e atrelada ao registro PRF20df193759', 1),
+(5, 27, '27', 'Bem vindo(a) à secretaria online do SEPT!', 'Sua conta foi registrada com sucesso e atrelada ao registro GRR20193750', 1),
+(6, 28, '28', 'Bem vindo(a) à secretaria online do SEPT!', 'Sua conta foi registrada com sucesso e atrelada ao registro GRR20211618', 1);
 
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `tipos_campos`
+-- Table structure for table `tipos_campos`
 --
 
 CREATE TABLE `tipos_campos` (
@@ -441,10 +515,18 @@ CREATE TABLE `tipos_campos` (
   `campo_padrao` int(11) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `tipos_campos`
+--
+
+INSERT INTO `tipos_campos` (`id`, `nome`, `etiqueta`, `obrigatorio`, `tipo_dado`, `campo_padrao`) VALUES
+(1, 'Aprovação de admin', 'Etapa de aprovação de admin', 0, 1, 0),
+(2, 'Apasdasdasdn', 'Etapa de aprovação de admin', 0, 1, 0);
+
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `tipo_solicitacao`
+-- Table structure for table `tipo_solicitacao`
 --
 
 CREATE TABLE `tipo_solicitacao` (
@@ -453,10 +535,18 @@ CREATE TABLE `tipo_solicitacao` (
   `fluxograma` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `tipo_solicitacao`
+--
+
+INSERT INTO `tipo_solicitacao` (`id`, `nome`, `fluxograma`) VALUES
+(1, 'processo 1', 'url'),
+(2, 'processo 2', 'url');
+
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `usuario`
+-- Table structure for table `usuario`
 --
 
 CREATE TABLE `usuario` (
@@ -476,19 +566,22 @@ CREATE TABLE `usuario` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Extraindo dados da tabela `usuario`
+-- Dumping data for table `usuario`
 --
 
 INSERT INTO `usuario` (`id`, `email`, `senha`, `registro`, `nome`, `sobrenome`, `nascimento`, `criado_em`, `funcao`, `foto`, `status_usuario`, `curso`, `status_curso`) VALUES
 (24, 'perussilucas@hotmail.com', '$2a$10$WWaHYx2/cfAk2SgNcxKLY.xXcOrImswudv12aQXtUOg9IpVHxkr/W', 'GRR20193759', 'Lucas', 'Perussi', '1999-07-28', '2024-10-10 20:05:21', 1, '', 1, NULL, 1),
-(25, 'professor@hotmail.com', '$2a$10$ES5CjJKLmuXbV4OhsX1G3.oafMmsiQHwhAfJV9DVuHbBI658fVcW6', 'PRF20193759', 'Lucas', 'Professor', '1999-07-28', '2024-10-11 14:06:56', 1, '', 1, NULL, 1);
+(25, 'professor@hotmail.com', '$2a$10$ES5CjJKLmuXbV4OhsX1G3.oafMmsiQHwhAfJV9DVuHbBI658fVcW6', 'PRF20193759', 'Lucas', 'Professor', '1999-07-28', '2024-10-11 14:06:56', 1, '', 1, NULL, 1),
+(26, 'proffdgdfgessor@hotmail.com', '$2a$10$ORd9E9JYh6MAwKwE3T.Ouug1Lzsw8Pk/etp0aOvOLCpclfAk9y4Na', 'PRF20df193759', 'Lucas', 'Professor', '1999-07-28', '2024-10-23 17:48:20', 1, '', 1, NULL, 1),
+(27, 'perussilucas@icloud.com', '$2a$10$fjQuLnfRhxUzDo2a/VgtA.cTEpKqTccTBvxNtcuD2ckqyWRqDkzoS', 'GRR20193750', 'Lucas', 'Perussi', '1999-07-28', '2024-10-23 18:10:46', 1, '', 1, NULL, 1),
+(28, 'math_fiori@hotmail.com', '$2a$10$XU4cEHvwbZFeEySvWWjyUutl75liJOFo5doQpY39vbMWnAqK0GW..', 'GRR20211618', 'Matheus', 'Fiori', '2002-01-22', '2024-11-04 18:43:21', 1, '', 1, NULL, 1);
 
 --
--- Índices para tabelas despejadas
+-- Indexes for dumped tables
 --
 
 --
--- Índices para tabela `campos_solicitacao`
+-- Indexes for table `campos_solicitacao`
 --
 ALTER TABLE `campos_solicitacao`
   ADD PRIMARY KEY (`id`),
@@ -496,14 +589,14 @@ ALTER TABLE `campos_solicitacao`
   ADD KEY `tipo_processo` (`tipo_processo`);
 
 --
--- Índices para tabela `codigos`
+-- Indexes for table `codigos`
 --
 ALTER TABLE `codigos`
   ADD PRIMARY KEY (`id`),
   ADD KEY `usuario` (`usuario`);
 
 --
--- Índices para tabela `comentarios`
+-- Indexes for table `comentarios`
 --
 ALTER TABLE `comentarios`
   ADD PRIMARY KEY (`id`),
@@ -511,7 +604,7 @@ ALTER TABLE `comentarios`
   ADD KEY `usuario` (`usuario`);
 
 --
--- Índices para tabela `curso`
+-- Indexes for table `curso`
 --
 ALTER TABLE `curso`
   ADD PRIMARY KEY (`id`),
@@ -519,19 +612,20 @@ ALTER TABLE `curso`
   ADD KEY `curso_fk_coordenador` (`coordenador`);
 
 --
--- Índices para tabela `empresas`
+-- Indexes for table `empresas`
 --
 ALTER TABLE `empresas`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `cnpj` (`cnpj`);
 
 --
--- Índices para tabela `enum_etapas`
+-- Indexes for table `enum_etapas`
 --
 ALTER TABLE `enum_etapas`
   ADD PRIMARY KEY (`id`);
 
 --
--- Índices para tabela `estagio`
+-- Indexes for table `estagio`
 --
 ALTER TABLE `estagio`
   ADD PRIMARY KEY (`id`),
@@ -540,20 +634,20 @@ ALTER TABLE `estagio`
   ADD KEY `empresa` (`empresa`);
 
 --
--- Índices para tabela `etapas_processo`
+-- Indexes for table `etapas_processo`
 --
 ALTER TABLE `etapas_processo`
   ADD PRIMARY KEY (`id`),
   ADD KEY `tipo` (`tipo`);
 
 --
--- Índices para tabela `fila_emails`
+-- Indexes for table `fila_emails`
 --
 ALTER TABLE `fila_emails`
   ADD PRIMARY KEY (`id`);
 
 --
--- Índices para tabela `horas_formativas`
+-- Indexes for table `horas_formativas`
 --
 ALTER TABLE `horas_formativas`
   ADD PRIMARY KEY (`id`),
@@ -561,21 +655,21 @@ ALTER TABLE `horas_formativas`
   ADD KEY `servidor_avaliador` (`servidor_avaliador`);
 
 --
--- Índices para tabela `logins`
+-- Indexes for table `logins`
 --
 ALTER TABLE `logins`
   ADD PRIMARY KEY (`id`),
   ADD KEY `usuario` (`usuario`);
 
 --
--- Índices para tabela `logs`
+-- Indexes for table `logs`
 --
 ALTER TABLE `logs`
   ADD PRIMARY KEY (`id`),
   ADD KEY `usuario` (`usuario`);
 
 --
--- Índices para tabela `mural`
+-- Indexes for table `mural`
 --
 ALTER TABLE `mural`
   ADD PRIMARY KEY (`id`),
@@ -583,7 +677,7 @@ ALTER TABLE `mural`
   ADD KEY `curso_alvo` (`curso_alvo`);
 
 --
--- Índices para tabela `opcoes_de_campos`
+-- Indexes for table `opcoes_de_campos`
 --
 ALTER TABLE `opcoes_de_campos`
   ADD PRIMARY KEY (`id`),
@@ -591,7 +685,7 @@ ALTER TABLE `opcoes_de_campos`
   ADD KEY `campo_pai` (`campo_pai`);
 
 --
--- Índices para tabela `processo`
+-- Indexes for table `processo`
 --
 ALTER TABLE `processo`
   ADD PRIMARY KEY (`id`),
@@ -602,7 +696,7 @@ ALTER TABLE `processo`
   ADD KEY `etapa_atual` (`etapa_atual`);
 
 --
--- Índices para tabela `respostas_processo`
+-- Indexes for table `respostas_processo`
 --
 ALTER TABLE `respostas_processo`
   ADD PRIMARY KEY (`id`),
@@ -611,33 +705,33 @@ ALTER TABLE `respostas_processo`
   ADD KEY `usuario` (`usuario`);
 
 --
--- Índices para tabela `tentativas_login`
+-- Indexes for table `tentativas_login`
 --
 ALTER TABLE `tentativas_login`
   ADD PRIMARY KEY (`id`),
   ADD KEY `usuario` (`usuario`);
 
 --
--- Índices para tabela `timelines`
+-- Indexes for table `timelines`
 --
 ALTER TABLE `timelines`
   ADD PRIMARY KEY (`id`),
   ADD KEY `usuario` (`usuario`);
 
 --
--- Índices para tabela `tipos_campos`
+-- Indexes for table `tipos_campos`
 --
 ALTER TABLE `tipos_campos`
   ADD PRIMARY KEY (`id`);
 
 --
--- Índices para tabela `tipo_solicitacao`
+-- Indexes for table `tipo_solicitacao`
 --
 ALTER TABLE `tipo_solicitacao`
   ADD PRIMARY KEY (`id`);
 
 --
--- Índices para tabela `usuario`
+-- Indexes for table `usuario`
 --
 ALTER TABLE `usuario`
   ADD PRIMARY KEY (`id`),
@@ -646,167 +740,167 @@ ALTER TABLE `usuario`
   ADD KEY `usuario_fk_curso` (`curso`);
 
 --
--- AUTO_INCREMENT de tabelas despejadas
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT de tabela `campos_solicitacao`
+-- AUTO_INCREMENT for table `campos_solicitacao`
 --
 ALTER TABLE `campos_solicitacao`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT de tabela `codigos`
+-- AUTO_INCREMENT for table `codigos`
 --
 ALTER TABLE `codigos`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT de tabela `comentarios`
+-- AUTO_INCREMENT for table `comentarios`
 --
 ALTER TABLE `comentarios`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT de tabela `curso`
+-- AUTO_INCREMENT for table `curso`
 --
 ALTER TABLE `curso`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT de tabela `empresas`
+-- AUTO_INCREMENT for table `empresas`
 --
 ALTER TABLE `empresas`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT de tabela `enum_etapas`
+-- AUTO_INCREMENT for table `enum_etapas`
 --
 ALTER TABLE `enum_etapas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT de tabela `estagio`
+-- AUTO_INCREMENT for table `estagio`
 --
 ALTER TABLE `estagio`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
--- AUTO_INCREMENT de tabela `etapas_processo`
+-- AUTO_INCREMENT for table `etapas_processo`
 --
 ALTER TABLE `etapas_processo`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT de tabela `fila_emails`
+-- AUTO_INCREMENT for table `fila_emails`
 --
 ALTER TABLE `fila_emails`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
--- AUTO_INCREMENT de tabela `horas_formativas`
+-- AUTO_INCREMENT for table `horas_formativas`
 --
 ALTER TABLE `horas_formativas`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT de tabela `logins`
+-- AUTO_INCREMENT for table `logins`
 --
 ALTER TABLE `logins`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
--- AUTO_INCREMENT de tabela `logs`
+-- AUTO_INCREMENT for table `logs`
 --
 ALTER TABLE `logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=73;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=126;
 
 --
--- AUTO_INCREMENT de tabela `mural`
+-- AUTO_INCREMENT for table `mural`
 --
 ALTER TABLE `mural`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT de tabela `opcoes_de_campos`
+-- AUTO_INCREMENT for table `opcoes_de_campos`
 --
 ALTER TABLE `opcoes_de_campos`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT de tabela `processo`
+-- AUTO_INCREMENT for table `processo`
 --
 ALTER TABLE `processo`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT de tabela `respostas_processo`
+-- AUTO_INCREMENT for table `respostas_processo`
 --
 ALTER TABLE `respostas_processo`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT de tabela `tentativas_login`
+-- AUTO_INCREMENT for table `tentativas_login`
 --
 ALTER TABLE `tentativas_login`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT de tabela `timelines`
+-- AUTO_INCREMENT for table `timelines`
 --
 ALTER TABLE `timelines`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
--- AUTO_INCREMENT de tabela `tipos_campos`
+-- AUTO_INCREMENT for table `tipos_campos`
 --
 ALTER TABLE `tipos_campos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT de tabela `tipo_solicitacao`
+-- AUTO_INCREMENT for table `tipo_solicitacao`
 --
 ALTER TABLE `tipo_solicitacao`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT de tabela `usuario`
+-- AUTO_INCREMENT for table `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
--- Restrições para despejos de tabelas
+-- Constraints for dumped tables
 --
 
 --
--- Limitadores para a tabela `campos_solicitacao`
+-- Constraints for table `campos_solicitacao`
 --
 ALTER TABLE `campos_solicitacao`
   ADD CONSTRAINT `campos_solicitacao_ibfk_1` FOREIGN KEY (`tipo`) REFERENCES `tipos_campos` (`id`),
   ADD CONSTRAINT `campos_solicitacao_ibfk_2` FOREIGN KEY (`tipo_processo`) REFERENCES `tipo_solicitacao` (`id`);
 
 --
--- Limitadores para a tabela `codigos`
+-- Constraints for table `codigos`
 --
 ALTER TABLE `codigos`
   ADD CONSTRAINT `codigos_ibfk_1` FOREIGN KEY (`usuario`) REFERENCES `usuario` (`id`);
 
 --
--- Limitadores para a tabela `comentarios`
+-- Constraints for table `comentarios`
 --
 ALTER TABLE `comentarios`
   ADD CONSTRAINT `comentarios_ibfk_1` FOREIGN KEY (`processo`) REFERENCES `processo` (`id`),
   ADD CONSTRAINT `comentarios_ibfk_2` FOREIGN KEY (`usuario`) REFERENCES `usuario` (`id`);
 
 --
--- Limitadores para a tabela `curso`
+-- Constraints for table `curso`
 --
 ALTER TABLE `curso`
   ADD CONSTRAINT `curso_fk_coordenador` FOREIGN KEY (`coordenador`) REFERENCES `usuario` (`id`);
 
 --
--- Limitadores para a tabela `estagio`
+-- Constraints for table `estagio`
 --
 ALTER TABLE `estagio`
   ADD CONSTRAINT `estagio_ibfk_1` FOREIGN KEY (`aluno`) REFERENCES `usuario` (`id`),
@@ -814,46 +908,46 @@ ALTER TABLE `estagio`
   ADD CONSTRAINT `estagio_ibfk_3` FOREIGN KEY (`empresa`) REFERENCES `empresas` (`id`);
 
 --
--- Limitadores para a tabela `etapas_processo`
+-- Constraints for table `etapas_processo`
 --
 ALTER TABLE `etapas_processo`
   ADD CONSTRAINT `etapas_processo_ibfk_1` FOREIGN KEY (`tipo`) REFERENCES `enum_etapas` (`id`);
 
 --
--- Limitadores para a tabela `horas_formativas`
+-- Constraints for table `horas_formativas`
 --
 ALTER TABLE `horas_formativas`
   ADD CONSTRAINT `horas_formativas_ibfk_1` FOREIGN KEY (`aluno`) REFERENCES `usuario` (`id`),
   ADD CONSTRAINT `horas_formativas_ibfk_2` FOREIGN KEY (`servidor_avaliador`) REFERENCES `usuario` (`id`);
 
 --
--- Limitadores para a tabela `logins`
+-- Constraints for table `logins`
 --
 ALTER TABLE `logins`
   ADD CONSTRAINT `logins_ibfk_1` FOREIGN KEY (`usuario`) REFERENCES `usuario` (`id`);
 
 --
--- Limitadores para a tabela `logs`
+-- Constraints for table `logs`
 --
 ALTER TABLE `logs`
   ADD CONSTRAINT `logs_ibfk_1` FOREIGN KEY (`usuario`) REFERENCES `usuario` (`id`);
 
 --
--- Limitadores para a tabela `mural`
+-- Constraints for table `mural`
 --
 ALTER TABLE `mural`
   ADD CONSTRAINT `mural_ibfk_1` FOREIGN KEY (`autor`) REFERENCES `usuario` (`id`),
   ADD CONSTRAINT `mural_ibfk_2` FOREIGN KEY (`curso_alvo`) REFERENCES `curso` (`id`);
 
 --
--- Limitadores para a tabela `opcoes_de_campos`
+-- Constraints for table `opcoes_de_campos`
 --
 ALTER TABLE `opcoes_de_campos`
   ADD CONSTRAINT `opcoes_de_campos_ibfk_1` FOREIGN KEY (`tipo`) REFERENCES `tipos_campos` (`id`),
   ADD CONSTRAINT `opcoes_de_campos_ibfk_2` FOREIGN KEY (`campo_pai`) REFERENCES `campos_solicitacao` (`id`);
 
 --
--- Limitadores para a tabela `processo`
+-- Constraints for table `processo`
 --
 ALTER TABLE `processo`
   ADD CONSTRAINT `processo_ibfk_1` FOREIGN KEY (`aluno`) REFERENCES `usuario` (`id`),
@@ -863,7 +957,7 @@ ALTER TABLE `processo`
   ADD CONSTRAINT `processo_ibfk_5` FOREIGN KEY (`etapa_atual`) REFERENCES `etapas_processo` (`id`);
 
 --
--- Limitadores para a tabela `respostas_processo`
+-- Constraints for table `respostas_processo`
 --
 ALTER TABLE `respostas_processo`
   ADD CONSTRAINT `respostas_processo_ibfk_1` FOREIGN KEY (`processo`) REFERENCES `processo` (`id`),
@@ -871,19 +965,19 @@ ALTER TABLE `respostas_processo`
   ADD CONSTRAINT `respostas_processo_ibfk_3` FOREIGN KEY (`usuario`) REFERENCES `usuario` (`id`);
 
 --
--- Limitadores para a tabela `tentativas_login`
+-- Constraints for table `tentativas_login`
 --
 ALTER TABLE `tentativas_login`
   ADD CONSTRAINT `tentativas_login_ibfk_1` FOREIGN KEY (`usuario`) REFERENCES `usuario` (`id`);
 
 --
--- Limitadores para a tabela `timelines`
+-- Constraints for table `timelines`
 --
 ALTER TABLE `timelines`
   ADD CONSTRAINT `timelines_ibfk_1` FOREIGN KEY (`usuario`) REFERENCES `usuario` (`id`);
 
 --
--- Limitadores para a tabela `usuario`
+-- Constraints for table `usuario`
 --
 ALTER TABLE `usuario`
   ADD CONSTRAINT `usuario_fk_curso` FOREIGN KEY (`curso`) REFERENCES `curso` (`id`);

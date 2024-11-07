@@ -136,7 +136,7 @@ model logins {
   local                           String   @db.VarChar(100)
   chave_sessao                    String   @db.VarChar(60)
   status                          Int      @default(1)
-  ip                              String?  @db.VarChar(15)
+  ip                              String?  @db.VarChar(255)
   usuario_logins_usuarioTousuario usuario  @relation("logins_usuarioTousuario", fields: [usuario], references: [id], onUpdate: Restrict, map: "logins_ibfk_1")
 
   @@index([usuario], map: "usuario")
@@ -159,7 +159,7 @@ model mural {
   descricao     String   @db.Text
   identificador String   @db.VarChar(50)
   autor         Int
-  data          DateTime @db.DateTime(0)
+  data          DateTime @default(now()) @db.DateTime(0)
   curso_alvo    Int
   visivel       Int      @default(1)
   usuario       usuario  @relation(fields: [autor], references: [id], onUpdate: Restrict, map: "mural_ibfk_1")

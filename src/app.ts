@@ -11,6 +11,10 @@ import { routerInternship } from './routes/internship/index'
 import { routerCompanies } from './routes/company/index'
 import { routerCourses } from './routes/courses/index'
 import { routerTrainingHours } from './routes/trainingHours/index'
+import { routerSteps } from './routes/steps/index'
+import { routerFields } from './routes/fields/index'
+import { routerRequestType } from './routes/requestType/index'
+import { routerMural } from './routes/mural/index'
 
 import { checkEmailQueue } from './middlewares/checkEmailQueue';
 
@@ -35,4 +39,8 @@ app.use('/internship', routerInternship)
 app.use('/companies', routerCompanies)
 app.use('/courses', routerCourses)
 app.use('/hours', routerTrainingHours)
+app.use('/steps', routerSteps)
+app.use('/fields', routerFields)
+app.use('/request-type', routerRequestType)
+app.use('/mural', routerMural)
 
