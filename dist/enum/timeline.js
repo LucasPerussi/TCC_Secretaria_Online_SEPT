@@ -6,7 +6,7 @@ var TimelineTypes;
     TimelineTypes["ACCOUNT_CREATION"] = "1";
     TimelineTypes["LOGIN"] = "2";
     TimelineTypes["TICKET_OPEN"] = "3";
-})(TimelineTypes || (exports.TimelineTypes = TimelineTypes = {}));
+})(TimelineTypes = exports.TimelineTypes || (exports.TimelineTypes = {}));
 exports.TimelineTypeInfo = {
     [TimelineTypes.ACCOUNT_CREATION]: { id: 1, nome: "Criação de Conta", cor: "#ffffff" },
     [TimelineTypes.LOGIN]: { id: 2, nome: "Login", cor: "#0000ff" },

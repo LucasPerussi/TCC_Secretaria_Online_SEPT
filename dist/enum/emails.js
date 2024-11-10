@@ -6,7 +6,7 @@ var EmailTypes;
     EmailTypes["ACCOUNT_CREATION"] = "1";
     EmailTypes["LOGIN"] = "2";
     EmailTypes["TICKET_OPEN"] = "3";
-})(EmailTypes || (exports.EmailTypes = EmailTypes = {}));
+})(EmailTypes = exports.EmailTypes || (exports.EmailTypes = {}));
 exports.EmailTypeInfo = {
     [EmailTypes.ACCOUNT_CREATION]: { id: 1, nome: "Criação de Conta", cor: "#ffffff" },
     [EmailTypes.LOGIN]: { id: 2, nome: "Login", cor: "#0000ff" },
