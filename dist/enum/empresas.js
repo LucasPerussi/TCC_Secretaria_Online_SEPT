@@ -11,7 +11,7 @@ var CompanyTypes;
     CompanyTypes["FREELANCER"] = "6";
     CompanyTypes["MEI"] = "7";
     CompanyTypes["NAO_INFORMADO"] = "99";
-})(CompanyTypes || (exports.CompanyTypes = CompanyTypes = {}));
+})(CompanyTypes = exports.CompanyTypes || (exports.CompanyTypes = {}));
 exports.CompanyTypeInfo = {
     [CompanyTypes.EMPRESA_PRIVADA]: {
         id: 1,

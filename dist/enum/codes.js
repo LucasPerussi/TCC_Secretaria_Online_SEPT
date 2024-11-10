@@ -6,7 +6,7 @@ var CodeTypes;
     CodeTypes["ACCOUNT_CREATION"] = "1";
     CodeTypes["PASSWORD_RESET"] = "2";
     CodeTypes["DOUBLE_STEP"] = "3";
-})(CodeTypes || (exports.CodeTypes = CodeTypes = {}));
+})(CodeTypes = exports.CodeTypes || (exports.CodeTypes = {}));
 exports.CodeTypeInfo = {
     [CodeTypes.ACCOUNT_CREATION]: { id: 1, nome: "Criação de Conta", cor: "#ffffff" },
     [CodeTypes.PASSWORD_RESET]: { id: 2, nome: "Reset de Senha", cor: "#0000ff" },
