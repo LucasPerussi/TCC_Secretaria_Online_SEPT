@@ -186,20 +186,21 @@ model processo {
   id                                                           Int                  @id @default(autoincrement())
   titulo                                                       String               @db.VarChar(100)
   descricao                                                    String               @db.VarChar(255)
-  identificador                                                Int
+  identificador                                                String               @db.VarChar(60)
   aluno                                                        Int
   data_abertura                                                DateTime             @db.DateTime(0)
-  servidor_responsavel                                         Int
-  professor_avaliador                                          Int
+  servidor_responsavel                                         Int?
+  professor_avaliador                                          Int?
   status                                                       Int                  @default(1)
   justificativa_conclusao                                      String?              @db.VarChar(255)
   data_limite_resolucao                                        DateTime?            @db.DateTime(0)
   tipo_solicitacao                                             Int
   etapa_atual                                                  Int
+  numero                                                       Int
   comentarios_comentarios_processoToprocesso                   comentarios[]        @relation("comentarios_processoToprocesso")
   usuario_processo_alunoTousuario                              usuario              @relation("processo_alunoTousuario", fields: [aluno], references: [id], onUpdate: Restrict, map: "processo_ibfk_1")
-  usuario_processo_servidor_responsavelTousuario               usuario              @relation("processo_servidor_responsavelTousuario", fields: [servidor_responsavel], references: [id], onUpdate: Restrict, map: "processo_ibfk_2")
-  usuario_processo_professor_avaliadorTousuario                usuario              @relation("processo_professor_avaliadorTousuario", fields: [professor_avaliador], references: [id], onUpdate: Restrict, map: "processo_ibfk_3")
+  usuario_processo_servidor_responsavelTousuario               usuario?             @relation("processo_servidor_responsavelTousuario", fields: [servidor_responsavel], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "processo_ibfk_2")
+  usuario_processo_professor_avaliadorTousuario                usuario?             @relation("processo_professor_avaliadorTousuario", fields: [professor_avaliador], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "processo_ibfk_3")
   tipo_solicitacao_processo_tipo_solicitacaoTotipo_solicitacao tipo_solicitacao     @relation("processo_tipo_solicitacaoTotipo_solicitacao", fields: [tipo_solicitacao], references: [id], onUpdate: Restrict, map: "processo_ibfk_4")
   etapas_processo                                              etapas_processo      @relation(fields: [etapa_atual], references: [id], onUpdate: Restrict, map: "processo_ibfk_5")
   respostas_processo_respostas_processo_processoToprocesso     respostas_processo[] @relation("respostas_processo_processoToprocesso")
