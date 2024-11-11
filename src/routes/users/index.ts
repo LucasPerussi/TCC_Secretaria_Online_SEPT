@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import prisma from '../../prismaClient'; // Adjust the path as necessary
-import { validateJWT } from '../../middlewares/JWTVerifier';
+import { isAllowed, validateJWT } from '../../middlewares/JWTVerifier';
 import { Logger } from '../../middlewares/logger';
 
 export const routerUsers = Router()
@@ -70,6 +70,35 @@ routerUsers.get('/role/:role', validateJWT, async (req, res) => {
     } catch (error) {
         Logger(`GET - USERS - role/${role}`, `Error fetching requested user. ${JSON.stringify(error)} `, "error");
         res.status(500).json({ message: 'Error fetching requested user.' });
+    }
+});
+
+routerUsers.patch('/role', validateJWT, isAllowed, async (req, res) => {
+
+    const { user, role } = req.body;
+
+    try {
+        const field = await prisma.usuario.update({
+            where: {
+                id : user
+            },
+            data: {
+                funcao: role,
+            }
+        });
+        
+        Logger(`PATCH - USER - role`, JSON.stringify(field), "success");
+        res.status(200).json(field); 
+    } catch (error) {
+        if (error instanceof Error) {
+            console.error('Erro ao atualizar role:', error.message);
+            Logger(`PATCH - USER - role`, error.message, "error");
+            res.status(500).json({ message: 'Erro ao atualizar ROLE', error: error.message });
+        } else {
+            console.error('Erro ao atualizar role: Erro desconhecido');
+            Logger(`PATCH - USER - role`, "Erro desconhecido", "error");
+            res.status(500).json({ message: 'Erro ao atualizar role', error: 'Erro desconhecido' });
+        }
     }
 });
 

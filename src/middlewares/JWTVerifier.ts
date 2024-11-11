@@ -15,6 +15,18 @@ export const extractUserFromToken = (token: string) => {
     }
 };
 
+export const extractRoleFromToken = (token: string) => {
+    try {
+        const decoded = jwt.decode(token);
+        if (decoded && typeof decoded === 'object' && 'role' in decoded) {
+            return decoded['role'];
+        }
+        return null; // Token doesn't contain the 'user' key in the payload
+    } catch (error) {
+        throw new Error('Error decoding the JWT token');
+    }
+};
+
 
 export const getSessionKey = async (user: number) => {
     try {
@@ -63,6 +75,20 @@ export const validateJWT = async (req: Request, res: Response, next: NextFunctio
     } catch (error) {
         return res.status(401).json({ message: 'Invalid authorization token.' });
     }
+};
+
+export const isAllowed = async (req: Request, res: Response, next: NextFunction) => {
+    const token = req.header('Authorization');
+    if (!token) {
+        return res.status(401).json({ message: 'Authorization token not provided.' });
+    }
+
+    const role = await extractRoleFromToken(token);
+    if ((role === null) || (role < 9)) {
+        return res.status(401).json({ message: 'You are not allowed to perform this action.' });
+    }
+    next();
+
 };
 
 
