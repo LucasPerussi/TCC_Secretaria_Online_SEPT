@@ -28,12 +28,18 @@ export const routerAuth = Router()
 routerAuth.get('/', (req, res) => res.send('API de Autenticação'))
 
 routerAuth.post('/login', async (req, res) => {
-    const { email, senha } = req.body;
-
+    let { email, senha } = req.body;
+    email = email.toLowerCase(); 
     try {
-        const user = await prisma.usuario.findUnique({
+        let user = await prisma.usuario.findUnique({
             where: { email },
         });
+
+        if (!user) {
+            user = await prisma.usuario.findUnique({
+                where: { registro: email },
+            });
+        }
 
         if (!user) {
             return res.status(404).json({ message: 'Usuário não encontrado.' });
@@ -45,41 +51,44 @@ routerAuth.post('/login', async (req, res) => {
             return res.status(401).json({ message: 'Senha incorreta.' });
         }
 
-        const deleteSessionsUser = await prisma.logins.deleteMany({
+        await prisma.logins.deleteMany({
             where: {
-                usuario: user.id
-            }
+                usuario: user.id,
+            },
         });
 
-        const code: string = await sessionGenerator(Number(user.id), req)
+        const code = await sessionGenerator(Number(user.id), req);
         if (code === "Error") {
-            res.status(505).json({ message: 'Erro interno do servidor. Entre em contato com o suporte' });
-            console.log(code)
+            console.log(code);
+            return res.status(505).json({ message: 'Erro interno do servidor. Entre em contato com o suporte' });
         }
-        const token = jwt.sign({
-            user: user.id.toString(),
-            role: user.funcao,
-            client: 'API'
-        }, code, {
-            expiresIn: '24h',
-        });
 
-        var roleText = ''
+        const token = jwt.sign(
+            {
+                user: user.id.toString(),
+                role: user.funcao,
+                client: 'API',
+            },
+            code,
+            { expiresIn: '24h' }
+        );
+
+        let roleText = '';
         switch (user.funcao) {
             case 1:
-                roleText = 'Member'
+                roleText = 'Member';
                 break;
             case 2:
-                roleText = 'Servidor'
+                roleText = 'Servidor';
                 break;
             case 3:
-                roleText = 'Professor'
+                roleText = 'Professor';
                 break;
             case 9:
-                roleText = 'Admin'
+                roleText = 'Admin';
                 break;
             default:
-                roleText = 'Deactivated'
+                roleText = 'Deactivated';
                 break;
         }
 
@@ -87,11 +96,12 @@ routerAuth.post('/login', async (req, res) => {
             token,
             user: {
                 id: user.id,
-                name: user.nome + ' ' + user.sobrenome,
+                name: `${user.nome} ${user.sobrenome}`,
                 email: user.email,
                 role: roleText,
-                picture: user.foto
-            }
+                picture: user.foto,
+                registro: user.registro
+            },
         });
     } catch (error) {
         console.error('Erro durante o login:', error);
@@ -103,6 +113,9 @@ routerAuth.post('/create', async (req, res) => {
     const { email, senha, nome, sobrenome, nascimento, registro }: CreateUserRequest = req.body;
 
     try {
+        const emailLC = email.toLowerCase(); 
+        const registroLC = registro.toLowerCase(); 
+
         const canCreateUser = await checkCanCreateuser(email, registro);
 
         if (!canCreateUser.canCreate) {
@@ -115,14 +128,14 @@ routerAuth.post('/create', async (req, res) => {
 
         const createdUser = await prisma.usuario.create({
             data: {
-                email,
+                email: emailLC,
                 senha: hashedPassword,
                 nome,
                 sobrenome,
                 nascimento: new Date(nascimento),
                 criado_em: new Date(),
                 funcao: 1, 
-                registro,
+                registro: registroLC,
                 foto: '', 
                 status_usuario: 1, 
                 status_curso: 1, 
