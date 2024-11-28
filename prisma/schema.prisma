@@ -186,7 +186,7 @@ model processo {
   id                                                           Int                  @id @default(autoincrement())
   titulo                                                       String               @db.VarChar(100)
   descricao                                                    String               @db.VarChar(255)
-  identificador                                                String               @db.VarChar(60)
+  identificador                                                String               @unique(map: "identificador") @db.VarChar(60)
   aluno                                                        Int
   data_abertura                                                DateTime             @db.DateTime(0)
   servidor_responsavel                                         Int?
@@ -196,7 +196,7 @@ model processo {
   data_limite_resolucao                                        DateTime?            @db.DateTime(0)
   tipo_solicitacao                                             Int
   etapa_atual                                                  Int
-  numero                                                       Int
+  numero                                                       Int                  @unique(map: "numero")
   comentarios_comentarios_processoToprocesso                   comentarios[]        @relation("comentarios_processoToprocesso")
   usuario_processo_alunoTousuario                              usuario              @relation("processo_alunoTousuario", fields: [aluno], references: [id], onUpdate: Restrict, map: "processo_ibfk_1")
   usuario_processo_servidor_responsavelTousuario               usuario?             @relation("processo_servidor_responsavelTousuario", fields: [servidor_responsavel], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "processo_ibfk_2")
@@ -254,6 +254,8 @@ model tipo_solicitacao {
   id                                                   Int                  @id @default(autoincrement())
   nome                                                 String               @db.VarChar(100)
   fluxograma                                           String               @db.VarChar(255)
+  hrs_resposta                                         Int?
+  hrs_resolucao                                        Int?
   campos_solicitacao                                   campos_solicitacao[]
   processo_processo_tipo_solicitacaoTotipo_solicitacao processo[]           @relation("processo_tipo_solicitacaoTotipo_solicitacao")
 }

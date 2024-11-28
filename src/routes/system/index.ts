@@ -3,6 +3,7 @@ import { PrismaClient } from '@prisma/client';
 import { validateJWT } from '../../middlewares/JWTVerifier';
 import nodemailer from 'nodemailer';
 import { SentMessageInfo } from 'nodemailer';
+import { Logger } from '../../middlewares/logger';
 const osUtils = require('os-utils');
 
 
@@ -63,6 +64,172 @@ routerSystem.post('/send-email', validateJWT, async (req, res) => {
         } else {
             console.error('Erro ao enviar email: Erro desconhecido');
             res.status(500).send({ message: 'Erro ao enviar email', error: 'Erro desconhecido' });
+        }
+    }
+});
+
+routerSystem.get('/logs', validateJWT, async (req, res) => {
+    try {
+        const logs = await prisma.logs.findMany();
+
+        if (logs) {
+            Logger(`GET - SYSTEM - logs`, `200 - Found and Authorized`, 'success');
+            res.status(200).json(logs);
+        } else {
+            Logger(`GET - SYSTEM - logs`, `404 - Not Found`, 'error');
+            res.status(404).send({ error: true, message: 'Registro não encontrado!' });
+        }
+    } catch (error) {
+        if (error instanceof Error) {
+            Logger(`GET - SYSTEM - logs`, `500 - Error fetching record: ${error.message}`, 'error');
+            res.status(500).json({ message: 'Erro ao buscar LOGS.', error: error.message });
+        } else {
+            Logger(`GET - SYSTEM - logs`, '500 - Unknown error occurred', 'error');
+            res.status(500).json({ message: 'Erro ao buscar LOGS.', error: 'Unknown error' });
+        }
+    }
+});
+
+routerSystem.get('/logs-user/:user', validateJWT, async (req, res) => {
+    const user = Number(req.params.user);
+    try {
+        const logs = await prisma.logs.findMany({
+            where: { usuario: user },
+        });
+
+        if (logs) {
+            Logger(`GET - SYSTEM - logs-user/${user}`, `200 - Found and Authorized`, 'success');
+            res.status(200).json(logs);
+        } else {
+            Logger(`GET - SYSTEM - logs-user/${user}`, `404 - Not Found`, 'error');
+            res.status(404).send({ error: true, message: 'Registro não encontrado!' });
+        }
+    } catch (error) {
+        if (error instanceof Error) {
+            Logger(`GET - SYSTEM - logs-user/${user}`, `500 - Error fetching record: ${error.message}`, 'error');
+            res.status(500).json({ message: 'Erro ao buscar o registro solicitado.', error: error.message });
+        } else {
+            Logger(`GET - SYSTEM - logs-user/${user}`, '500 - Unknown error occurred', 'error');
+            res.status(500).json({ message: 'Erro ao buscar o registro solicitado.', error: 'Unknown error' });
+        }
+    }
+});
+
+routerSystem.get('/timelines', validateJWT, async (req, res) => {
+    try {
+        const timelines = await prisma.timelines.findMany();
+
+        if (timelines) {
+            Logger(`GET - SYSTEM - timelines`, `200 - Found and Authorized`, 'success');
+            res.status(200).json(timelines);
+        } else {
+            Logger(`GET - SYSTEM - timelines`, `404 - Not Found`, 'error');
+            res.status(404).send({ error: true, message: 'Registro não encontrado!' });
+        }
+    } catch (error) {
+        if (error instanceof Error) {
+            Logger(`GET - SYSTEM - timelines`, `500 - Error fetching record: ${error.message}`, 'error');
+            res.status(500).json({ message: 'Erro ao buscar LOGS.', error: error.message });
+        } else {
+            Logger(`GET - SYSTEM - timelines`, '500 - Unknown error occurred', 'error');
+            res.status(500).json({ message: 'Erro ao buscar LOGS.', error: 'Unknown error' });
+        }
+    }
+});
+
+routerSystem.get('/timelines-user/:user', validateJWT, async (req, res) => {
+    const user = Number(req.params.user);
+    try {
+        const timelines = await prisma.timelines.findMany({
+            where: { usuario: user },
+        });
+
+        if (timelines) {
+            Logger(`GET - SYSTEM - timelines-user/${user}`, `200 - Found and Authorized`, 'success');
+            res.status(200).json(timelines);
+        } else {
+            Logger(`GET - SYSTEM - timelines-user/${user}`, `404 - Not Found`, 'error');
+            res.status(404).send({ error: true, message: 'Registro não encontrado!' });
+        }
+    } catch (error) {
+        if (error instanceof Error) {
+            Logger(`GET - SYSTEM - timelines-user/${user}`, `500 - Error fetching record: ${error.message}`, 'error');
+            res.status(500).json({ message: 'Erro ao buscar o registro solicitado.', error: error.message });
+        } else {
+            Logger(`GET - SYSTEM - timelines-user/${user}`, '500 - Unknown error occurred', 'error');
+            res.status(500).json({ message: 'Erro ao buscar o registro solicitado.', error: 'Unknown error' });
+        }
+    }
+});
+
+routerSystem.get('/timelines-process/:processo', validateJWT, async (req, res) => {
+    const processo = req.params.processo;
+    try {
+        const timelines = await prisma.timelines.findMany({
+            where: { referencia: processo },
+        });
+
+        if (timelines) {
+            Logger(`GET - SYSTEM - timelines-processo/${processo}`, `200 - Found and Authorized`, 'success');
+            res.status(200).json(timelines);
+        } else {
+            Logger(`GET - SYSTEM - timelines-processo/${processo}`, `404 - Not Found`, 'error');
+            res.status(404).send({ error: true, message: 'Registro não encontrado!' });
+        }
+    } catch (error) {
+        if (error instanceof Error) {
+            Logger(`GET - SYSTEM - timelines-processo/${processo}`, `500 - Error fetching record: ${error.message}`, 'error');
+            res.status(500).json({ message: 'Erro ao buscar o registro solicitado.', error: error.message });
+        } else {
+            Logger(`GET - SYSTEM - timelines-processo/${processo}`, '500 - Unknown error occurred', 'error');
+            res.status(500).json({ message: 'Erro ao buscar o registro solicitado.', error: 'Unknown error' });
+        }
+    }
+});
+
+routerSystem.get('/logins', validateJWT, async (req, res) => {
+    try {
+        const logins = await prisma.logins.findMany();
+
+        if (logins) {
+            Logger(`GET - SYSTEM - logins`, `200 - Found and Authorized`, 'success');
+            res.status(200).json(logins);
+        } else {
+            Logger(`GET - SYSTEM - logins`, `404 - Not Found`, 'error');
+            res.status(404).send({ error: true, message: 'Registro não encontrado!' });
+        }
+    } catch (error) {
+        if (error instanceof Error) {
+            Logger(`GET - SYSTEM - logins`, `500 - Error fetching record: ${error.message}`, 'error');
+            res.status(500).json({ message: 'Erro ao buscar LOGS.', error: error.message });
+        } else {
+            Logger(`GET - SYSTEM - logins`, '500 - Unknown error occurred', 'error');
+            res.status(500).json({ message: 'Erro ao buscar LOGS.', error: 'Unknown error' });
+        }
+    }
+});
+
+routerSystem.get('/logins-user/:user', validateJWT, async (req, res) => {
+    const user = Number(req.params.user);
+    try {
+        const logins = await prisma.logins.findMany({
+            where: { usuario: user },
+        });
+
+        if (logins) {
+            Logger(`GET - SYSTEM - logins-user/${user}`, `200 - Found and Authorized`, 'success');
+            res.status(200).json(logins);
+        } else {
+            Logger(`GET - SYSTEM - logins-user/${user}`, `404 - Not Found`, 'error');
+            res.status(404).send({ error: true, message: 'Registro não encontrado!' });
+        }
+    } catch (error) {
+        if (error instanceof Error) {
+            Logger(`GET - SYSTEM - logins-user/${user}`, `500 - Error fetching record: ${error.message}`, 'error');
+            res.status(500).json({ message: 'Erro ao buscar o registro solicitado.', error: error.message });
+        } else {
+            Logger(`GET - SYSTEM - logins-user/${user}`, '500 - Unknown error occurred', 'error');
+            res.status(500).json({ message: 'Erro ao buscar o registro solicitado.', error: 'Unknown error' });
         }
     }
 });

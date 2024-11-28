@@ -16,6 +16,7 @@ import { routerFields } from './routes/fields/index'
 import { routerRequestType } from './routes/requestType/index'
 import { routerMural } from './routes/mural/index'
 import { routerRequests } from './routes/requests/index'
+import { routerComments } from './routes/comments/index'
 
 import { checkEmailQueue } from './middlewares/checkEmailQueue';
 
@@ -45,4 +46,5 @@ app.use('/fields', routerFields)
 app.use('/request-type', routerRequestType)
 app.use('/mural', routerMural)
 app.use('/requests', routerRequests)
+app.use('/comments', routerComments)
 
