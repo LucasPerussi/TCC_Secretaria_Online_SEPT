@@ -100,6 +100,31 @@ routerTrainingHours.get('/id/:id', validateJWT, async (req, res) => {
     }
 });
 
+routerTrainingHours.get('/by-student/:aluno', validateJWT, async (req, res) => {
+    const aluno = Number(req.params.aluno);
+    try {
+        const recordData = await prisma.horas_formativas.findMany({
+            where: { aluno: aluno },
+        });
+
+        if (recordData) {
+            Logger(`GET - HOURS - by-student/${aluno}`, `200 - Found and Authorized`, 'success');
+            res.status(200).json(recordData);
+        } else {
+            Logger(`GET - HOURS - by-student/${aluno}`, `404 - Not Found`, 'error');
+            res.status(404).send({ error: true, message: 'Registro não encontrado!' });
+        }
+    } catch (error) {
+        if (error instanceof Error) {
+            Logger(`GET - HOURS - by-student/${aluno}`, `500 - Error fetching record: ${error.message}`, 'error');
+            res.status(500).json({ message: 'Erro ao buscar o registro solicitado.', error: error.message });
+        } else {
+            Logger(`GET - HOURS - by-student/${aluno}`, '500 - Unknown error occurred', 'error');
+            res.status(500).json({ message: 'Erro ao buscar o registro solicitado.', error: 'Unknown error' });
+        }
+    }
+});
+
 routerTrainingHours.get('/all', validateJWT, async (req, res) => {
     try {
         const records = await prisma.horas_formativas.findMany();
