@@ -34,6 +34,30 @@ routerComments.post('/new', validateJWT, async (req, res) => {
     }
 });
 
+routerComments.delete('/:id', validateJWT, async (req, res) => {
+
+    const processo = Number(req.params.id);
+    try {
+        const field = await prisma.comentarios.delete({
+           where: {
+            id: processo
+           }
+        })
+        Logger(`DELETE - COMENTARIOS - ID ${processo}`, JSON.stringify(field), "success");
+        res.status(200).send(JSON.stringify(field));
+    } catch (error) {
+        if (error instanceof Error) {
+            console.error('Erro ao criar comentario:', error.message);
+            Logger(`DELETE - COMENTARIOS - ID ${processo}`, error.message, "error");
+            res.status(500).send({ message: 'Erro ao criar comentario', error: error.message });
+        } else {
+            console.error('Erro ao criar comentario: Erro desconhecido');
+            Logger(`DELETE - COMENTARIOS - ID ${processo}`, "Erro desconhecido", "error");
+            res.status(500).send({ message: 'Erro ao criar comentario', error: 'Erro desconhecido' });
+        }
+    }
+});
+
 routerComments.get('/all-from-proccess/:processo', validateJWT, async (req, res) => {
     const processo = Number(req.params.processo);
     try {
@@ -48,11 +72,11 @@ routerComments.get('/all-from-proccess/:processo', validateJWT, async (req, res)
             res.status(200).send(JSON.stringify(steps));
         } else {
             Logger(`GET - COMENTARIOS - /all-from-proccess/${processo}`, `404 - Not Found`, "error");
-            res.status(404).send({ error: true, message: 'Field type not found!' });
+            res.status(404).send({ error: true, message: 'Proccess type not found!' });
         }
     } catch (error) {
-        Logger(`GET - COMENTARIOS - /all-from-proccess/${processo}`, `Error fetching requested Field type. ${JSON.stringify(error)} `, "error");
-        res.status(500).json({ message: 'Error fetching requested Field type.' });
+        Logger(`GET - COMENTARIOS - /all-from-proccess/${processo}`, `Error fetching requested Proccess type. ${JSON.stringify(error)} `, "error");
+        res.status(500).json({ message: 'Error fetching requested Proccess type.' });
     }
 });
 
