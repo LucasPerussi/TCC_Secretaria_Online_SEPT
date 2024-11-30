@@ -12,35 +12,38 @@ routerRequests.post('/new', validateJWT, async (req, res) => {
     let { titulo, descricao, aluno, professor_avaliador = null, tipo_solicitacao } = req.body;
     let numero = await Number(numberGenerator(8));
     let identificador = await codeGenerator(60);
-
+  
     try {
         const field = await prisma.processo.create({
             data: {
-                titulo,
-                descricao,
-                aluno,
-                tipo_solicitacao,
-                professor_avaliador : professor_avaliador ?? null,
-                data_abertura: '',
-                identificador, 
-                numero,
-                etapa_atual: 1
-            }
-        })
-        Logger(`POST - REQUESTS - new`, JSON.stringify(field), "success");
-        res.status(200).send(JSON.stringify(field));
+              titulo,
+              descricao,
+              aluno, // Assign the number directly
+              tipo_solicitacao,
+              professor_avaliador: professor_avaliador ?? null,
+              data_abertura: new Date(),
+              identificador,
+              numero,
+              etapa_atual: 1,
+            },
+          });
+          
+      Logger(`POST - REQUESTS - new`, JSON.stringify(field), "success");
+      res.status(200).send(JSON.stringify(field));
     } catch (error) {
-        if (error instanceof Error) {
-            console.error('Erro ao criar estágio:', error.message);
-            Logger(`POST - REQUESTS - new`, error.message, "error");
-            res.status(500).send({ message: 'Erro ao criar estágio', error: error.message });
-        } else {
-            console.error('Erro ao criar estágio: Erro desconhecido');
-            Logger(`POST - REQUESTS - new`, "Erro desconhecido", "error");
-            res.status(500).send({ message: 'Erro ao criar estágio', error: 'Erro desconhecido' });
-        }
+      if (error instanceof Error) {
+        console.error('Erro ao criar estágio:', error.message);
+        Logger(`POST - REQUESTS - new`, error.message, "error");
+        res.status(500).send({ message: 'Erro ao criar estágio', error: error.message });
+      } else {
+        console.error('Erro ao criar estágio: Erro desconhecido');
+        Logger(`POST - REQUESTS - new`, "Erro desconhecido", "error");
+        res.status(500).send({ message: 'Erro ao criar estágio', error: 'Erro desconhecido' });
+      }
     }
-});
+  });
+  
+
 
 routerRequests.patch('/add-teacher', validateJWT, async (req, res) => {
     const { identificador, professor } = req.body;

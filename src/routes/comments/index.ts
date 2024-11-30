@@ -47,11 +47,11 @@ routerComments.delete('/:id', validateJWT, async (req, res) => {
         res.status(200).send(JSON.stringify(field));
     } catch (error) {
         if (error instanceof Error) {
-            console.error('Erro ao criar comentario:', error.message);
+            console.error('Erro ao deletar comentario:', error.message);
             Logger(`DELETE - COMENTARIOS - ID ${processo}`, error.message, "error");
             res.status(500).send({ message: 'Erro ao criar comentario', error: error.message });
         } else {
-            console.error('Erro ao criar comentario: Erro desconhecido');
+            console.error('Erro ao deletar comentario: Erro desconhecido');
             Logger(`DELETE - COMENTARIOS - ID ${processo}`, "Erro desconhecido", "error");
             res.status(500).send({ message: 'Erro ao criar comentario', error: 'Erro desconhecido' });
         }

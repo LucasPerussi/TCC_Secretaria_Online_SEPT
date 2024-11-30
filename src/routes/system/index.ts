@@ -162,7 +162,7 @@ routerSystem.get('/timelines-user/:user', validateJWT, async (req, res) => {
     }
 });
 
-routerSystem.get('/timelines-process/:processo', validateJWT, async (req, res) => {
+routerSystem.get('/timelines-proccess/:processo', validateJWT, async (req, res) => {
     const processo = req.params.processo;
     try {
         const timelines = await prisma.timelines.findMany({
@@ -233,3 +233,28 @@ routerSystem.get('/logins-user/:user', validateJWT, async (req, res) => {
         }
     }
 });
+
+routerSystem.get('/system-roles', validateJWT, async (req, res) => {
+    res.status(200).json([
+        {
+            "role": 1,
+            "label": 'Aluno',
+        },
+        {
+            "role": 2,
+            "label": 'Servidor',
+        },
+        {
+            "role": 3,
+            "label": 'Professor',
+        },
+        {
+            "role": 9,
+            "label": 'Admin',
+        },
+        {
+            "role": 0,
+            "label": 'Deactivated',
+        },
+    ])
+    });

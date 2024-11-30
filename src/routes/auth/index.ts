@@ -76,7 +76,7 @@ routerAuth.post('/login', async (req, res) => {
         let roleText = '';
         switch (user.funcao) {
             case 1:
-                roleText = 'Member';
+                roleText = 'Aluno';
                 break;
             case 2:
                 roleText = 'Servidor';
