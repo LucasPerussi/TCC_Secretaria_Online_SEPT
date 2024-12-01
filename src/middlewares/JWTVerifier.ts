@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
-import jwt, { Secret } from 'jsonwebtoken'; // Import 'Secret' type from 'jsonwebtoken'
-import prisma from '../prismaClient'; // Adjust the path as necessary
-
+import jwt, { Secret } from 'jsonwebtoken'; // Importa o tipo 'Secret' do 'jsonwebtoken'
+import prisma from '../prismaClient'; // Ajuste o caminho conforme necessário
 
 export const extractUserFromToken = (token: string) => {
     try {
@@ -9,9 +8,9 @@ export const extractUserFromToken = (token: string) => {
         if (decoded && typeof decoded === 'object' && 'user' in decoded) {
             return decoded['user'];
         }
-        return null; // Token doesn't contain the 'user' key in the payload
+        return null; // O token não contém a chave 'user' no payload
     } catch (error) {
-        throw new Error('Error decoding the JWT token');
+        throw new Error('Erro ao decodificar o token JWT');
     }
 };
 
@@ -21,16 +20,15 @@ export const extractRoleFromToken = (token: string) => {
         if (decoded && typeof decoded === 'object' && 'role' in decoded) {
             return decoded['role'];
         }
-        return null; // Token doesn't contain the 'user' key in the payload
+        return null; // O token não contém a chave 'role' no payload
     } catch (error) {
-        throw new Error('Error decoding the JWT token');
+        throw new Error('Erro ao decodificar o token JWT');
     }
 };
 
-
-export const getSessionKey = async (user: number) => {
+export const getSessionKeys = async (user: number) => {
     try {
-        const session = await prisma.logins.findFirst({
+        const sessions = await prisma.logins.findMany({
             where: {
                 usuario: Number(user)
             },
@@ -39,77 +37,102 @@ export const getSessionKey = async (user: number) => {
             }
         });
 
-        if (session) {
-            return session.chave_sessao;
+        if (sessions && sessions.length > 0) {
+            return sessions.map(session => session.chave_sessao);
         } else {
-            console.warn('No session found for user:', user);
-            return null;
+            console.warn('Nenhuma sessão encontrada para o usuário:', user);
+            return [];
         }
         
     } catch (error) {
-        console.error('Error in getSessionKey:', error);
-        throw error; // Rethrow the original error
+        console.error('Erro em getSessionKeys:', error);
+        throw error; // Relança o erro original
     }
 };
 
+export const verifyToken = async (token: string, userId: number): Promise<boolean> => {
+    const secretKeys = await getSessionKeys(userId);
+    if (secretKeys.length === 0) {
+        return false;
+    }
+
+    for (const secretKey of secretKeys) {
+        try {
+            jwt.verify(token, secretKey as Secret);
+            return true; // Token é válido
+        } catch (error) {
+            // Continua tentando com a próxima chave secreta
+        }
+    }
+    return false; // Token inválido
+};
 
 export const validateJWT = async (req: Request, res: Response, next: NextFunction) => {
     const token = req.header('Authorization');
     if (!token) {
-        return res.status(401).json({ message: 'Authorization token not provided.' });
+        return res.status(401).json({ message: 'Token de autorização não fornecido.' });
     }
 
-    const userId = await extractUserFromToken(token);
+    const userId = extractUserFromToken(token);
     if (userId === null) {
-        return res.status(401).json({ message: 'Invalid JWT token.' });
+        return res.status(401).json({ message: 'Token JWT inválido.' });
     }
 
-    const secretKey = await getSessionKey(userId);
-    if (secretKey === null) {
-        return res.status(401).json({ message: 'Invalid JWT token.' });
-    }
-
-    try {
-        const decoded = jwt.verify(token, secretKey as Secret);
+    const isValid = await verifyToken(token, userId);
+    if (isValid) {
         next();
-    } catch (error) {
-        return res.status(401).json({ message: 'Invalid authorization token.' });
+    } else {
+        return res.status(401).json({ message: 'Token de autorização inválido.' });
     }
 };
 
 export const isAllowed = async (req: Request, res: Response, next: NextFunction) => {
     const token = req.header('Authorization');
     if (!token) {
-        return res.status(401).json({ message: 'Authorization token not provided.' });
+        return res.status(401).json({ message: 'Token de autorização não fornecido.' });
     }
 
-    const role = await extractRoleFromToken(token);
+    const userId = extractUserFromToken(token);
+    if (userId === null) {
+        return res.status(401).json({ message: 'Token JWT inválido.' });
+    }
+
+    const isValid = await verifyToken(token, userId);
+    if (!isValid) {
+        return res.status(401).json({ message: 'Token de autorização inválido.' });
+    }
+
+    const role = extractRoleFromToken(token);
     if ((role === null) || (role < 9)) {
-        return res.status(401).json({ message: 'You are not allowed to perform this action.' });
+        return res.status(403).json({ message: 'Você não tem permissão para executar esta ação.' });
     }
     next();
-
 };
-
 
 export const extractUserDataFromToken = async (req: Request, res: Response) => {
     const token = req.header('Authorization');
     if (!token) {
-        return res.status(401).json({ message: 'Invalid session data' });
+        return res.status(401).json({ message: 'Dados de sessão inválidos' });
+    }
+
+    const userId = extractUserFromToken(token);
+    if (userId === null) {
+        return res.status(401).json({ message: 'Dados de sessão inválidos' });
+    }
+
+    const isValid = await verifyToken(token, userId);
+    if (!isValid) {
+        return res.status(401).json({ message: 'Dados de sessão inválidos' });
     }
 
     try {
-        const decoded = jwt.decode(token);
-        if (decoded && typeof decoded === 'object' && 'user' in decoded) {
-            const user = prisma.usuario.findFirst({
-                where: {id : decoded['user']}
-            })
-   
-            console.log(user)
-            return user;
-        }
-        return null; 
+        const user = await prisma.usuario.findFirst({
+            where: { id: userId }
+        });
+
+        console.log(user);
+        return user;
     } catch (error) {
-        throw new Error('Error decoding the JWT token');
+        throw new Error('Erro ao buscar os dados do usuário');
     }
 };

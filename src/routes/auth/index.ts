@@ -51,11 +51,11 @@ routerAuth.post('/login', async (req, res) => {
             return res.status(401).json({ message: 'Senha incorreta.' });
         }
 
-        await prisma.logins.deleteMany({
-            where: {
-                usuario: user.id,
-            },
-        });
+        // await prisma.logins.deleteMany({
+        //     where: {
+        //         usuario: user.id,
+        //     },
+        // });
 
         const code = await sessionGenerator(Number(user.id), req);
         if (code === "Error") {
