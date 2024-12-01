@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { validateJWT } from '../../middlewares/JWTVerifier';
 import prisma from '../../prismaClient'; // Adjust the path as necessary
 import { Logger } from '../../middlewares/logger';
-import { AtividadeFormativaTypeInfo } from '../../enum/formativeHoursTypes';
+import { AtividadeFormativaTypeInfo, AtividadeFormativaTypes } from '../../enum/formativeHoursTypes';
 
 interface CreateHours {
     aluno: number;
@@ -78,6 +78,23 @@ routerTrainingHours.delete('/id/:id', validateJWT, async (req, res) => {
 
 routerTrainingHours.get('/types', validateJWT, async (req, res) => {
     res.json(AtividadeFormativaTypeInfo);
+});
+
+routerTrainingHours.get('/types/:id', validateJWT, (req, res) => {
+    const { id } = req.params;
+
+    // Verifica se o ID é um valor válido do enum
+    if (!Object.values(AtividadeFormativaTypes).includes(id as AtividadeFormativaTypes)) {
+        return res.status(400).json({ error: 'ID inválido fornecido' });
+    }
+
+    const typeInfo = AtividadeFormativaTypeInfo[id as AtividadeFormativaTypes];
+
+    if (typeInfo) {
+        res.json(typeInfo);
+    } else {
+        res.status(404).json({ error: 'Tipo de hora formativa não encontrado' });
+    }
 });
 
 routerTrainingHours.get('/id/:id', validateJWT, async (req, res) => {
