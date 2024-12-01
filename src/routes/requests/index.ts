@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { validateJWT } from '../../middlewares/JWTVerifier';
 import prisma from '../../prismaClient'; // Adjust the path as necessary
+import { Prisma } from '@prisma/client';
 import { Logger } from '../../middlewares/logger';
 import { codeGenerator, numberGenerator } from '../../middlewares/randomCodeGenerator';
 
@@ -8,26 +9,42 @@ export const routerRequests = Router()
 
 routerRequests.get('/', (req, res) => res.send('API de Solicitações'))
 
+
 routerRequests.post('/new', validateJWT, async (req, res) => {
     let { titulo, descricao, aluno, professor_avaliador = null, tipo_solicitacao } = req.body;
-    let numero = await Number(numberGenerator(8));
+    let numero = Number(await numberGenerator(8));
     let identificador = await codeGenerator(60);
   
     try {
-        const field = await prisma.processo.create({
-            data: {
-              titulo,
-              descricao,
-              aluno, // Assign the number directly
-              tipo_solicitacao,
-              professor_avaliador: professor_avaliador ?? null,
-              data_abertura: new Date(),
-              identificador,
-              numero,
-              etapa_atual: 1,
-            },
-          });
-          
+      // Verifique ou crie a etapa inicial
+      let etapaInicial = await prisma.etapas_processo.findFirst({
+        where: { tipo: 1 }, // Ajuste o filtro conforme necessário
+      });
+  
+      if (!etapaInicial) {
+        etapaInicial = await prisma.etapas_processo.create({
+          data: {
+            tipo: 1,
+            obrigatorio: 1,
+            // Outros campos necessários
+          },
+        });
+      }
+  
+      const field = await prisma.processo.create({
+        data: {
+          titulo,
+          descricao,
+          aluno,
+          tipo_solicitacao,
+          professor_avaliador: professor_avaliador ?? null,
+          data_abertura: new Date(),
+          identificador,
+          numero,
+          etapa_atual: etapaInicial.id, // Use o ID da etapa inicial
+        },
+      });
+  
       Logger(`POST - REQUESTS - new`, JSON.stringify(field), "success");
       res.status(200).send(JSON.stringify(field));
     } catch (error) {
@@ -44,6 +61,9 @@ routerRequests.post('/new', validateJWT, async (req, res) => {
   });
   
 
+  
+
+
 
 routerRequests.patch('/add-teacher', validateJWT, async (req, res) => {
     const { identificador, professor } = req.body;
@@ -57,9 +77,9 @@ routerRequests.patch('/add-teacher', validateJWT, async (req, res) => {
                 professor_avaliador: professor,
             }
         });
-        
+
         Logger(`PATCH - REQUESTS - add-teacher`, JSON.stringify(field), "success");
-        res.status(200).json(field); 
+        res.status(200).json(field);
     } catch (error) {
         if (error instanceof Error) {
             console.error('Erro ao atualizar professor avaliador:', error.message);
@@ -85,9 +105,9 @@ routerRequests.patch('/add-server', validateJWT, async (req, res) => {
                 servidor_responsavel: servidor,
             }
         });
-        
+
         Logger(`PATCH - REQUESTS - add-server`, JSON.stringify(field), "success");
-        res.status(200).json(field); 
+        res.status(200).json(field);
     } catch (error) {
         if (error instanceof Error) {
             console.error('Erro ao atualizar server avaliador:', error.message);
@@ -195,7 +215,7 @@ routerRequests.get('/processes-student-open/:student', validateJWT, async (req, 
     try {
         const steps = await prisma.processo.findFirst({
             where: {
-                aluno: aluno, 
+                aluno: aluno,
                 status: 1
             }
         })
@@ -240,7 +260,7 @@ routerRequests.get('/processes-professor-open/:professor', validateJWT, async (r
     try {
         const steps = await prisma.processo.findFirst({
             where: {
-                professor_avaliador: professor, 
+                professor_avaliador: professor,
                 status: 1
             }
         })
@@ -285,7 +305,7 @@ routerRequests.get('/processes-servidor-open/:servidor', validateJWT, async (req
     try {
         const steps = await prisma.processo.findFirst({
             where: {
-                servidor_responsavel: servidor, 
+                servidor_responsavel: servidor,
                 status: 1
             }
         })
@@ -308,7 +328,7 @@ routerRequests.get('/res-servidor-open/:servidor', validateJWT, async (req, res)
     try {
         const steps = await prisma.processo.findFirst({
             where: {
-                servidor_responsavel: servidor, 
+                servidor_responsavel: servidor,
                 status: 1
             }
         })
@@ -330,7 +350,7 @@ routerRequests.get('/all-without-server', validateJWT, async (req, res) => {
     try {
         const steps = await prisma.processo.findFirst({
             where: {
-                servidor_responsavel: null, 
+                servidor_responsavel: null,
             }
         })
 
@@ -351,7 +371,7 @@ routerRequests.get('/all-without-professor', validateJWT, async (req, res) => {
     try {
         const steps = await prisma.processo.findFirst({
             where: {
-                professor_avaliador: null, 
+                professor_avaliador: null,
             }
         })
 
@@ -375,10 +395,10 @@ routerRequests.post('/reply-proccess', validateJWT, async (req, res) => {
     try {
         const field = await prisma.respostas_processo.create({
             data: {
-              processo,
-              campo,
-              resposta,
-              usuario
+                processo,
+                campo,
+                resposta,
+                usuario
             }
         })
         Logger(`POST - REQUESTS - reply-proccess`, JSON.stringify(field), "success");
@@ -402,7 +422,7 @@ routerRequests.get('/replies/:processo', validateJWT, async (req, res) => {
     try {
         const steps = await prisma.respostas_processo.findFirst({
             where: {
-                processo: processo, 
+                processo: processo,
             }
         })
 
@@ -424,7 +444,7 @@ routerRequests.delete('/reply/:id', validateJWT, async (req, res) => {
     try {
         const steps = await prisma.respostas_processo.delete({
             where: {
-                id: id, 
+                id: id,
             }
         })
 
@@ -446,7 +466,7 @@ routerRequests.delete('/clear-replies-process/:processo', validateJWT, async (re
     try {
         const steps = await prisma.respostas_processo.deleteMany({
             where: {
-                processo: processo, 
+                processo: processo,
             }
         })
 

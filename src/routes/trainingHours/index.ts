@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { validateJWT } from '../../middlewares/JWTVerifier';
 import prisma from '../../prismaClient'; // Adjust the path as necessary
 import { Logger } from '../../middlewares/logger';
+import { AtividadeFormativaTypeInfo } from '../../enum/formativeHoursTypes';
 
 interface CreateHours {
     aluno: number;
@@ -73,6 +74,10 @@ routerTrainingHours.delete('/id/:id', validateJWT, async (req, res) => {
             res.status(500).json({ message: 'Erro ao buscar o registro solicitado.', error: 'Unknown error' });
         }
     }
+});
+
+routerTrainingHours.get('/types', validateJWT, async (req, res) => {
+    res.json(AtividadeFormativaTypeInfo);
 });
 
 routerTrainingHours.get('/id/:id', validateJWT, async (req, res) => {
