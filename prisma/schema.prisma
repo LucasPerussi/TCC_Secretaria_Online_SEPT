@@ -148,6 +148,7 @@ model logs {
   mensagem                      String   @db.VarChar(255)
   usuario                       Int?
   status                        String   @db.VarChar(20)
+  data                          DateTime @default(now()) @db.DateTime(0)
   usuario_logs_usuarioTousuario usuario? @relation("logs_usuarioTousuario", fields: [usuario], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "logs_ibfk_1")
 
   @@index([usuario], map: "usuario")
@@ -239,13 +240,14 @@ model tentativas_login {
 }
 
 model timelines {
-  id                                 Int     @id @default(autoincrement())
+  id                                 Int      @id @default(autoincrement())
   usuario                            Int
-  referencia                         String  @db.VarChar(60)
-  titulo                             String  @db.VarChar(100)
-  descricao                          String  @db.VarChar(255)
+  referencia                         String   @db.VarChar(60)
+  titulo                             String   @db.VarChar(100)
+  descricao                          String   @db.VarChar(255)
   tipo                               Int
-  usuario_timelines_usuarioTousuario usuario @relation("timelines_usuarioTousuario", fields: [usuario], references: [id], onUpdate: Restrict, map: "timelines_ibfk_1")
+  data                               DateTime @default(now()) @db.DateTime(0)
+  usuario_timelines_usuarioTousuario usuario  @relation("timelines_usuarioTousuario", fields: [usuario], references: [id], onUpdate: Restrict, map: "timelines_ibfk_1")
 
   @@index([usuario], map: "usuario")
 }

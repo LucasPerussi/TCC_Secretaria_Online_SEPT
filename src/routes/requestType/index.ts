@@ -8,26 +8,28 @@ export const routerRequestType = Router()
 routerRequestType.get('/', (req, res) => res.send('API de Tipos de Solicitações'))
 
 routerRequestType.post('/new', validateJWT, async (req, res) => {
-    let { nome, fluxograma } = req.body;
+    let { nome, fluxograma, hrs_resolucao, hrs_resposta } = req.body;
 
     try {
         const request = await prisma.tipo_solicitacao.create({
             data: {
                 nome,
                 fluxograma,
+                hrs_resolucao: Number(hrs_resolucao),
+                hrs_resposta: Number(hrs_resposta)
             }
         })
         Logger(`POST - REQUEST TYPE - new`, JSON.stringify(request), "success");
         res.status(200).send(JSON.stringify(request));
     } catch (error) {
         if (error instanceof Error) {
-            console.error('Erro ao criar estágio:', error.message);
+            console.error('Erro ao cadastrar tipo de processo:', error.message);
             Logger(`POST - REQUEST TYPE - new`, error.message, "error");
-            res.status(500).send({ message: 'Erro ao criar estágio', error: error.message });
+            res.status(500).send({ message: 'Erro ao cadastrar tipo de processo', error: error.message });
         } else {
-            console.error('Erro ao criar estágio: Erro desconhecido');
+            console.error('Erro ao cadastrar tipo de processo: Erro desconhecido');
             Logger(`POST - REQUEST TYPE - new`, "Erro desconhecido", "error");
-            res.status(500).send({ message: 'Erro ao criar estágio', error: 'Erro desconhecido' });
+            res.status(500).send({ message: 'Erro ao cadastrar tipo de processo', error: 'Erro desconhecido' });
         }
     }
 });

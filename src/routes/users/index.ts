@@ -53,7 +53,6 @@ routerUsers.patch('/id/:id/change-password', validateJWT, async (req, res) => {
     const id = Number(req.params.id);
 
     try {
-        // Extrai os dados do usuário a partir do token JWT
         const userData = await extractUserDataFromToken(req, res);
         if (!userData) { 
             return;
