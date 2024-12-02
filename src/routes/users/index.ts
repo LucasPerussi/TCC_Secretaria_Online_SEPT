@@ -277,3 +277,305 @@ routerUsers.get('/all-deactivated', validateJWT, async (req, res) => {
     }
 });
 
+routerUsers.patch('/email/:id', validateJWT, async (req, res) => {
+    const { id } = req.params;
+    const { email } = req.body;
+
+    if (!email) {
+        return res.status(400).json({ error: true, message: 'Email é obrigatório.' });
+    }
+
+    try {
+        const existingUser = await prisma.usuario.findUnique({
+            where: { id: parseInt(id) },
+        });
+
+        if (!existingUser) {
+            Logger(`PATCH - USERS - EMAIL - ${id}`, `404 - Usuário não encontrado`, "error");
+            return res.status(404).json({ error: true, message: 'Usuário não encontrado!' });
+        }
+
+        const updatedUser = await prisma.usuario.update({
+            where: { id: parseInt(id) },
+            data: { email },
+        });
+
+        Logger(`PATCH - USERS - EMAIL - ${id}`, `200 - Email atualizado com sucesso`, "success");
+        res.status(200).json(updatedUser);
+    } catch (error) {
+        Logger(`PATCH - USERS - EMAIL - ${id}`, `Erro ao atualizar email. ${JSON.stringify(error)}`, "error");
+        res.status(500).json({ message: 'Erro ao atualizar email.' });
+    }
+});
+
+routerUsers.patch('/registro/:id', validateJWT, async (req, res) => {
+    const { id } = req.params;
+    const { registro } = req.body;
+
+    if (!registro) {
+        return res.status(400).json({ error: true, message: 'Registro é obrigatório.' });
+    }
+
+    try {
+        const existingUser = await prisma.usuario.findUnique({
+            where: { id: parseInt(id) },
+        });
+
+        if (!existingUser) {
+            Logger(`PATCH - USERS - REGISTRO - ${id}`, `404 - Usuário não encontrado`, "error");
+            return res.status(404).json({ error: true, message: 'Usuário não encontrado!' });
+        }
+
+        const updatedUser = await prisma.usuario.update({
+            where: { id: parseInt(id) },
+            data: { registro },
+        });
+
+        Logger(`PATCH - USERS - REGISTRO - ${id}`, `200 - Registro atualizado com sucesso`, "success");
+        res.status(200).json(updatedUser);
+    } catch (error) {
+        Logger(`PATCH - USERS - REGISTRO - ${id}`, `Erro ao atualizar registro. ${JSON.stringify(error)}`, "error");
+        res.status(500).json({ message: 'Erro ao atualizar registro.' });
+    }
+});
+
+routerUsers.patch('/nome/:id', validateJWT, async (req, res) => {
+    const { id } = req.params;
+    const { nome } = req.body;
+
+    if (!nome) {
+        return res.status(400).json({ error: true, message: 'Nome é obrigatório.' });
+    }
+
+    try {
+        const existingUser = await prisma.usuario.findUnique({
+            where: { id: parseInt(id) },
+        });
+
+        if (!existingUser) {
+            Logger(`PATCH - USERS - NOME - ${id}`, `404 - Usuário não encontrado`, "error");
+            return res.status(404).json({ error: true, message: 'Usuário não encontrado!' });
+        }
+
+        const updatedUser = await prisma.usuario.update({
+            where: { id: parseInt(id) },
+            data: { nome },
+        });
+
+        Logger(`PATCH - USERS - NOME - ${id}`, `200 - Nome atualizado com sucesso`, "success");
+        res.status(200).json(updatedUser);
+    } catch (error) {
+        Logger(`PATCH - USERS - NOME - ${id}`, `Erro ao atualizar nome. ${JSON.stringify(error)}`, "error");
+        res.status(500).json({ message: 'Erro ao atualizar nome.' });
+    }
+});
+
+routerUsers.patch('/sobrenome/:id', validateJWT, async (req, res) => {
+    const { id } = req.params;
+    const { sobrenome } = req.body;
+
+    if (!sobrenome) {
+        return res.status(400).json({ error: true, message: 'Sobrenome é obrigatório.' });
+    }
+
+    try {
+        const existingUser = await prisma.usuario.findUnique({
+            where: { id: parseInt(id) },
+        });
+
+        if (!existingUser) {
+            Logger(`PATCH - USERS - SOBRENOME - ${id}`, `404 - Usuário não encontrado`, "error");
+            return res.status(404).json({ error: true, message: 'Usuário não encontrado!' });
+        }
+
+        const updatedUser = await prisma.usuario.update({
+            where: { id: parseInt(id) },
+            data: { sobrenome },
+        });
+
+        Logger(`PATCH - USERS - SOBRENOME - ${id}`, `200 - Sobrenome atualizado com sucesso`, "success");
+        res.status(200).json(updatedUser);
+    } catch (error) {
+        Logger(`PATCH - USERS - SOBRENOME - ${id}`, `Erro ao atualizar sobrenome. ${JSON.stringify(error)}`, "error");
+        res.status(500).json({ message: 'Erro ao atualizar sobrenome.' });
+    }
+});
+
+routerUsers.patch('/nascimento/:id', validateJWT, async (req, res) => {
+    const { id } = req.params;
+    const { nascimento } = req.body;
+
+    if (!nascimento) {
+        return res.status(400).json({ error: true, message: 'Data de nascimento é obrigatória.' });
+    }
+
+    const dataNascimento = new Date(nascimento);
+
+    try {
+        const existingUser = await prisma.usuario.findUnique({
+            where: { id: parseInt(id) },
+        });
+
+        if (!existingUser) {
+            Logger(`PATCH - USERS - NASCIMENTO - ${id}`, `404 - Usuário não encontrado`, "error");
+            return res.status(404).json({ error: true, message: 'Usuário não encontrado!' });
+        }
+
+        const updatedUser = await prisma.usuario.update({
+            where: { id: parseInt(id) },
+            data: { nascimento: dataNascimento },
+        });
+
+        Logger(`PATCH - USERS - NASCIMENTO - ${id}`, `200 - Data de nascimento atualizada com sucesso`, "success");
+        res.status(200).json(updatedUser);
+    } catch (error) {
+        Logger(`PATCH - USERS - NASCIMENTO - ${id}`, `Erro ao atualizar data de nascimento. ${JSON.stringify(error)}`, "error");
+        res.status(500).json({ message: 'Erro ao atualizar data de nascimento.' });
+    }
+});
+
+routerUsers.patch('/foto/:id', validateJWT, async (req, res) => {
+    const { id } = req.params;
+    const { foto } = req.body;
+
+    if (!foto) {
+        return res.status(400).json({ error: true, message: 'URL da foto é obrigatória.' });
+    }
+
+    try {
+        const existingUser = await prisma.usuario.findUnique({
+            where: { id: parseInt(id) },
+        });
+
+        if (!existingUser) {
+            Logger(`PATCH - USERS - FOTO - ${id}`, `404 - Usuário não encontrado`, "error");
+            return res.status(404).json({ error: true, message: 'Usuário não encontrado!' });
+        }
+
+        const updatedUser = await prisma.usuario.update({
+            where: { id: parseInt(id) },
+            data: { foto },
+        });
+
+        Logger(`PATCH - USERS - FOTO - ${id}`, `200 - Foto atualizada com sucesso`, "success");
+        res.status(200).json(updatedUser);
+    } catch (error) {
+        Logger(`PATCH - USERS - FOTO - ${id}`, `Erro ao atualizar foto. ${JSON.stringify(error)}`, "error");
+        res.status(500).json({ message: 'Erro ao atualizar foto.' });
+    }
+});
+
+
+routerUsers.patch('/status_usuario/:id', validateJWT, async (req, res) => {
+    const { id } = req.params;
+    const { status_usuario } = req.body;
+
+    if (status_usuario === undefined) {
+        return res.status(400).json({ error: true, message: 'Status do usuário é obrigatório.' });
+    }
+
+    const statusInt = parseInt(status_usuario);
+    if (isNaN(statusInt)) {
+        return res.status(400).json({ error: true, message: 'Status do usuário deve ser um número inteiro.' });
+    }
+
+    try {
+        const existingUser = await prisma.usuario.findUnique({
+            where: { id: parseInt(id) },
+        });
+
+        if (!existingUser) {
+            Logger(`PATCH - USERS - STATUS_USUARIO - ${id}`, `404 - Usuário não encontrado`, "error");
+            return res.status(404).json({ error: true, message: 'Usuário não encontrado!' });
+        }
+
+        const updatedUser = await prisma.usuario.update({
+            where: { id: parseInt(id) },
+            data: { status_usuario: statusInt },
+        });
+
+        Logger(`PATCH - USERS - STATUS_USUARIO - ${id}`, `200 - Status do usuário atualizado com sucesso`, "success");
+        res.status(200).json(updatedUser);
+    } catch (error) {
+        Logger(`PATCH - USERS - STATUS_USUARIO - ${id}`, `Erro ao atualizar status do usuário. ${JSON.stringify(error)}`, "error");
+        res.status(500).json({ message: 'Erro ao atualizar status do usuário.' });
+    }
+});
+
+// PATCH /curso/:id
+routerUsers.patch('/curso/:id', validateJWT, async (req, res) => {
+    const { id } = req.params;
+    const { curso } = req.body;
+
+    if (curso === undefined) {
+        return res.status(400).json({ error: true, message: 'Curso é obrigatório.' });
+    }
+
+    const cursoInt = parseInt(curso);
+    if (isNaN(cursoInt)) {
+        return res.status(400).json({ error: true, message: 'Curso deve ser um número inteiro.' });
+    }
+
+    try {
+        const existingUser = await prisma.usuario.findUnique({
+            where: { id: parseInt(id) },
+        });
+
+        if (!existingUser) {
+            Logger(`PATCH - USERS - CURSO - ${id}`, `404 - Usuário não encontrado`, "error");
+            return res.status(404).json({ error: true, message: 'Usuário não encontrado!' });
+        }
+
+        const updatedUser = await prisma.usuario.update({
+            where: { id: parseInt(id) },
+            data: { curso: cursoInt },
+        });
+
+        Logger(`PATCH - USERS - CURSO - ${id}`, `200 - Curso atualizado com sucesso`, "success");
+        res.status(200).json(updatedUser);
+    } catch (error) {
+        Logger(`PATCH - USERS - CURSO - ${id}`, `Erro ao atualizar curso. ${JSON.stringify(error)}`, "error");
+        res.status(500).json({ message: 'Erro ao atualizar curso.' });
+    }
+});
+
+
+routerUsers.patch('/status_curso/:id', validateJWT, async (req, res) => {
+    const { id } = req.params;
+    const { status_curso } = req.body;
+
+    if (status_curso === undefined) {
+        return res.status(400).json({ error: true, message: 'Status do curso é obrigatório.' });
+    }
+
+    const statusCursoInt = parseInt(status_curso);
+    if (isNaN(statusCursoInt)) {
+        return res.status(400).json({ error: true, message: 'Status do curso deve ser um número inteiro.' });
+    }
+
+    try {
+        const existingUser = await prisma.usuario.findUnique({
+            where: { id: parseInt(id) },
+        });
+
+        if (!existingUser) {
+            Logger(`PATCH - USERS - STATUS_CURSO - ${id}`, `404 - Usuário não encontrado`, "error");
+            return res.status(404).json({ error: true, message: 'Usuário não encontrado!' });
+        }
+
+        const updatedUser = await prisma.usuario.update({
+            where: { id: parseInt(id) },
+            data: { status_curso: statusCursoInt },
+        });
+
+        Logger(`PATCH - USERS - STATUS_CURSO - ${id}`, `200 - Status do curso atualizado com sucesso`, "success");
+        res.status(200).json(updatedUser);
+    } catch (error) {
+        Logger(`PATCH - USERS - STATUS_CURSO - ${id}`, `Erro ao atualizar status do curso. ${JSON.stringify(error)}`, "error");
+        res.status(500).json({ message: 'Erro ao atualizar status do curso.' });
+    }
+});
+
+
+
+

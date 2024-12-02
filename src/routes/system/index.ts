@@ -68,6 +68,46 @@ routerSystem.post('/send-email', validateJWT, async (req, res) => {
     }
 });
 
+routerSystem.post('/new-log', validateJWT, async (req, res) => {
+    let { funcao, mensagem, status, usuario } = req.body;
+  
+    try {
+      if (usuario) {
+        const userExists = await prisma.usuario.findUnique({
+          where: { id: usuario }
+        });
+  
+        if (!userExists) {
+          // Envie uma resposta de erro ao cliente
+          return res.status(404).json({ error: `Usuário com ID ${usuario} não encontrado` });
+        }
+      }
+  
+      const registerLog = await prisma.logs.create({
+        data: {
+          funcao,
+          mensagem,
+          usuario: usuario ?? null,
+          status
+        }
+      });
+  
+      // Envie a resposta de sucesso ao cliente
+      return res.status(201).json(registerLog);
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error('Erro ao registrar log:', error.message);
+        // Envie uma resposta de erro ao cliente
+        return res.status(500).json({ error: `Erro ao registrar log: ${error.message}` });
+      } else {
+        console.error('Erro desconhecido ao registrar log:', error);
+        // Envie uma resposta de erro ao cliente
+        return res.status(500).json({ error: 'Erro desconhecido ao registrar log' });
+      }
+    }
+  });
+  
+
 routerSystem.get('/logs', validateJWT, async (req, res) => {
     try {
         const logs = await prisma.logs.findMany();

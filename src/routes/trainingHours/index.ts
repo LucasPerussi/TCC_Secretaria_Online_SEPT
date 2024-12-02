@@ -29,10 +29,10 @@ routerTrainingHours.post('/new', validateJWT, async (req, res) => {
             data: {
                 aluno,
                 data_envio,
-                horas_solicitadas,
+                horas_solicitadas: Number(horas_solicitadas),
                 data_evento: new Date(data_evento),
                 descricao,
-                tipo,
+                tipo: Number(tipo),
                 comprovante,
             },
         });
@@ -78,6 +78,64 @@ routerTrainingHours.delete('/id/:id', validateJWT, async (req, res) => {
 
 routerTrainingHours.get('/types', validateJWT, async (req, res) => {
     res.json(AtividadeFormativaTypeInfo);
+});
+
+
+routerTrainingHours.get('/percentual-por-tipo/:aluno', validateJWT, async (req, res) => {
+    const aluno = Number(req.params.aluno);
+
+    try {
+        // Validação do ID do aluno
+        if (isNaN(aluno)) {
+            Logger(`GET - PERCENTUAL-POR-TIPO - by-student/${aluno}`, `400 - ID de aluno inválido`, 'error');
+            return res.status(400).json({ error: true, message: 'ID de aluno inválido.' });
+        }
+
+        // Contagem total de registros para o aluno
+        const totalRecords = await prisma.horas_formativas.count({
+            where: { aluno: aluno },
+        });
+
+        if (totalRecords === 0) {
+            Logger(`GET - PERCENTUAL-POR-TIPO - by-student/${aluno}`, `404 - Nenhum registro encontrado`, 'error');
+            return res.status(404).json({ error: true, message: 'Nenhum registro encontrado para o aluno especificado.' });
+        }
+
+        // Agrupar registros por tipo e contar
+        const groupedData = await prisma.horas_formativas.groupBy({
+            by: ['tipo'],
+            where: { aluno: aluno },
+            _count: {
+                tipo: true,
+            },
+        });
+
+        // Construir o response com os percentuais
+        const response = Object.values(AtividadeFormativaTypes).map(tipoKey => {
+            const tipoId = Number(tipoKey);
+            const tipoInfo = AtividadeFormativaTypeInfo[tipoKey as AtividadeFormativaTypes];
+            const tipoCount = groupedData.find(item => Number(item.tipo) === tipoId)?._count.tipo || 0;
+            const percentual = ((tipoCount / totalRecords) * 100).toFixed(2); // Percentual com 2 casas decimais
+
+            return {
+                id: tipoId,
+                nome: tipoInfo.nome,
+                percentual: Number(percentual),
+            };
+        });
+
+        Logger(`GET - PERCENTUAL-POR-TIPO - by-student/${aluno}`, `200 - Percentuais calculados com sucesso`, 'success');
+        return res.status(200).json(response);
+
+    } catch (error) {
+        if (error instanceof Error) {
+            Logger(`GET - PERCENTUAL-POR-TIPO - by-student/${aluno}`, `500 - Erro interno: ${error.message}`, 'error');
+            return res.status(500).json({ message: 'Erro ao calcular os percentuais dos tipos de registros.', error: error.message });
+        } else {
+            Logger(`GET - PERCENTUAL-POR-TIPO - by-student/${aluno}`, `500 - Erro desconhecido`, 'error');
+            return res.status(500).json({ message: 'Erro desconhecido ao calcular os percentuais dos tipos de registros.', error: 'Erro desconhecido' });
+        }
+    }
 });
 
 routerTrainingHours.get('/types/:id', validateJWT, (req, res) => {
