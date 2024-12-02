@@ -130,6 +130,33 @@ routerSystem.get('/logs', validateJWT, async (req, res) => {
     }
 });
 
+routerSystem.get('/logs/last50', validateJWT, async (req, res) => {
+    try {
+        const logs = await prisma.logs.findMany({
+            take: 50,
+            orderBy: {
+                id: 'desc', // Substitua por 'id' se 'created_at' não existir
+            },
+        });
+
+        if (logs && logs.length > 0) {
+            Logger(`GET - SYSTEM - logs/last50`, `200 - Found and Authorized`, 'success');
+            res.status(200).json(logs);
+        } else {
+            Logger(`GET - SYSTEM - logs/last50`, `404 - Not Found`, 'error');
+            res.status(404).send({ error: true, message: 'Nenhum registro de log encontrado!' });
+        }
+    } catch (error) {
+        if (error instanceof Error) {
+            Logger(`GET - SYSTEM - logs/last50`, `500 - Error fetching logs: ${error.message}`, 'error');
+            res.status(500).json({ message: 'Erro ao buscar LOGS.', error: error.message });
+        } else {
+            Logger(`GET - SYSTEM - logs/last50`, '500 - Unknown error occurred', 'error');
+            res.status(500).json({ message: 'Erro ao buscar LOGS.', error: 'Erro desconhecido' });
+        }
+    }
+});
+
 routerSystem.get('/logs-user/:user', validateJWT, async (req, res) => {
     const user = Number(req.params.user);
     try {
