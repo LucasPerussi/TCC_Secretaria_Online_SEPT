@@ -175,6 +175,28 @@ routerFields.get('/request-field-by-process-type/:id', validateJWT, async (req, 
     }
 });
 
+routerFields.get('/input-types', validateJWT, async (req, res) => {
+    const id = Number(req.params.id);
+    try {
+        const steps = await prisma.campos_solicitacao.findMany({
+            where: {
+                tipo_processo: id
+            }
+        })
+
+        if (steps) {
+            Logger(`GET - FIELDS - request-field-by-process-type/${id}`, `200 - Found and Authorized`, "success");
+            res.status(200).send(JSON.stringify(steps));
+        } else {
+            Logger(`GET - FIELDS - request-field-by-process-type/${id}`, `404 - Not Found`, "error");
+            res.status(404).send({ error: true, message: 'Field type not found!' });
+        }
+    } catch (error) {
+        Logger(`GET - FIELDS - request-field-by-process-type/${id}`, `Error fetching requested Field type. ${JSON.stringify(error)} `, "error");
+        res.status(500).json({ message: 'Error fetching requested Field type.' });
+    }
+});
+
 
 
 
