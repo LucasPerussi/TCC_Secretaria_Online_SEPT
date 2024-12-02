@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { validateJWT } from '../../middlewares/JWTVerifier';
+import { extractUserDataFromToken, validateJWT } from '../../middlewares/JWTVerifier';
 import prisma from '../../prismaClient'; // Adjust the path as necessary
 import { Prisma } from '@prisma/client';
 import { Logger } from '../../middlewares/logger';
@@ -388,6 +388,63 @@ routerRequests.get('/all-without-professor', validateJWT, async (req, res) => {
     }
 });
 
+routerRequests.get('/all-requests-as-teacher', validateJWT, async (req, res) => {
+    try {
+      const userData = await extractUserDataFromToken(req, res);
+      if (!userData) { 
+        return;
+      }
+  
+      const steps = await prisma.processo.findMany({
+        where: {
+          professor_avaliador: userData.id,
+        },
+        include: {
+          usuario_processo_alunoTousuario: {
+            select: {
+              nome: true,
+              sobrenome: true,
+              email: true,
+              foto: true,
+            },
+          },
+          usuario_processo_professor_avaliadorTousuario: {
+            select: {
+              nome: true,
+              sobrenome: true,
+              email: true,
+              foto: true,
+            },
+          },
+          usuario_processo_servidor_responsavelTousuario: {
+            select: {
+              nome: true,
+              sobrenome: true,
+              email: true,
+              foto: true,
+            },
+          },
+          tipo_solicitacao_processo_tipo_solicitacaoTotipo_solicitacao: {
+            select: {
+              nome: true,
+            },
+          }
+        },
+      });
+  
+      if (steps.length > 0) {
+        Logger(`GET - REQUESTS - /all-requests-as-teacher`, `200 - Found and Authorized`, "success");
+        res.status(200).json(steps);
+      } else {
+        Logger(`GET - REQUESTS - /all-requests-as-teacher`, `404 - Not Found`, "error");
+        res.status(404).json({ error: true, message: 'No process found' });
+      }
+    } catch (error) {
+      Logger(`GET - REQUESTS - /all-requests-as-teacher`, `Error fetching processes: ${JSON.stringify(error)}`, "error");
+      res.status(500).json({ message: 'Error fetching processes.' });
+    }
+  });
+  
 
 routerRequests.post('/reply-proccess', validateJWT, async (req, res) => {
     let { processo, campo, usuario, resposta } = req.body;
