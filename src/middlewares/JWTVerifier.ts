@@ -108,31 +108,55 @@ export const isAllowed = async (req: Request, res: Response, next: NextFunction)
     }
     next();
 };
-
 export const extractUserDataFromToken = async (req: Request, res: Response) => {
     const token = req.header('Authorization');
+
     if (!token) {
-        return res.status(401).json({ message: 'Dados de sessão inválidos' });
+        res.status(401).json({ message: 'Dados de sessão inválidos' });
+        return null;
     }
 
-    const userId = extractUserFromToken(token);
-    if (userId === null) {
-        return res.status(401).json({ message: 'Dados de sessão inválidos' });
+    const userIdString = extractUserFromToken(token);
+    if (userIdString === null) {
+        res.status(401).json({ message: 'Dados de sessão inválidos' });
+        return null;
+    }
+
+    const userId = Number(userIdString);
+    if (isNaN(userId)) {
+        res.status(401).json({ message: 'Dados de sessão inválidos' });
+        return null;
     }
 
     const isValid = await verifyToken(token, userId);
     if (!isValid) {
-        return res.status(401).json({ message: 'Dados de sessão inválidos' });
+        res.status(401).json({ message: 'Dados de sessão inválidos' });
+        return null;
     }
 
     try {
         const user = await prisma.usuario.findFirst({
-            where: { id: userId }
+            where: { id: userId },
+            select: {
+                id: true,
+                email: true,
+                senha: true,
+                nome: true,
+                sobrenome: true,
+                funcao: true, 
+            },
         });
+
+        if (!user) {
+            res.status(401).json({ message: 'Dados de sessão inválidos' });
+            return null;
+        }
 
         console.log(user);
         return user;
     } catch (error) {
-        throw new Error('Erro ao buscar os dados do usuário');
+        console.error('Erro ao buscar os dados do usuário:', error);
+        res.status(500).json({ message: 'Erro interno do servidor.' });
+        return null;
     }
 };

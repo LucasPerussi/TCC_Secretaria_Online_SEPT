@@ -1,7 +1,27 @@
 import { Router } from 'express';
 import prisma from '../../prismaClient'; // Adjust the path as necessary
-import { isAllowed, validateJWT } from '../../middlewares/JWTVerifier';
+import { PrismaClient, Prisma } from '@prisma/client';  
+import { extractUserDataFromToken, isAllowed, validateJWT } from '../../middlewares/JWTVerifier';
+import { TimelineTypes, TimelineTypeInfo } from '../../enum/timeline';
+
+
+
+const crypto = require('crypto');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+
+import axios from 'axios';
 import { Logger } from '../../middlewares/logger';
+import { Timeline } from '../../middlewares/timeline';
+import { SendEmail } from '../../middlewares/sendEmail';
+import { EmailTypes } from '../../enum/emails';
+
+// Definição do tipo para o corpo da requisição
+interface ChangePasswordRequest {
+    currentPassword: string;
+    newPassword: string;
+    confirmPassword: string;
+}
 
 export const routerUsers = Router()
 
@@ -26,6 +46,108 @@ routerUsers.get('/id/:id', validateJWT, async (req, res) => {
     } catch (error) {
         Logger(`GET - USERS - id/${id}`, `Error fetching requested user. ${JSON.stringify(error)} `, "error");
         res.status(500).json({ message: 'Error fetching requested user.' });
+    }
+});
+
+routerUsers.patch('/id/:id/change-password', validateJWT, async (req, res) => {
+    const id = Number(req.params.id);
+
+    try {
+        // Extrai os dados do usuário a partir do token JWT
+        const userData = await extractUserDataFromToken(req, res);
+        if (!userData) { 
+            return;
+        }
+
+        if (userData.id !== id && userData.funcao < 9) { 
+            Logger('USERS/PATCH - change-password', `403 - Erro - Acesso negado. Usuário ID: ${userData.id} tentou alterar a senha de ID: ${id}`, "error");
+            return res.status(403).json({ message: 'Acesso negado.' });
+        }
+
+        // Extrai os campos necessários do corpo da requisição
+        const { currentPassword, newPassword, confirmPassword }: ChangePasswordRequest = req.body;
+
+        // Verificação de campos obrigatórios
+        if (!currentPassword || !newPassword || !confirmPassword) {
+            Logger('USERS/PATCH - change-password', `400 - Erro - Campos obrigatórios faltando. ID: ${id}`, "error");
+            return res.status(400).json({ message: 'Todos os campos são obrigatórios.' });
+        }
+
+        // Verifica se a nova senha e a confirmação correspondem
+        if (newPassword !== confirmPassword) {
+            Logger('USERS/PATCH - change-password', `400 - Erro - As novas senhas não correspondem. ID: ${id}`, "error");
+            return res.status(400).json({ message: 'As novas senhas não correspondem.' });
+        }
+
+        // Opcional: Verificar se a nova senha atende a certos critérios de segurança
+        if (newPassword.length < 6) { // Exemplo de critério
+            Logger('USERS/PATCH - change-password', `400 - Erro - A nova senha deve ter pelo menos 6 caracteres. ID: ${id}`, "error");
+            return res.status(400).json({ message: 'A nova senha deve ter pelo menos 6 caracteres.' });
+        }
+
+        // Recupera o usuário do banco de dados, incluindo a senha atual
+        const user = await prisma.usuario.findUnique({
+            where: { id: id },
+            select: {
+                id: true,
+                email: true,
+                senha: true,
+                nome: true,
+                sobrenome: true,
+                funcao: true, 
+            },
+        });
+
+        // Verifica se o usuário existe
+        if (!user) {
+            Logger('USERS/PATCH - change-password', `404 - Erro - Usuário não encontrado. ID: ${id}`, "error");
+            return res.status(404).json({ message: 'Usuário não encontrado.' });
+        }
+
+        // Verifica se a senha atual está correta
+        const isPasswordValid = await bcrypt.compare(currentPassword, user.senha);
+        if (!isPasswordValid) {
+            Logger('USERS/PATCH - change-password', `400 - Erro - Senha atual inválida. ID: ${id}`, "error");
+            return res.status(400).json({ message: 'Senha atual inválida.' });
+        }
+
+        // Hash da nova senha
+        const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+
+        // Atualiza a senha no banco de dados
+        await prisma.usuario.update({
+            where: { id: id },
+            data: { senha: hashedNewPassword },
+        });
+
+        // Log da ação
+        Logger('USERS/PATCH - change-password', `200 - Senha atualizada com sucesso para o usuário ID: ${id}`, "success", id);
+        Timeline(
+            'Senha alterada com sucesso!',
+            id.toString(),
+            'A senha da sua conta foi alterada.',
+            Number(TimelineTypes.PASSWORD_CHANGE),
+            id
+        );
+        SendEmail(
+            user.email,
+            'Senha Alterada',
+            'Sua senha foi alterada com sucesso.',
+            Number(user.id),
+            Number(EmailTypes.PASSWORD_CHANGE)
+        );
+
+        // Responde com uma mensagem de sucesso
+        res.status(200).json({ message: 'Senha atualizada com sucesso.' });
+    } catch (error) {
+        if (error instanceof Prisma.PrismaClientKnownRequestError) {
+            Logger('USERS/PATCH - change-password', `400 - Erro - ${error.message}`, "error", id);
+            res.status(400).json({ message: error.message });
+        } else {
+            Logger('USERS/PATCH - change-password', `500 - Erro - ${error}`, "error", id);
+            console.error('Erro durante a troca de senha:', error);
+            res.status(500).json({ message: 'Erro interno do servidor.' });
+        }
     }
 });
 
@@ -344,7 +466,7 @@ routerUsers.patch('/nome/:id', validateJWT, async (req, res) => {
     const { nome } = req.body;
 
     if (!nome) {
-        return res.status(400).json({ error: true, message: 'Nome é obrigatório.' });
+        return res.status(400).json({ error: true, message: 'Nome é obrigatório. recived' + JSON.stringify(req.body) });
     }
 
     try {
