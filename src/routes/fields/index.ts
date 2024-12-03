@@ -106,7 +106,7 @@ routerFields.post('/new-option', validateJWT, async (req, res) => {
             data: {
                 nome,
                 label,
-                tipo : Number(tipo),
+                tipo: Number(tipo),
                 campo_pai
             }
         })
@@ -175,7 +175,7 @@ routerFields.post('/link-field-to-request', validateJWT, async (req, res) => {
     try {
         const tipoCampo = await prisma.tipos_campos.findUnique({
             where: {
-                id: tipo
+                id: Number(tipo)
             },
             select: {
                 nome: true,
@@ -194,8 +194,8 @@ routerFields.post('/link-field-to-request', validateJWT, async (req, res) => {
             data: {
                 nome: tipoCampo.nome,
                 nome_exibicao: tipoCampo.etiqueta,
-                tipo,
-                tipo_processo
+                tipo: Number(tipo),
+                tipo_processo: Number(tipo_processo)
             }
         });
 
@@ -213,6 +213,89 @@ routerFields.post('/link-field-to-request', validateJWT, async (req, res) => {
         }
     }
 });
+
+routerFields.post('/new-type-for-process', validateJWT, async (req, res) => {
+    const { nome, label, obrigatorio, tipo_dado, padrao, processo } = req.body;
+
+    try {
+        // Inicia uma transação interativa
+        const result = await prisma.$transaction(async (prisma) => {
+            // Primeiro, cria o novo campo em tipos_campos
+            const newField = await prisma.tipos_campos.create({
+                data: {
+                    nome,
+                    etiqueta: label,
+                    obrigatorio: Number(obrigatorio),
+                    tipo_dado: Number(tipo_dado),
+                    campo_padrao: 0
+                }
+            });
+
+            // Em seguida, cria o registro em campos_solicitacao usando o id do newField
+            const proccessField = await prisma.campos_solicitacao.create({
+                data: {
+                    nome: newField.nome,
+                    nome_exibicao: newField.etiqueta,
+                    tipo: newField.id, // Aqui usamos o id do newField
+                    tipo_processo: Number(processo)
+                }
+            });
+
+            // Retorna os dados para uso fora da transação
+            return { newField, proccessField };
+        });
+
+        // Log de sucesso para ambas as operações
+        Logger(`POST - FIELDS - new-type-for-process`, JSON.stringify(result.newField), "success");
+        Logger(`POST - FIELDS - new-type-for-process`, JSON.stringify(result.proccessField), "success");
+
+        // Resposta bem-sucedida com os dados criados
+        return res.status(201).json({
+            message: 'Campo personalizado cadastrado com sucesso!',
+            data: result
+        });
+
+    } catch (error) {
+        // Verifica se o erro é uma instância de Error
+        if (error instanceof Error) {
+            console.error('Erro ao criar campo personalizado:', error.message);
+            Logger(`POST - FIELDS - new-type-for-process`, error.message, "error");
+            return res.status(500).json({ message: 'Erro ao criar campo personalizado', error: error.message });
+        } else {
+            console.error('Erro desconhecido ao criar campo personalizado');
+            Logger(`POST - FIELDS - new-type-for-process`, "Erro desconhecido", "error");
+            return res.status(500).json({ message: 'Erro desconhecido ao criar campo personalizado' });
+        }
+    }
+});
+
+routerFields.delete('/remove-link-field-to-request/:field/:processo', validateJWT, async (req, res) => {
+    const field = Number(req.params.field);
+    const processo = Number(req.params.processo);
+
+    try {
+        const removeField = await prisma.campos_solicitacao.deleteMany({
+            where: {
+                tipo: field,
+                tipo_processo: processo,
+            }
+        });
+
+        Logger(`POST - FIELDS - remove-link-field-to-request`, JSON.stringify(removeField), "success");
+        res.status(200).send(JSON.stringify(removeField));
+    } catch (error) {
+        if (error instanceof Error) {
+            console.error('Erro ao remover campo de solicitação:', error.message);
+            Logger(`POST - FIELDS - remove-link-field-to-request`, error.message, "error");
+            res.status(500).send({ message: 'Erro ao remover campo de solicitação', error: error.message });
+        } else {
+            console.error('Erro ao remover campo de solicitação: Erro desconhecido');
+            Logger(`POST - FIELDS - remove-link-field-to-request`, "Erro desconhecido", "error");
+            res.status(500).send({ message: 'Erro ao remover campo de solicitação', error: 'Erro desconhecido' });
+        }
+    }
+});
+
 
 routerFields.post('/new-request-field', validateJWT, async (req, res) => {
     let { nome, nome_exibicao, tipo, tipo_processo } = req.body;
