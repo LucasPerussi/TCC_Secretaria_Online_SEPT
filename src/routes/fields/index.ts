@@ -16,9 +16,9 @@ routerFields.post('/new-type', validateJWT, async (req, res) => {
             data: {
                 nome,
                 etiqueta: label,
-                obrigatorio,
-                tipo_dado,
-                campo_padrao: padrao
+                obrigatorio: Number(obrigatorio),
+                tipo_dado: Number(tipo_dado),
+                campo_padrao: Number(padrao)
             }
         })
         Logger(`POST - FIELDS - new-type`, JSON.stringify(field), "success");
@@ -84,7 +84,7 @@ routerFields.post('/new-option', validateJWT, async (req, res) => {
             data: {
                 nome,
                 label,
-                tipo,
+                tipo : Number(tipo),
                 campo_pai
             }
         })
