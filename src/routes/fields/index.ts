@@ -169,6 +169,50 @@ routerFields.get('/all-default-fields', validateJWT, async (req, res) => {
     }
 });
 
+routerFields.post('/link-field-to-request', validateJWT, async (req, res) => {
+    const { tipo, tipo_processo } = req.body;
+
+    try {
+        const tipoCampo = await prisma.tipos_campos.findUnique({
+            where: {
+                id: tipo
+            },
+            select: {
+                nome: true,
+                etiqueta: true
+            }
+        });
+
+        if (!tipoCampo) {
+            const message = `Tipo com ID ${tipo} não encontrado.`;
+            Logger(`POST - FIELDS - new-request-field`, message, "error");
+            return res.status(404).send({ message });
+        }
+
+        // Criar o campo na tabela campos_solicitacao
+        const field = await prisma.campos_solicitacao.create({
+            data: {
+                nome: tipoCampo.nome,
+                nome_exibicao: tipoCampo.etiqueta,
+                tipo,
+                tipo_processo
+            }
+        });
+
+        Logger(`POST - FIELDS - new-request-field`, JSON.stringify(field), "success");
+        res.status(200).send(JSON.stringify(field));
+    } catch (error) {
+        if (error instanceof Error) {
+            console.error('Erro ao criar campo de solicitação:', error.message);
+            Logger(`POST - FIELDS - new-request-field`, error.message, "error");
+            res.status(500).send({ message: 'Erro ao criar campo de solicitação', error: error.message });
+        } else {
+            console.error('Erro ao criar campo de solicitação: Erro desconhecido');
+            Logger(`POST - FIELDS - new-request-field`, "Erro desconhecido", "error");
+            res.status(500).send({ message: 'Erro ao criar campo de solicitação', error: 'Erro desconhecido' });
+        }
+    }
+});
 
 routerFields.post('/new-request-field', validateJWT, async (req, res) => {
     let { nome, nome_exibicao, tipo, tipo_processo } = req.body;
