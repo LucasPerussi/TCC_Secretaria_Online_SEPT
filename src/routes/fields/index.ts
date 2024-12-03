@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { validateJWT } from '../../middlewares/JWTVerifier';
 import prisma from '../../prismaClient'; // Adjust the path as necessary
 import { Logger } from '../../middlewares/logger';
+import { InputTypeInfo } from '../../enum/input';
 
 export const routerFields = Router()
 
@@ -197,6 +198,18 @@ routerFields.get('/input-types', validateJWT, async (req, res) => {
     }
 });
 
+routerFields.get('/input-types-enum', validateJWT, async (req, res) => {
+    try {
+        if (!InputTypeInfo || Object.keys(InputTypeInfo).length === 0) {
+            throw new Error('InputTypeInfo is empty or undefined.');
+        }
+
+        res.json(InputTypeInfo); // Retorna o objeto JSON
+    } catch (error) {
+        console.error('Error fetching InputTypeInfo:', JSON.stringify(error));
+        res.status(500).json({ message: 'Error fetching requested Field type.' });
+    }
+});
 
 
 

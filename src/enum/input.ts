@@ -24,11 +24,11 @@ export enum InputTypes {
 }
 
 export const InputTypeInfo: Record<InputTypes, InputType> = {
-    [InputTypes.TEXT_INPUT]: { id: 1, nome: "Criação de Conta", cor: "#ffffff" },
-    [InputTypes.NUMBER_INPUT]: { id: 2, nome: "Login", cor: "#0000ff" },
-    [InputTypes.DATE_INPUT]: { id: 3, nome: "Chamado registrado", cor: "#ff0f0f" },
-    [InputTypes.EMAIL_INPUT]: { id: 4, nome: "E-mail", cor: "#ff8800" },
-    [InputTypes.PHONE_INPUT]: { id: 5, nome: "Telefone", cor: "#228b22" },
+    [InputTypes.TEXT_INPUT]: { id: 1, nome: "Input de Texto", cor: "#ffffff" },
+    [InputTypes.NUMBER_INPUT]: { id: 2, nome: "Input de Número", cor: "#0000ff" },
+    [InputTypes.DATE_INPUT]: { id: 3, nome: "Input de Data", cor: "#ff0f0f" },
+    [InputTypes.EMAIL_INPUT]: { id: 4, nome: "Input de Email", cor: "#ff8800" },
+    [InputTypes.PHONE_INPUT]: { id: 5, nome: "Input de Telefone", cor: "#228b22" },
     [InputTypes.TEXT_BOX]: { id: 6, nome: "Caixa de Texto", cor: "#8a2be2" },
     [InputTypes.CHECK_BOX]: { id: 7, nome: "Caixa de Seleção", cor: "#ff1493" },
     [InputTypes.SELECT]: { id: 8, nome: "Seleção", cor: "#00ced1" },
