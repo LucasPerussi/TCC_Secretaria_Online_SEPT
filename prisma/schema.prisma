@@ -7,36 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model comentarios {
-  id                                      Int      @id @default(autoincrement())
-  processo                                Int
-  usuario                                 Int
-  comentario                              String   @db.VarChar(255)
-  data                                    DateTime @db.DateTime(0)
-  processo_comentarios_processoToprocesso processo @relation("comentarios_processoToprocesso", fields: [processo], references: [id], onUpdate: Restrict, map: "comentarios_ibfk_1")
-  usuario_comentarios_usuarioTousuario    usuario  @relation("comentarios_usuarioTousuario", fields: [usuario], references: [id], onUpdate: Restrict, map: "comentarios_ibfk_2")
-
-  @@index([processo], map: "processo")
-  @@index([usuario], map: "usuario")
-}
-
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
-model curso {
-  id                                 Int       @id @default(autoincrement())
-  nome                               String    @db.VarChar(255)
-  descricao                          String    @db.VarChar(255)
-  coordenador                        Int
-  criado_em                          DateTime  @default(now()) @db.DateTime(0)
-  identificador                      String    @unique(map: "identificador") @db.VarChar(10)
-  horas_formativas                   Int?
-  semestres                          Int?
-  usuario_curso_coordenadorTousuario usuario   @relation("curso_coordenadorTousuario", fields: [coordenador], references: [id], onUpdate: Restrict, map: "curso_fk_coordenador")
-  mural                              mural[]
-  usuario_usuario_cursoTocurso       usuario[] @relation("usuario_cursoTocurso")
-
-  @@index([coordenador], map: "curso_fk_coordenador")
-}
-
 model campos_solicitacao {
   id                 Int                  @id @default(autoincrement())
   tipo               Int
@@ -63,6 +33,35 @@ model codigos {
   @@index([usuario], map: "usuario")
 }
 
+model comentarios {
+  id                                      Int      @id @default(autoincrement())
+  processo                                Int
+  usuario                                 Int
+  comentario                              String   @db.VarChar(255)
+  data                                    DateTime @db.DateTime(0)
+  processo_comentarios_processoToprocesso processo @relation("comentarios_processoToprocesso", fields: [processo], references: [id], onUpdate: Restrict, map: "comentarios_ibfk_1")
+  usuario_comentarios_usuarioTousuario    usuario  @relation("comentarios_usuarioTousuario", fields: [usuario], references: [id], onUpdate: Restrict, map: "comentarios_ibfk_2")
+
+  @@index([processo], map: "processo")
+  @@index([usuario], map: "usuario")
+}
+
+model curso {
+  id                                 Int       @id @default(autoincrement())
+  nome                               String    @db.VarChar(255)
+  descricao                          String    @db.VarChar(255)
+  coordenador                        Int
+  criado_em                          DateTime  @default(now()) @db.DateTime(0)
+  identificador                      String    @unique(map: "identificador") @db.VarChar(10)
+  horas_formativas                   Int?
+  semestres                          Int?
+  usuario_curso_coordenadorTousuario usuario   @relation("curso_coordenadorTousuario", fields: [coordenador], references: [id], onUpdate: Restrict, map: "curso_fk_coordenador")
+  mural                              mural[]
+  usuario_usuario_cursoTocurso       usuario[] @relation("usuario_cursoTocurso")
+
+  @@index([coordenador], map: "curso_fk_coordenador")
+}
+
 model empresas {
   id            Int       @id @default(autoincrement())
   nome          String    @db.VarChar(100)
@@ -77,6 +76,8 @@ model enum_etapas {
   nome            String            @default("50") @db.VarChar(255)
   label           String            @default("100") @db.VarChar(255)
   padrao          Int               @default(1)
+  estimativaHoras Int               @default(24)
+  cor             String            @default("#1E90FF\t") @db.VarChar(10)
   etapas_processo etapas_processo[]
 }
 
@@ -101,13 +102,28 @@ model estagio {
 }
 
 model etapas_processo {
-  id          Int         @id @default(autoincrement())
-  tipo        Int
-  obrigatorio Int         @default(1)
-  enum_etapas enum_etapas @relation(fields: [tipo], references: [id], onUpdate: Restrict, map: "etapas_processo_ibfk_1")
-  processo    processo[]
+  id             Int         @id @default(autoincrement())
+  tipo           Int
+  obrigatorio    Int         @default(1)
+  ordem          Int?
+  proccessTypeId Int
+  enum_etapas    enum_etapas @relation(fields: [tipo], references: [id], onUpdate: Restrict, map: "etapas_processo_ibfk_1")
+  processo       processo[]
 
   @@index([tipo], map: "tipo")
+}
+
+model fila_emails {
+  id            Int      @id @default(autoincrement())
+  identificador String   @db.VarChar(15)
+  destinatario  String   @db.VarChar(255)
+  titulo        String   @db.VarChar(100)
+  operacao      Int
+  corpo         String   @db.Text
+  status        String   @default("1") @db.VarChar(3)
+  data          DateTime @default(now()) @db.DateTime(0)
+  usuario       Int?
+  sensivel      Int      @default(1)
 }
 
 model horas_formativas {
@@ -306,17 +322,4 @@ model usuario {
   curso_usuario_cursoTocurso                                    curso?               @relation("usuario_cursoTocurso", fields: [curso], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "usuario_fk_curso")
 
   @@index([curso], map: "usuario_fk_curso")
-}
-
-model fila_emails {
-  id            Int      @id @default(autoincrement())
-  identificador String   @db.VarChar(15)
-  destinatario  String   @db.VarChar(255)
-  titulo        String   @db.VarChar(100)
-  operacao      Int
-  corpo         String   @db.Text
-  status        String   @default("1") @db.VarChar(3)
-  data          DateTime @default(now()) @db.DateTime(0)
-  usuario       Int?
-  sensivel      Int      @default(1)
 }

@@ -10,55 +10,55 @@ export const routerRequests = Router()
 routerRequests.get('/', (req, res) => res.send('API de Solicitações'))
 
 
-routerRequests.post('/new', validateJWT, async (req, res) => {
-    let { titulo, descricao, aluno, professor_avaliador = null, tipo_solicitacao } = req.body;
-    let numero = Number(await numberGenerator(8));
-    let identificador = await codeGenerator(60);
+// routerRequests.post('/new', validateJWT, async (req, res) => {
+//     let { titulo, descricao, aluno, professor_avaliador = null, tipo_solicitacao } = req.body;
+//     let numero = Number(await numberGenerator(8));
+//     let identificador = await codeGenerator(60);
   
-    try {
-      // Verifique ou crie a etapa inicial
-      let etapaInicial = await prisma.etapas_processo.findFirst({
-        where: { tipo: 1 }, // Ajuste o filtro conforme necessário
-      });
+//     try {
+//       // Verifique ou crie a etapa inicial
+//       let etapaInicial = await prisma.etapas_processo.findFirst({
+//         where: { tipo: 1 }, // Ajuste o filtro conforme necessário
+//       });
   
-      if (!etapaInicial) {
-        etapaInicial = await prisma.etapas_processo.create({
-          data: {
-            tipo: 1,
-            obrigatorio: 1,
-            // Outros campos necessários
-          },
-        });
-      }
+//       if (!etapaInicial) {
+//         etapaInicial = await prisma.etapas_processo.create({
+//           data: {
+//             tipo: 1,
+//             obrigatorio: 1,
+//             // Outros campos necessários
+//           },
+//         });
+//       }
   
-      const field = await prisma.processo.create({
-        data: {
-          titulo,
-          descricao,
-          aluno,
-          tipo_solicitacao,
-          professor_avaliador: professor_avaliador ?? null,
-          data_abertura: new Date(),
-          identificador,
-          numero,
-          etapa_atual: etapaInicial.id, // Use o ID da etapa inicial
-        },
-      });
+//       const field = await prisma.processo.create({
+//         data: {
+//           titulo,
+//           descricao,
+//           aluno,
+//           tipo_solicitacao,
+//           professor_avaliador: professor_avaliador ?? null,
+//           data_abertura: new Date(),
+//           identificador,
+//           numero,
+//           etapa_atual: etapaInicial.id, // Use o ID da etapa inicial
+//         },
+//       });
   
-      Logger(`POST - REQUESTS - new`, JSON.stringify(field), "success");
-      res.status(200).send(JSON.stringify(field));
-    } catch (error) {
-      if (error instanceof Error) {
-        console.error('Erro ao criar estágio:', error.message);
-        Logger(`POST - REQUESTS - new`, error.message, "error");
-        res.status(500).send({ message: 'Erro ao criar estágio', error: error.message });
-      } else {
-        console.error('Erro ao criar estágio: Erro desconhecido');
-        Logger(`POST - REQUESTS - new`, "Erro desconhecido", "error");
-        res.status(500).send({ message: 'Erro ao criar estágio', error: 'Erro desconhecido' });
-      }
-    }
-  });
+//       Logger(`POST - REQUESTS - new`, JSON.stringify(field), "success");
+//       res.status(200).send(JSON.stringify(field));
+//     } catch (error) {
+//       if (error instanceof Error) {
+//         console.error('Erro ao criar estágio:', error.message);
+//         Logger(`POST - REQUESTS - new`, error.message, "error");
+//         res.status(500).send({ message: 'Erro ao criar estágio', error: error.message });
+//       } else {
+//         console.error('Erro ao criar estágio: Erro desconhecido');
+//         Logger(`POST - REQUESTS - new`, "Erro desconhecido", "error");
+//         res.status(500).send({ message: 'Erro ao criar estágio', error: 'Erro desconhecido' });
+//       }
+//     }
+//   });
   
 
   
@@ -539,3 +539,4 @@ routerRequests.delete('/clear-replies-process/:processo', validateJWT, async (re
         res.status(500).json({ message: 'Error fetching requested Field type.' });
     }
 });
+
