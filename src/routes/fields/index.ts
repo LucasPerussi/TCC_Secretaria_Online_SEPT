@@ -36,6 +36,28 @@ routerFields.post('/new-type', validateJWT, async (req, res) => {
     }
 });
 
+routerFields.delete('/type/:id', validateJWT, async (req, res) => {
+    const id = Number(req.params.id);
+    try {
+        const steps = await prisma.tipos_campos.delete({
+            where: {
+                id: id
+            }
+        })
+
+        if (steps) {
+            Logger(`DELETE - FIELDS - type/${id}`, `200 - Found and Authorized`, "success");
+            res.status(200).send(JSON.stringify(steps));
+        } else {
+            Logger(`DELETE - FIELDS - type/${id}`, `404 - Not Found`, "error");
+            res.status(404).send({ error: true, message: 'Field type not found!' });
+        }
+    } catch (error) {
+        Logger(`DELETE - FIELDS - type/${id}`, `Error DELETING requested Field type. ${JSON.stringify(error)} `, "error");
+        res.status(500).json({ message: 'Error DELETING requested Field type.' });
+    }
+});
+
 routerFields.get('/field-type-id/:id', validateJWT, async (req, res) => {
     const id = Number(req.params.id);
     try {
