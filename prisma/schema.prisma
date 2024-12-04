@@ -72,13 +72,12 @@ model empresas {
 }
 
 model enum_etapas {
-  id              Int               @id @default(autoincrement())
-  nome            String            @default("50") @db.VarChar(255)
-  label           String            @default("100") @db.VarChar(255)
-  padrao          Int               @default(1)
-  estimativaHoras Int               @default(24)
-  cor             String            @default("#1E90FF\t") @db.VarChar(10)
-  etapas_processo etapas_processo[]
+  id              Int    @id @default(autoincrement())
+  nome            String @default("50") @db.VarChar(255)
+  label           String @default("100") @db.VarChar(255)
+  padrao          Int    @default(1)
+  estimativaHoras Int    @default(24)
+  cor             String @default("#1E90FF") @db.VarChar(10)
 }
 
 model estagio {
@@ -102,12 +101,11 @@ model estagio {
 }
 
 model etapas_processo {
-  id             Int         @id @default(autoincrement())
+  id             Int        @id @default(autoincrement())
   tipo           Int
-  obrigatorio    Int         @default(1)
-  ordem          Int?
+  obrigatorio    Int        @default(1)
   proccessTypeId Int
-  enum_etapas    enum_etapas @relation(fields: [tipo], references: [id], onUpdate: Restrict, map: "etapas_processo_ibfk_1")
+  ordem          Int?
   processo       processo[]
 
   @@index([tipo], map: "tipo")
