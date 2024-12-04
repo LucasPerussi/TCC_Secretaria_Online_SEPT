@@ -4,63 +4,72 @@ import prisma from '../../prismaClient'; // Adjust the path as necessary
 import { Prisma } from '@prisma/client';
 import { Logger } from '../../middlewares/logger';
 import { codeGenerator, numberGenerator } from '../../middlewares/randomCodeGenerator';
+import { CompanyTypeInfo } from '../../enum/empresas';
 
 export const routerRequests = Router()
 
 routerRequests.get('/', (req, res) => res.send('API de Solicitações'))
 
 
-// routerRequests.post('/new', validateJWT, async (req, res) => {
-//     let { titulo, descricao, aluno, professor_avaliador = null, tipo_solicitacao } = req.body;
-//     let numero = Number(await numberGenerator(8));
-//     let identificador = await codeGenerator(60);
-  
-//     try {
-//       // Verifique ou crie a etapa inicial
-//       let etapaInicial = await prisma.etapas_processo.findFirst({
-//         where: { tipo: 1 }, // Ajuste o filtro conforme necessário
-//       });
-  
-//       if (!etapaInicial) {
-//         etapaInicial = await prisma.etapas_processo.create({
-//           data: {
-//             tipo: 1,
-//             obrigatorio: 1,
-//             // Outros campos necessários
-//           },
-//         });
-//       }
-  
-//       const field = await prisma.processo.create({
-//         data: {
-//           titulo,
-//           descricao,
-//           aluno,
-//           tipo_solicitacao,
-//           professor_avaliador: professor_avaliador ?? null,
-//           data_abertura: new Date(),
-//           identificador,
-//           numero,
-//           etapa_atual: etapaInicial.id, // Use o ID da etapa inicial
-//         },
-//       });
-  
-//       Logger(`POST - REQUESTS - new`, JSON.stringify(field), "success");
-//       res.status(200).send(JSON.stringify(field));
-//     } catch (error) {
-//       if (error instanceof Error) {
-//         console.error('Erro ao criar estágio:', error.message);
-//         Logger(`POST - REQUESTS - new`, error.message, "error");
-//         res.status(500).send({ message: 'Erro ao criar estágio', error: error.message });
-//       } else {
-//         console.error('Erro ao criar estágio: Erro desconhecido');
-//         Logger(`POST - REQUESTS - new`, "Erro desconhecido", "error");
-//         res.status(500).send({ message: 'Erro ao criar estágio', error: 'Erro desconhecido' });
-//       }
-//     }
-//   });
-  
+routerRequests.post('/new',  validateJWT, async (req, res) => {
+    const { titulo, descricao, aluno, tipo_solicitacao } = req.body;
 
+    // Validação básica dos campos de entrada
+    if (!titulo || !descricao || !aluno || !tipo_solicitacao) {
+      Logger('POST - REQUESTS - new', 'Campos de entrada inválidos', 'error');
+      return res.status(400).json({ message: 'Campos de entrada inválidos' });
+    }
+  
+    try {
+      const numero = Number(await numberGenerator(8));
+      const identificador = await codeGenerator(60);
+  
+      // Verifica se o aluno existe
+      const alunoExistente = await prisma.usuario.findUnique({
+        where: { id: Number(aluno) },
+      });
+  
+      if (!alunoExistente) {
+        Logger('POST - REQUESTS - new', `Aluno com id ${aluno} não encontrado`, 'error');
+        return res.status(404).json({ message: `Aluno com id ${aluno} não encontrado` });
+      }
+  
+      // Busca a etapa inicial com base no tipo_solicitacao
+      const etapaInicial = await prisma.etapas_processo.findFirst({
+        where: { tipo: Number(tipo_solicitacao) },
+      });
+  
+      // Define etapaInicialId com base na existência de etapaInicial
+      const etapaInicialId = etapaInicial ? Number(etapaInicial.id) : 1;
+  
+      // Cria o novo processo
+      const novoProcesso = await prisma.processo.create({
+        data: {
+          titulo,
+          descricao,
+          aluno:  Number(aluno), // Conecta ao aluno existente
+          tipo_solicitacao: Number(tipo_solicitacao),
+          data_abertura: new Date(),
+          identificador,
+          numero,
+          etapa_atual: etapaInicialId,
+        },
+      });
+  
+      Logger('POST - REQUESTS - new', JSON.stringify(novoProcesso), 'success');
+      return res.status(201).json(novoProcesso);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error('Erro ao criar processo:', error.message);
+        Logger('POST - REQUESTS - new', error.message, 'error');
+        return res.status(500).json({ message: 'Erro ao criar processo', error: error.message });
+      } else {
+        console.error('Erro ao criar processo: Erro desconhecido');
+        Logger('POST - REQUESTS - new', 'Erro desconhecido', 'error');
+        return res.status(500).json({ message: 'Erro ao criar processo', error: 'Erro desconhecido' });
+      }
+    }
+  });
   
 
 
@@ -120,6 +129,53 @@ routerRequests.patch('/add-server', validateJWT, async (req, res) => {
         }
     }
 });
+routerRequests.post('/new-question-reply', validateJWT, async (req, res) => {
+    const { campo, resposta, processo, usuario } = req.body; // Certifique-se de que o nome seja 'processo' e não 'process'
+
+    // Validação básica dos campos
+    if (
+        campo === undefined ||
+        typeof resposta !== 'string' ||
+        processo === undefined ||
+        usuario === undefined
+    ) {
+        return res.status(400).json({ message: 'Dados de entrada inválidos' });
+    }
+
+    const campoNumber = Number(campo);
+    const processoNumber = Number(processo);
+    const usuarioNumber = Number(usuario);
+
+   
+    if (isNaN(campoNumber) || isNaN(processoNumber) || isNaN(usuarioNumber)) {
+        return res.status(400).json({ message: 'Campos "campo", "processo" e "usuario" devem ser números válidos' });
+    }
+
+    try {
+        const field = await prisma.respostas_processo.create({
+            data: {
+                campo: campoNumber,
+                resposta,
+                processo: processoNumber, // Atribuindo diretamente o ID
+                usuario: usuarioNumber    // Atribuindo diretamente o ID
+            }
+        });
+
+        Logger(`POST - REQUESTS - new-question-reply`, JSON.stringify(field), "success");
+        res.status(200).json(field);
+    } catch (error) {
+        if (error instanceof Error) {
+            console.error('Erro ao atualizar server avaliador:', error.message);
+            Logger(`POST - REQUESTS - new-question-reply`, error.message, "error");
+            res.status(500).json({ message: 'Erro ao atualizar professor avaliador', error: error.message });
+        } else {
+            console.error('Erro ao atualizar server avaliador: Erro desconhecido');
+            Logger(`POST - REQUESTS - new-question-reply`, "Erro desconhecido", "error");
+            res.status(500).json({ message: 'Erro ao atualizar server avaliador', error: 'Erro desconhecido' });
+        }
+    }
+});
+
 
 
 routerRequests.get('/process-id/:id', validateJWT, async (req, res) => {
