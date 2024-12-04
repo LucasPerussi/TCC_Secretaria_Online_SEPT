@@ -296,6 +296,31 @@ routerFields.delete('/remove-link-field-to-request/:field/:processo', validateJW
     }
 });
 
+// routerFields.delete('/remove-field/:field/', validateJWT, async (req, res) => {
+//     const field = Number(req.params.field);
+
+//     try {
+//         const removeField = await prisma.campos_solicitacao.deleteMany({
+//             where: {
+//                 id: field,
+//             }
+//         });
+
+//         Logger(`POST - FIELDS - remove-field`, JSON.stringify(removeField), "success");
+//         res.status(200).send(JSON.stringify(removeField));
+//     } catch (error) {
+//         if (error instanceof Error) {
+//             console.error('Erro ao remover campo pelo id:', error.message);
+//             Logger(`POST - FIELDS - remove-field`, error.message, "error");
+//             res.status(500).send({ message: 'Erro ao remover campo pelo id', error: error.message });
+//         } else {
+//             console.error('Erro ao remover campo pelo id: Erro desconhecido');
+//             Logger(`POST - FIELDS - remove-field`, "Erro desconhecido", "error");
+//             res.status(500).send({ message: 'Erro ao remover campo pelo id', error: 'Erro desconhecido' });
+//         }
+//     }
+// });
+
 
 routerFields.post('/new-request-field', validateJWT, async (req, res) => {
     let { nome, nome_exibicao, tipo, tipo_processo } = req.body;
