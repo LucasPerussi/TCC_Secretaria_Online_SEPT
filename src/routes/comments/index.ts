@@ -3,6 +3,8 @@ import { validateJWT } from '../../middlewares/JWTVerifier';
 import prisma from '../../prismaClient'; // Adjust the path as necessary
 import { Logger } from '../../middlewares/logger';
 import { codeGenerator, numberGenerator } from '../../middlewares/randomCodeGenerator';
+import { Timeline } from '../../middlewares/timeline';
+import { TimelineTypes } from '../../enum/timeline';
 
 export const routerComments = Router()
 
@@ -35,7 +37,8 @@ routerComments.post('/new', validateJWT, async (req, res) => {
                 },
             },
         });
-
+        
+        Timeline("Novo comentário", processo, "Um novo comentário foi registrado em seu chamado!", Number(TimelineTypes.NEW_COMMENT), Number(usuario))
         // Log de sucesso
         Logger(`POST - COMENTARIOS - new`, JSON.stringify(novoComentario), "success");
 

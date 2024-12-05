@@ -5,6 +5,8 @@ import { Prisma } from '@prisma/client';
 import { Logger } from '../../middlewares/logger';
 import { codeGenerator, numberGenerator } from '../../middlewares/randomCodeGenerator';
 import { CompanyTypeInfo } from '../../enum/empresas';
+import { Timeline } from '../../middlewares/timeline';
+import { TimelineTypes } from '../../enum/timeline';
 
 export const routerRequests = Router()
 
@@ -55,6 +57,7 @@ routerRequests.post('/new', validateJWT, async (req, res) => {
                 etapa_atual: etapaInicialId,
             },
         });
+        Timeline("Chamado registrado", novoProcesso.id.toString(), "O chamado número " + numero + " foi registrado com sucesso", Number(TimelineTypes.NEW_COMMENT), Number(aluno))
 
         Logger('POST - REQUESTS - new', JSON.stringify(novoProcesso), 'success');
         return res.status(201).json(novoProcesso);
@@ -72,36 +75,60 @@ routerRequests.post('/new', validateJWT, async (req, res) => {
 });
 
 
-
-
 routerRequests.patch('/add-teacher', validateJWT, async (req, res) => {
     const { identificador, professor } = req.body;
-
-    try {
-        const field = await prisma.processo.update({
-            where: {
-                identificador
-            },
-            data: {
-                professor_avaliador: professor,
-            }
-        });
-
-        Logger(`PATCH - REQUESTS - add-teacher`, JSON.stringify(field), "success");
-        res.status(200).json(field);
-    } catch (error) {
-        if (error instanceof Error) {
-            console.error('Erro ao atualizar professor avaliador:', error.message);
-            Logger(`PATCH - REQUESTS - add-teacher`, error.message, "error");
-            res.status(500).json({ message: 'Erro ao atualizar professor avaliador', error: error.message });
-        } else {
-            console.error('Erro ao atualizar professor avaliador: Erro desconhecido');
-            Logger(`PATCH - REQUESTS - add-teacher`, "Erro desconhecido", "error");
-            res.status(500).json({ message: 'Erro ao atualizar professor avaliador', error: 'Erro desconhecido' });
-        }
+  
+    // Validação dos dados de entrada
+    if (!identificador || !professor) {
+      return res.status(400).json({ message: 'Identificador e professor são obrigatórios' });
     }
-});
-
+  
+    try {
+      const processoExistente = await prisma.processo.findUnique({
+        where: {
+          id: Number(identificador), 
+        },
+      });
+  
+      if (!processoExistente) {
+        console.error('Registro não encontrado para atualizar:', identificador);
+        Logger(`PATCH - REQUESTS - add-teacher`, `Registro não encontrado: ${identificador}`, "error");
+        return res.status(404).json({ message: 'Registro não encontrado' });
+      }
+  
+      const field = await prisma.processo.update({
+        where: {
+          id: Number(identificador),
+        },
+        data: {
+          professor_avaliador: Number(professor),
+        },
+      });
+  
+      Logger(`PATCH - REQUESTS - add-teacher`, JSON.stringify(field), "success");
+      res.status(200).json(field);
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if (error.code === 'P2025') { // Registro não encontrado
+          console.error('Registro não encontrado para atualizar:', identificador);
+          Logger(`PATCH - REQUESTS - add-teacher`, `Registro não encontrado: ${identificador}`, "error");
+          return res.status(404).json({ message: 'Registro não encontrado' });
+        }
+        // Você pode tratar outros códigos de erro do Prisma aqui, se necessário
+      }
+  
+      if (error instanceof Error) {
+        console.error('Erro ao atualizar professor avaliador:', error.message);
+        Logger(`PATCH - REQUESTS - add-teacher`, error.message, "error");
+        res.status(500).json({ message: 'Erro ao atualizar professor avaliador', error: error.message });
+      } else {
+        console.error('Erro ao atualizar professor avaliador: Erro desconhecido');
+        Logger(`PATCH - REQUESTS - add-teacher`, "Erro desconhecido", "error");
+        res.status(500).json({ message: 'Erro ao atualizar professor avaliador', error: 'Erro desconhecido' });
+      }
+    }
+  });
+  
 routerRequests.patch('/add-server', validateJWT, async (req, res) => {
     const { identificador, servidor } = req.body;
 
