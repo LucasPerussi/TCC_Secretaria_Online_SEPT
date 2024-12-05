@@ -9,39 +9,61 @@ export const routerComments = Router()
 routerComments.get('/', (req, res) => res.send('API de Solicitações'))
 
 routerComments.post('/new', validateJWT, async (req, res) => {
-    let { processo, usuario, comentario } = req.body;
+    const { processo, usuario, comentario } = req.body;
+
+    // Validação básica dos dados recebidos
+    if (!processo || !usuario || !comentario) {
+        return res.status(400).json({ message: 'Dados incompletos fornecidos.' });
+    }
+
     try {
-        const field = await prisma.comentarios.create({
+        const novoComentario = await prisma.comentarios.create({
             data: {
                 data: new Date(),
-                processo,
-                usuario,
-                comentario
-            }
-        })
-        Logger(`POST - COMENTARIOS - new`, JSON.stringify(field), "success");
-        res.status(200).send(JSON.stringify(field));
+                processo: Number(processo),
+                usuario: Number(usuario),
+                comentario: comentario.trim(),
+            },
+            include: {
+                usuario_comentarios_usuarioTousuario: {
+                    select: {
+                        nome: true,
+                        sobrenome: true,
+                        email: true,
+                        foto: true,
+                    },
+                },
+            },
+        });
+
+        // Log de sucesso
+        Logger(`POST - COMENTARIOS - new`, JSON.stringify(novoComentario), "success");
+
+        // Retorna o comentário criado com os dados do usuário incluídos
+        res.status(201).json(novoComentario);
     } catch (error) {
+        // Tratamento de erros
         if (error instanceof Error) {
-            console.error('Erro ao criar comentario:', error.message);
+            console.error('Erro ao criar comentário:', error.message);
             Logger(`POST - COMENTARIOS - new`, error.message, "error");
-            res.status(500).send({ message: 'Erro ao criar comentario', error: error.message });
+            res.status(500).json({ message: 'Erro ao criar comentário.', error: error.message });
         } else {
-            console.error('Erro ao criar comentario: Erro desconhecido');
+            console.error('Erro ao criar comentário: Erro desconhecido');
             Logger(`POST - COMENTARIOS - new`, "Erro desconhecido", "error");
-            res.status(500).send({ message: 'Erro ao criar comentario', error: 'Erro desconhecido' });
+            res.status(500).json({ message: 'Erro ao criar comentário.', error: 'Erro desconhecido.' });
         }
     }
 });
+
 
 routerComments.delete('/:id', validateJWT, async (req, res) => {
 
     const processo = Number(req.params.id);
     try {
         const field = await prisma.comentarios.delete({
-           where: {
-            id: processo
-           }
+            where: {
+                id: processo
+            }
         })
         Logger(`DELETE - COMENTARIOS - ID ${processo}`, JSON.stringify(field), "success");
         res.status(200).send(JSON.stringify(field));
@@ -61,10 +83,19 @@ routerComments.delete('/:id', validateJWT, async (req, res) => {
 routerComments.get('/all-from-proccess/:processo', validateJWT, async (req, res) => {
     const processo = Number(req.params.processo);
     try {
-        const steps = await prisma.comentarios.findFirst({
+        const steps = await prisma.comentarios.findMany({
             where: {
-                processo: processo, 
-            }
+                processo: processo,
+            }, include: {
+                usuario_comentarios_usuarioTousuario: {
+                    select: {
+                        nome: true,
+                        sobrenome: true,
+                        email: true,
+                        foto: true,
+                    },
+                },
+            },
         })
 
         if (steps) {

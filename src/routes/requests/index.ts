@@ -11,66 +11,66 @@ export const routerRequests = Router()
 routerRequests.get('/', (req, res) => res.send('API de Solicitações'))
 
 
-routerRequests.post('/new',  validateJWT, async (req, res) => {
+routerRequests.post('/new', validateJWT, async (req, res) => {
     const { titulo, descricao, aluno, tipo_solicitacao } = req.body;
 
     // Validação básica dos campos de entrada
     if (!titulo || !descricao || !aluno || !tipo_solicitacao) {
-      Logger('POST - REQUESTS - new', 'Campos de entrada inválidos', 'error');
-      return res.status(400).json({ message: 'Campos de entrada inválidos' });
+        Logger('POST - REQUESTS - new', 'Campos de entrada inválidos', 'error');
+        return res.status(400).json({ message: 'Campos de entrada inválidos' });
     }
-  
+
     try {
-      const numero = Number(await numberGenerator(8));
-      const identificador = await codeGenerator(60);
-  
-      // Verifica se o aluno existe
-      const alunoExistente = await prisma.usuario.findUnique({
-        where: { id: Number(aluno) },
-      });
-  
-      if (!alunoExistente) {
-        Logger('POST - REQUESTS - new', `Aluno com id ${aluno} não encontrado`, 'error');
-        return res.status(404).json({ message: `Aluno com id ${aluno} não encontrado` });
-      }
-  
-      // Busca a etapa inicial com base no tipo_solicitacao
-      const etapaInicial = await prisma.etapas_processo.findFirst({
-        where: { tipo: Number(tipo_solicitacao) },
-      });
-  
-      // Define etapaInicialId com base na existência de etapaInicial
-      const etapaInicialId = etapaInicial ? Number(etapaInicial.id) : 1;
-  
-      // Cria o novo processo
-      const novoProcesso = await prisma.processo.create({
-        data: {
-          titulo,
-          descricao,
-          aluno:  Number(aluno), // Conecta ao aluno existente
-          tipo_solicitacao: Number(tipo_solicitacao),
-          data_abertura: new Date(),
-          identificador,
-          numero,
-          etapa_atual: etapaInicialId,
-        },
-      });
-  
-      Logger('POST - REQUESTS - new', JSON.stringify(novoProcesso), 'success');
-      return res.status(201).json(novoProcesso);
+        const numero = Number(await numberGenerator(8));
+        const identificador = await codeGenerator(60);
+
+        // Verifica se o aluno existe
+        const alunoExistente = await prisma.usuario.findUnique({
+            where: { id: Number(aluno) },
+        });
+
+        if (!alunoExistente) {
+            Logger('POST - REQUESTS - new', `Aluno com id ${aluno} não encontrado`, 'error');
+            return res.status(404).json({ message: `Aluno com id ${aluno} não encontrado` });
+        }
+
+        // Busca a etapa inicial com base no tipo_solicitacao
+        const etapaInicial = await prisma.etapas_processo.findFirst({
+            where: { tipo: Number(tipo_solicitacao) },
+        });
+
+        // Define etapaInicialId com base na existência de etapaInicial
+        const etapaInicialId = etapaInicial ? Number(etapaInicial.id) : 1;
+
+        // Cria o novo processo
+        const novoProcesso = await prisma.processo.create({
+            data: {
+                titulo,
+                descricao,
+                aluno: Number(aluno), // Conecta ao aluno existente
+                tipo_solicitacao: Number(tipo_solicitacao),
+                data_abertura: new Date(),
+                identificador,
+                numero,
+                etapa_atual: etapaInicialId,
+            },
+        });
+
+        Logger('POST - REQUESTS - new', JSON.stringify(novoProcesso), 'success');
+        return res.status(201).json(novoProcesso);
     } catch (error: unknown) {
-      if (error instanceof Error) {
-        console.error('Erro ao criar processo:', error.message);
-        Logger('POST - REQUESTS - new', error.message, 'error');
-        return res.status(500).json({ message: 'Erro ao criar processo', error: error.message });
-      } else {
-        console.error('Erro ao criar processo: Erro desconhecido');
-        Logger('POST - REQUESTS - new', 'Erro desconhecido', 'error');
-        return res.status(500).json({ message: 'Erro ao criar processo', error: 'Erro desconhecido' });
-      }
+        if (error instanceof Error) {
+            console.error('Erro ao criar processo:', error.message);
+            Logger('POST - REQUESTS - new', error.message, 'error');
+            return res.status(500).json({ message: 'Erro ao criar processo', error: error.message });
+        } else {
+            console.error('Erro ao criar processo: Erro desconhecido');
+            Logger('POST - REQUESTS - new', 'Erro desconhecido', 'error');
+            return res.status(500).json({ message: 'Erro ao criar processo', error: 'Erro desconhecido' });
+        }
     }
-  });
-  
+});
+
 
 
 
@@ -146,7 +146,7 @@ routerRequests.post('/new-question-reply', validateJWT, async (req, res) => {
     const processoNumber = Number(processo);
     const usuarioNumber = Number(usuario);
 
-   
+
     if (isNaN(campoNumber) || isNaN(processoNumber) || isNaN(usuarioNumber)) {
         return res.status(400).json({ message: 'Campos "campo", "processo" e "usuario" devem ser números válidos' });
     }
@@ -228,6 +228,39 @@ routerRequests.get('/process-identificador/:identificador', validateJWT, async (
         const steps = await prisma.processo.findFirst({
             where: {
                 identificador: identificador
+            },
+            include: {
+                usuario_processo_alunoTousuario: {
+                    select: {
+                        nome: true,
+                        sobrenome: true,
+                        email: true,
+                        foto: true,
+                    },
+                },
+                usuario_processo_professor_avaliadorTousuario: {
+                    select: {
+                        nome: true,
+                        sobrenome: true,
+                        email: true,
+                        foto: true,
+                    },
+                },
+                usuario_processo_servidor_responsavelTousuario: {
+                    select: {
+                        nome: true,
+                        sobrenome: true,
+                        email: true,
+                        foto: true,
+                    },
+                },
+                tipo_solicitacao_processo_tipo_solicitacaoTotipo_solicitacao: {
+                    select: {
+                        nome: true,
+                        hrs_resolucao: true,
+                        hrs_resposta: true
+                    },
+                }
             }
         })
 
@@ -243,6 +276,42 @@ routerRequests.get('/process-identificador/:identificador', validateJWT, async (
         res.status(500).json({ message: 'Error fetching requested Field type.' });
     }
 });
+routerRequests.get('/all-responses-process/:identificador', validateJWT, async (req, res) => {
+    const identificador = req.params.identificador;
+    try {
+        const process = await prisma.processo.findFirst({
+            where: {
+                identificador: identificador
+            },
+        })
+        if (process) {
+            try {
+                const listResonses = await prisma.respostas_processo.findMany({
+                    where: {
+                        processo: process.id
+                    },
+                })
+                if (process) {
+                    res.status(200).send(JSON.stringify(listResonses));
+
+                } else {
+                    Logger(`GET - REQUESTS - all-responses-process/${identificador}`, `404 - Not Found`, "error");
+                    res.status(404).send({ error: true, message: 'Field type not found!' });
+                }
+
+            } catch (error) {
+                Logger(`GET - REQUESTS - all-responses-process/${identificador}`, `Error fetching requested Field type. ${JSON.stringify(error)} `, "error");
+                res.status(500).json({ message: 'Error fetching requested Field type.' });
+            }
+        } else {
+            Logger(`GET - REQUESTS - all-responses-process/${identificador}`, `404 - Not Found`, "error");
+            res.status(404).send({ error: true, message: 'Field type not found!' });
+        }
+    } catch (error) {
+        Logger(`GET - REQUESTS - all-responses-process/${identificador}`, `Error fetching requested Field type. ${JSON.stringify(error)} `, "error");
+        res.status(500).json({ message: 'Error fetching requested Field type.' });
+    }
+});
 
 routerRequests.get('/processes-student/:student', validateJWT, async (req, res) => {
     const aluno = Number(req.params.student);
@@ -250,7 +319,39 @@ routerRequests.get('/processes-student/:student', validateJWT, async (req, res) 
         const steps = await prisma.processo.findFirst({
             where: {
                 aluno: aluno
+            },
+            include: {
+                usuario_processo_alunoTousuario: {
+                    select: {
+                        nome: true,
+                        sobrenome: true,
+                        email: true,
+                        foto: true,
+                    },
+                },
+                usuario_processo_professor_avaliadorTousuario: {
+                    select: {
+                        nome: true,
+                        sobrenome: true,
+                        email: true,
+                        foto: true,
+                    },
+                },
+                usuario_processo_servidor_responsavelTousuario: {
+                    select: {
+                        nome: true,
+                        sobrenome: true,
+                        email: true,
+                        foto: true,
+                    },
+                },
+                tipo_solicitacao_processo_tipo_solicitacaoTotipo_solicitacao: {
+                    select: {
+                        nome: true,
+                    },
+                }
             }
+
         })
 
         if (steps) {
@@ -446,61 +547,118 @@ routerRequests.get('/all-without-professor', validateJWT, async (req, res) => {
 
 routerRequests.get('/all-requests-as-teacher', validateJWT, async (req, res) => {
     try {
-      const userData = await extractUserDataFromToken(req, res);
-      if (!userData) { 
-        return;
-      }
-  
-      const steps = await prisma.processo.findMany({
-        where: {
-          professor_avaliador: userData.id,
-        },
-        include: {
-          usuario_processo_alunoTousuario: {
-            select: {
-              nome: true,
-              sobrenome: true,
-              email: true,
-              foto: true,
+        const userData = await extractUserDataFromToken(req, res);
+        if (!userData) {
+            return;
+        }
+
+        const steps = await prisma.processo.findMany({
+            where: {
+                professor_avaliador: userData.id,
             },
-          },
-          usuario_processo_professor_avaliadorTousuario: {
-            select: {
-              nome: true,
-              sobrenome: true,
-              email: true,
-              foto: true,
+            include: {
+                usuario_processo_alunoTousuario: {
+                    select: {
+                        nome: true,
+                        sobrenome: true,
+                        email: true,
+                        foto: true,
+                    },
+                },
+                usuario_processo_professor_avaliadorTousuario: {
+                    select: {
+                        nome: true,
+                        sobrenome: true,
+                        email: true,
+                        foto: true,
+                    },
+                },
+                usuario_processo_servidor_responsavelTousuario: {
+                    select: {
+                        nome: true,
+                        sobrenome: true,
+                        email: true,
+                        foto: true,
+                    },
+                },
+                tipo_solicitacao_processo_tipo_solicitacaoTotipo_solicitacao: {
+                    select: {
+                        nome: true,
+                    },
+                }
             },
-          },
-          usuario_processo_servidor_responsavelTousuario: {
-            select: {
-              nome: true,
-              sobrenome: true,
-              email: true,
-              foto: true,
-            },
-          },
-          tipo_solicitacao_processo_tipo_solicitacaoTotipo_solicitacao: {
-            select: {
-              nome: true,
-            },
-          }
-        },
-      });
-  
-      if (steps.length > 0) {
-        Logger(`GET - REQUESTS - /all-requests-as-teacher`, `200 - Found and Authorized`, "success");
-        res.status(200).json(steps);
-      } else {
-        Logger(`GET - REQUESTS - /all-requests-as-teacher`, `404 - Not Found`, "error");
-        res.status(404).json({ error: true, message: 'No process found' });
-      }
+        });
+
+        if (steps.length > 0) {
+            Logger(`GET - REQUESTS - /all-requests-as-teacher`, `200 - Found and Authorized`, "success");
+            res.status(200).json(steps);
+        } else {
+            Logger(`GET - REQUESTS - /all-requests-as-teacher`, `404 - Not Found`, "error");
+            res.status(404).json({ error: true, message: 'No process found' });
+        }
     } catch (error) {
-      Logger(`GET - REQUESTS - /all-requests-as-teacher`, `Error fetching processes: ${JSON.stringify(error)}`, "error");
-      res.status(500).json({ message: 'Error fetching processes.' });
+        Logger(`GET - REQUESTS - /all-requests-as-teacher`, `Error fetching processes: ${JSON.stringify(error)}`, "error");
+        res.status(500).json({ message: 'Error fetching processes.' });
     }
-  });
-  
+});
+
+routerRequests.get('/all-requests-as-student', validateJWT, async (req, res) => {
+    try {
+        const userData = await extractUserDataFromToken(req, res);
+        if (!userData) {
+            return;
+        }
+
+        const steps = await prisma.processo.findMany({
+            where: {
+                aluno: userData.id,
+            },
+            include: {
+                usuario_processo_alunoTousuario: {
+                    select: {
+                        nome: true,
+                        sobrenome: true,
+                        email: true,
+                        foto: true,
+                    },
+                },
+                usuario_processo_professor_avaliadorTousuario: {
+                    select: {
+                        nome: true,
+                        sobrenome: true,
+                        email: true,
+                        foto: true,
+                    },
+                },
+                usuario_processo_servidor_responsavelTousuario: {
+                    select: {
+                        nome: true,
+                        sobrenome: true,
+                        email: true,
+                        foto: true,
+                    },
+                },
+                tipo_solicitacao_processo_tipo_solicitacaoTotipo_solicitacao: {
+                    select: {
+                        nome: true,
+                    },
+                }
+            },
+        });
+
+        if (steps.length > 0) {
+            Logger(`GET - REQUESTS - /all-requests-as-student`, `200 - Found and Authorized`, "success");
+            res.status(200).json(steps);
+        } else {
+            Logger(`GET - REQUESTS - /all-requests-as-student`, `404 - Not Found`, "error");
+            res.status(404).json({ error: true, message: 'No process found' });
+        }
+    } catch (error) {
+        Logger(`GET - REQUESTS - /all-requests-as-student`, `Error fetching processes: ${JSON.stringify(error)}`, "error");
+        res.status(500).json({ message: 'Error fetching processes.' });
+    }
+});
+
 
 routerRequests.post('/reply-proccess', validateJWT, async (req, res) => {
     let { processo, campo, usuario, resposta } = req.body;
