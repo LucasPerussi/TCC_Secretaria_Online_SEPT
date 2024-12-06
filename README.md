@@ -14,6 +14,7 @@ A API fornece os serviços necessários para gerenciar as funcionalidades da sec
 - Express
 - Prisma ORM
 - JWT (Json Web Tokens)
+- JEST (Testes)
 
 ## 🛠️ Instalação
 
