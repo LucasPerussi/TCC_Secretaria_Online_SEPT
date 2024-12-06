@@ -1,11 +1,26 @@
 import prisma from '../prismaClient'; // Adjust the path as necessary
 
-
-export const Logger = async (funcao: string, mensagem: string, status: string, usuario?: number) => {
+export const Logger = async (
+  funcao: string,
+  mensagem: string,
+  status: string,
+  usuario?: number
+) => {
   try {
+    // Defina o tamanho máximo permitido para 'funcao'
+    const maxFuncaoLength = 50; // Ajuste conforme o esquema do banco
+
+    // Truncate 'funcao' se exceder o tamanho máximo
+    if (funcao.length > maxFuncaoLength) {
+      console.warn(
+        `A função "${funcao}" excede ${maxFuncaoLength} caracteres e será truncada.`
+      );
+      funcao = funcao.substring(0, maxFuncaoLength);
+    }
+
     if (usuario) {
       const userExists = await prisma.usuario.findUnique({
-        where: { id: usuario }
+        where: { id: usuario },
       });
 
       if (!userExists) {
@@ -17,9 +32,9 @@ export const Logger = async (funcao: string, mensagem: string, status: string, u
       data: {
         funcao,
         mensagem,
-        usuario: usuario ?? null, 
-        status
-      }
+        usuario: usuario ?? null,
+        status,
+      },
     });
 
     return registerLog;
