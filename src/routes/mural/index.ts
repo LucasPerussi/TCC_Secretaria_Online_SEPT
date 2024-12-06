@@ -14,7 +14,7 @@ routerMural.post('/new', validateJWT, async (req, res) => {
     try {
         // Verifique se o autor existe na tabela de referência
         const autorExiste = await prisma.usuario.findUnique({
-            where: { id: autor }
+            where: { id: Number(autor) }
         });
 
         if (!autorExiste) {
@@ -27,9 +27,9 @@ routerMural.post('/new', validateJWT, async (req, res) => {
                 titulo,
                 descricao,
                 identificador,
-                autor,
-                curso_alvo: curso,
-                visivel,
+                autor: Number(autor),
+                curso_alvo: Number(curso),
+                visivel: Number(visivel),
             }
         });
         Logger(`POST - MURAL - new`, JSON.stringify(mural), "success");
