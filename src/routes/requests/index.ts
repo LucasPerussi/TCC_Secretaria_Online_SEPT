@@ -220,7 +220,7 @@ routerRequests.get('/all-status-types', validateJWT, async (req, res) => {
 routerRequests.post('/new-question-reply', validateJWT, async (req, res) => {
     const { campo, resposta, processo, usuario } = req.body;
 
-    // Validação básica dos campos de entrada
+    // Validação Inicial dos Dados de Entrada
     if (
         campo === undefined ||
         typeof resposta !== 'string' ||
@@ -251,7 +251,7 @@ routerRequests.post('/new-question-reply', validateJWT, async (req, res) => {
 
         if (!processoExists) {
             Logger('POST - REQUESTS - new-question-reply', `Processo com ID ${processoNumber} não encontrado.`, 'error');
-            return res.status(400).json({ message: 'O processo fornecido não existe.' });
+            return res.status(404).json({ message: 'O processo fornecido não existe.' });
         }
 
         // Verificar se o usuário existe
@@ -261,21 +261,18 @@ routerRequests.post('/new-question-reply', validateJWT, async (req, res) => {
 
         if (!usuarioExists) {
             Logger('POST - REQUESTS - new-question-reply', `Usuário com ID ${usuarioNumber} não encontrado.`, 'error');
-            return res.status(400).json({ message: 'O usuário fornecido não existe.' });
+            return res.status(404).json({ message: 'O usuário fornecido não existe.' });
         }
 
-        // Opcional: Verificar se o campo faz parte de uma estrutura válida (dependendo do seu modelo de dados)
-        // Exemplo:
-        /*
-        const campoExists = await prisma.campo.findUnique({
+        // Verificar se o campo existe
+        const campoExists = await prisma.campos_solicitacao.findUnique({
             where: { id: campoNumber }
         });
 
         if (!campoExists) {
             Logger('POST - REQUESTS - new-question-reply', `Campo com ID ${campoNumber} não encontrado.`, 'error');
-            return res.status(400).json({ message: 'O campo fornecido não existe.' });
+            return res.status(404).json({ message: 'O campo fornecido não existe.' });
         }
-        */
 
         // Criar a nova resposta ao processo
         const novaResposta = await prisma.respostas_processo.create({
@@ -290,14 +287,19 @@ routerRequests.post('/new-question-reply', validateJWT, async (req, res) => {
         Logger('POST - REQUESTS - new-question-reply', `Resposta criada: ${JSON.stringify(novaResposta)}`, 'success');
         return res.status(201).json(novaResposta);
     } catch (error) {
+        // Tratamento de Erros do Prisma
+        // if (error.code && error.code.startsWith('P')) { // Erros do Prisma geralmente começam com 'P'
+        //     Logger('POST - REQUESTS - new-question-reply', `Erro do Prisma: ${error.message}`, 'error');
+        //     return res.status(500).json({ message: 'Erro interno do servidor ao processar a resposta.' });
+        // }
+
+        // Outros Erros
         if (error instanceof Error) {
-            console.error('Erro ao atualizar server avaliador:', error.message);
-            Logger('POST - REQUESTS - new-question-reply', error.message, 'error');
-            return res.status(500).json({ message: 'Erro ao atualizar professor avaliador', error: error.message });
+            Logger('POST - REQUESTS - new-question-reply', `Erro desconhecido: ${error.message}`, 'error');
+            return res.status(500).json({ message: 'Erro interno do servidor ao processar a resposta.', error: error.message });
         } else {
-            console.error('Erro ao atualizar server avaliador: Erro desconhecido');
             Logger('POST - REQUESTS - new-question-reply', 'Erro desconhecido', 'error');
-            return res.status(500).json({ message: 'Erro ao atualizar server avaliador', error: 'Erro desconhecido' });
+            return res.status(500).json({ message: 'Erro interno do servidor ao processar a resposta.', error: 'Erro desconhecido' });
         }
     }
 });

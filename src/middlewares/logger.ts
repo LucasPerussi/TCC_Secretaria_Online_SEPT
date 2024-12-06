@@ -8,7 +8,8 @@ export const Logger = async (
 ) => {
   try {
     // Defina o tamanho máximo permitido para 'funcao'
-    const maxFuncaoLength = 50; // Ajuste conforme o esquema do banco
+    const maxFuncaoLength = 50; 
+    const maxMnsagemLength = 255; 
 
     // Truncate 'funcao' se exceder o tamanho máximo
     if (funcao.length > maxFuncaoLength) {
@@ -16,6 +17,13 @@ export const Logger = async (
         `A função "${funcao}" excede ${maxFuncaoLength} caracteres e será truncada.`
       );
       funcao = funcao.substring(0, maxFuncaoLength);
+    }
+
+    if (mensagem.length > maxMnsagemLength) {
+      console.warn(
+        `A mensagem "${mensagem}" excede ${maxMnsagemLength} caracteres e será truncada.`
+      );
+      mensagem = mensagem.substring(0, maxMnsagemLength);
     }
 
     if (usuario) {
