@@ -6,6 +6,7 @@ import { numberGenerator } from '../../middlewares/randomCodeGenerator';
 import { addMonths, parseISO } from 'date-fns';
 import { CheckUserExists } from '../../middlewares/checkUserExists';
 import { CheckEmpresaExists } from '../../middlewares/checkCompanyExists';
+import { ProcessStatusTypeInfo } from '../../enum/status';
 
 export const routerInternship = Router()
 
@@ -124,6 +125,36 @@ routerInternship.get('/code/:code', validateJWT, async (req, res) => {
         res.status(500).json({ message: 'Error fetching requested Internship.' });
     }
 });
+
+routerInternship.get('/get-status-types', validateJWT, async (req, res) => {
+    res.status(200).send(JSON.stringify(ProcessStatusTypeInfo));
+});
+
+routerInternship.patch('/update-status', validateJWT, async (req, res) => {
+    let { id_estagio, status } = req.body;
+    try {
+        const internshipData = await prisma.estagio.update({
+            where: {
+                id: Number(id_estagio)
+            }, data: {
+                status: status
+            }
+        })
+
+        if (internshipData) {
+            Logger(`GET - INTERNSHIP - code/${id_estagio}`, `200 - Found and Authorized`, "success");
+            res.status(200).send(JSON.stringify(internshipData));
+        } else {
+            Logger(`GET - INTERNSHIP - code/${id_estagio}`, `404 - Not Found`, "error");
+            res.status(404).send({ error: true, message: 'Internship not found!' });
+        }
+    } catch (error) {
+        Logger(`GET - INTERNSHIP - code/${id_estagio}`, `Error fetching requested Internship. ${JSON.stringify(error)} `, "error");
+        res.status(500).json({ message: 'Error fetching requested Internship.' });
+    }
+});
+
+
 
 routerInternship.get('/all-internships', validateJWT, async (req, res) => {
     try {
