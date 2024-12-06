@@ -81,13 +81,13 @@ Há uma versão de testes disponível online no seguinte link:
 
 [https://tcc-secretaria-api-zs8ke.ondigitalocean.app/](https://tcc-secretaria-api-zs8ke.ondigitalocean.app/)
 
+## 📖 Documentação Online
+
+Você pode acessar a documentação da API em:
+
+[https://documenter.getpostman.com/view/17286749/2sAY545dog](https://documenter.getpostman.com/view/17286749/2sAY545dog)
+
 **Nota:** Esta versão pode apresentar lentidão devido a limitações de hardware.
-
-## 🧪 Rotas Disponíveis
-
-- **Servidor Local:** `http://localhost:3000`
-- **Gerenciamento de Usuários:** `http://localhost:3000/users`
-- **Autenticação:** `http://localhost:3000/auth`
 
 ## 🔧 Scripts Disponíveis
 
