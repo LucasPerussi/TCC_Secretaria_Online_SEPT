@@ -110,22 +110,25 @@ routerAuth.post('/login', async (req, res) => {
 });
 
 routerAuth.post('/create', async (req, res) => {
-    const { email, senha, nome, sobrenome, nascimento, registro }: CreateUserRequest = req.body;
+    const { email, senha, nome, sobrenome, nascimento, registro } = req.body;
 
     try {
         const emailLC = email.toLowerCase(); 
         const registroLC = registro.toLowerCase(); 
 
+        // Verifica se pode criar o usuário
         const canCreateUser = await checkCanCreateuser(email, registro);
 
         if (!canCreateUser.canCreate) {
-            Logger('auth/create', `400 - Erro - Motivo: ${canCreateUser.reason} | email: ${email} | registro: ${registro}`,"error");
+            Logger('auth/create', `400 - Erro - Motivo: ${canCreateUser.reason} | email: ${email} | registro: ${registro}`, "error");
             console.log(`Motivo: ${canCreateUser.reason} | email: ${email} | registro: ${registro}`);
             return res.status(400).json({ message: canCreateUser.reason });
         }
 
+        // Hash da senha
         const hashedPassword = await bcrypt.hash(senha, 10);
 
+        // Criação do usuário no banco de dados
         const createdUser = await prisma.usuario.create({
             data: {
                 email: emailLC,
@@ -149,17 +152,67 @@ routerAuth.post('/create', async (req, res) => {
                 registro: true,
                 funcao: true,
                 status_usuario: true,
+                foto: true,
             },
         });
 
+        // Registro no Logger e Timeline
         Logger('auth/create', `Usuário criado com sucesso! ${JSON.stringify({ user: createdUser })}`, "success", createdUser.id);
         Timeline('Bem vindo(a) à secretaria online do SEPT!', createdUser.id.toString(), 'Sua conta foi registrada com sucesso e atrelada ao registro ' + registro, Number(TimelineTypes.ACCOUNT_CREATION), createdUser.id);
         SendEmail(createdUser.email, 'Bem-vindo(a) à secretaria online do SEPT!', 'Este é um teste!', Number(createdUser.id), Number(EmailTypes.ACCOUNT_CREATION));
 
-        res.status(201).json({ user: createdUser });
+        // Geração da sessão e do token JWT, semelhante à rota de login
+        const code = await sessionGenerator(Number(createdUser.id), req);
+        if (code === "Error") {
+            console.log(code);
+            return res.status(505).json({ message: 'Erro interno do servidor. Entre em contato com o suporte' });
+        }
+
+        const token = jwt.sign(
+            {
+                user: createdUser.id.toString(),
+                role: createdUser.funcao,
+                client: 'API',
+            },
+            code,
+            { expiresIn: '24h' }
+        );
+
+        // Determinação do texto da função do usuário
+        let roleText = '';
+        switch (createdUser.funcao) {
+            case 1:
+                roleText = 'Aluno';
+                break;
+            case 2:
+                roleText = 'Servidor';
+                break;
+            case 3:
+                roleText = 'Professor';
+                break;
+            case 9:
+                roleText = 'Admin';
+                break;
+            default:
+                roleText = 'Deactivated';
+                break;
+        }
+
+        // Envio da resposta com o token e informações do usuário
+        res.status(201).json({ 
+            token, 
+            user: { 
+                id: createdUser.id,
+                name: `${createdUser.nome} ${createdUser.sobrenome}`,
+                email: createdUser.email,
+                role: roleText,
+                picture: createdUser.foto,
+                registro: createdUser.registro
+            } 
+        });
     } catch (error) {
         if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
-            Logger('auth/create', `400 - Erro - O ${error.meta?.target} já está em uso.`,"error");
+            Logger('auth/create', `400 - Erro - O ${error.meta?.target} já está em uso.`, "error");
             res.status(400).json({ message: `O ${error.meta?.target} já está em uso.` });
         } else {
             Logger('auth/create', `500 - Erro - O ${error}`, "error");
@@ -168,6 +221,7 @@ routerAuth.post('/create', async (req, res) => {
         }
     }
 });
+
 
 async function checkCanCreateuser(email: string, registro: string) {
 
