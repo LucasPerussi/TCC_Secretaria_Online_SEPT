@@ -139,7 +139,7 @@ routerAuth.post('/create', async (req, res) => {
                 criado_em: new Date(),
                 funcao: 1, 
                 registro: registroLC,
-                foto: '', 
+                foto: 'src/img/avatars/generic.webp', 
                 status_usuario: 1, 
                 status_curso: 1, 
             },
