@@ -606,7 +606,7 @@ routerUsers.patch('/foto/:id', validateJWT, async (req, res) => {
             where: { id: parseInt(id) },
             data: { foto },
         });
-        Timeline("Alteração de fototo de perfil" , id, "Seu nascimento foi alterado", Number(TimelineTypes.PHOTO_UPDATE), Number(id))
+        Timeline("Alteração de foto de perfil" , id, "Seu nascimento foi alterado", Number(TimelineTypes.PHOTO_UPDATE), Number(id))
 
         Logger(`PATCH - USERS - FOTO - ${id}`, `200 - Foto atualizada com sucesso`, "success");
         res.status(200).json(updatedUser);

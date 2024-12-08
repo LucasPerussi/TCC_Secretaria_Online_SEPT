@@ -42,7 +42,7 @@ export const TimelineTypeInfo: Record<TimelineTypes, TimelineType> = {
     [TimelineTypes.REGISTRATION_UPDATE]: { id: 12, nome: "Atualização de Registro", cor: "#ff0037" },
     [TimelineTypes.NAME_UPDATE]: { id: 13, nome: "Atualização de Nome", cor: "#0c907e" },
     [TimelineTypes.SURNAME_UPDATE]: { id: 14, nome: "Atualização de Sobrenome", cor: "#581845" },
-    [TimelineTypes.BIRTHDATE_UPDATE]: { id: 15, nome: "Atualização de Data de Nascimento", cor: "#DAF7A6" },
+    [TimelineTypes.BIRTHDATE_UPDATE]: { id: 15, nome: "Atualização de Data de Nascimento", cor: "#b2ba1b" },
     [TimelineTypes.PHOTO_UPDATE]: { id: 16, nome: "Atualização de Foto", cor: "#900C3F" },
     [TimelineTypes.USER_STATUS_UPDATE]: { id: 17, nome: "Atualização de Status do Usuário", cor: "#c53d9c" },
     [TimelineTypes.COURSE_UPDATE]: { id: 18, nome: "Atualização de Curso", cor: "#FF5733" },
