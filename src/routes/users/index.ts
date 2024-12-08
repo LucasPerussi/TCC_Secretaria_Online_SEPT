@@ -2,7 +2,7 @@ import { Router } from 'express';
 import prisma from '../../prismaClient'; // Adjust the path as necessary
 import { PrismaClient, Prisma } from '@prisma/client';  
 import { extractUserDataFromToken, isAllowed, validateJWT } from '../../middlewares/JWTVerifier';
-import { TimelineTypes, TimelineTypeInfo } from '../../enum/timeline';
+import { TimelineTypes, TimelineTypeInfo, getNomeTimelinesById } from '../../enum/timeline';
 
 
 
@@ -207,6 +207,28 @@ routerUsers.patch('/role', validateJWT, isAllowed, async (req, res) => {
                 funcao: role,
             }
         });
+
+        let roleText ="";
+        switch (user.funcao) {
+            case 1:
+                roleText = 'Aluno';
+                break;
+            case 2:
+                roleText = 'Servidor';
+                break;
+            case 3:
+                roleText = 'Professor';
+                break;
+            case 9:
+                roleText = 'Admin';
+                break;
+            default:
+                roleText = 'Deactivated';
+                break;
+        }
+
+        Timeline("Você é agora um  " + roleText, user, "Sua função no sistema foi alterada para '" + roleText + "'!", Number(TimelineTypes.ROLE_UPDATE), Number(user))
+
         
         Logger(`PATCH - USER - role`, JSON.stringify(field), "success");
         res.status(200).json(field); 
@@ -237,6 +259,8 @@ routerUsers.patch('/link-user-course', validateJWT, isAllowed, async (req, res) 
             }
         });
         
+        Timeline("Alteração de curso" , user, "Você foi vinculado a um novo curso de graduação", Number(TimelineTypes.COURSE_UPDATE), Number(user))
+
         Logger(`PATCH - USER - link-user-course`, JSON.stringify(field), "success");
         res.status(200).json(field); 
     } catch (error) {
@@ -420,7 +444,7 @@ routerUsers.patch('/email/:id', validateJWT, async (req, res) => {
             where: { id: parseInt(id) },
             data: { email },
         });
-
+        Timeline("Alteração de email" , id, "Seu email foi alterado", Number(TimelineTypes.EMAIL_UPDATE), Number(id))
         Logger(`PATCH - USERS - EMAIL - ${id}`, `200 - Email atualizado com sucesso`, "success");
         res.status(200).json(updatedUser);
     } catch (error) {
@@ -451,6 +475,7 @@ routerUsers.patch('/registro/:id', validateJWT, async (req, res) => {
             where: { id: parseInt(id) },
             data: { registro },
         });
+        Timeline("Alteração de registro" , id, "Seu registro foi alterado", Number(TimelineTypes.REGISTRATION_UPDATE), Number(id))
 
         Logger(`PATCH - USERS - REGISTRO - ${id}`, `200 - Registro atualizado com sucesso`, "success");
         res.status(200).json(updatedUser);
@@ -482,6 +507,7 @@ routerUsers.patch('/nome/:id', validateJWT, async (req, res) => {
             where: { id: parseInt(id) },
             data: { nome },
         });
+        Timeline("Alteração de nome" , id, "Seu nome foi alterado", Number(TimelineTypes.NAME_UPDATE), Number(id))
 
         Logger(`PATCH - USERS - NOME - ${id}`, `200 - Nome atualizado com sucesso`, "success");
         res.status(200).json(updatedUser);
@@ -513,6 +539,8 @@ routerUsers.patch('/sobrenome/:id', validateJWT, async (req, res) => {
             where: { id: parseInt(id) },
             data: { sobrenome },
         });
+        Timeline("Alteração de sobrenome" , id, "Seu sobrenome foi alterado", Number(TimelineTypes.SURNAME_UPDATE), Number(id))
+
 
         Logger(`PATCH - USERS - SOBRENOME - ${id}`, `200 - Sobrenome atualizado com sucesso`, "success");
         res.status(200).json(updatedUser);
@@ -546,6 +574,7 @@ routerUsers.patch('/nascimento/:id', validateJWT, async (req, res) => {
             where: { id: parseInt(id) },
             data: { nascimento: dataNascimento },
         });
+        Timeline("Alteração de nascimento" , id, "Seu nascimento foi alterado", Number(TimelineTypes.BIRTHDATE_UPDATE), Number(id))
 
         Logger(`PATCH - USERS - NASCIMENTO - ${id}`, `200 - Data de nascimento atualizada com sucesso`, "success");
         res.status(200).json(updatedUser);
@@ -577,6 +606,7 @@ routerUsers.patch('/foto/:id', validateJWT, async (req, res) => {
             where: { id: parseInt(id) },
             data: { foto },
         });
+        Timeline("Alteração de fototo de perfil" , id, "Seu nascimento foi alterado", Number(TimelineTypes.PHOTO_UPDATE), Number(id))
 
         Logger(`PATCH - USERS - FOTO - ${id}`, `200 - Foto atualizada com sucesso`, "success");
         res.status(200).json(updatedUser);
@@ -614,6 +644,7 @@ routerUsers.patch('/status_usuario/:id', validateJWT, async (req, res) => {
             where: { id: parseInt(id) },
             data: { status_usuario: statusInt },
         });
+        Timeline("Alteração de status de conta" , id, "Seu status de conta foi alterado", Number(TimelineTypes.USER_STATUS_UPDATE), Number(id))
 
         Logger(`PATCH - USERS - STATUS_USUARIO - ${id}`, `200 - Status do usuário atualizado com sucesso`, "success");
         res.status(200).json(updatedUser);
@@ -651,6 +682,7 @@ routerUsers.patch('/curso/:id', validateJWT, async (req, res) => {
             where: { id: parseInt(id) },
             data: { curso: cursoInt },
         });
+        Timeline("Alteração de curso" , id, "Você foi vinculado a um novo curso de graduação", Number(TimelineTypes.COURSE_UPDATE), Number(id))
 
         Logger(`PATCH - USERS - CURSO - ${id}`, `200 - Curso atualizado com sucesso`, "success");
         res.status(200).json(updatedUser);
@@ -688,6 +720,7 @@ routerUsers.patch('/status_curso/:id', validateJWT, async (req, res) => {
             where: { id: parseInt(id) },
             data: { status_curso: statusCursoInt },
         });
+        Timeline("Alteração de status de curso" , id, "Seu status de curso foi atualizado", Number(TimelineTypes.COURSE_STATUS_UPDATE), Number(id))
 
         Logger(`PATCH - USERS - STATUS_CURSO - ${id}`, `200 - Status do curso atualizado com sucesso`, "success");
         res.status(200).json(updatedUser);
