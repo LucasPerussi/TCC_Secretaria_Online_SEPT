@@ -172,7 +172,7 @@ model mural {
   id            Int      @id @default(autoincrement())
   titulo        String   @db.VarChar(100)
   descricao     String   @db.Text
-  identificador String   @db.VarChar(50)
+  identificador String   @unique(map: "identificador") @db.VarChar(50)
   autor         Int
   data          DateTime @default(now()) @db.DateTime(0)
   curso_alvo    Int

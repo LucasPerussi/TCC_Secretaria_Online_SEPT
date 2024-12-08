@@ -7,7 +7,8 @@ import { codeGenerator, numberGenerator } from '../../middlewares/randomCodeGene
 import { CompanyTypeInfo } from '../../enum/empresas';
 import { Timeline } from '../../middlewares/timeline';
 import { TimelineTypes } from '../../enum/timeline';
-import { ProcessStatusTypeInfo } from '../../enum/status';
+import { getNomeStatusById, ProcessStatusTypeInfo } from '../../enum/status';
+import { getNomeEtapaById } from '../../enum/proccessStages';
 
 export const routerRequests = Router()
 
@@ -77,62 +78,75 @@ routerRequests.post('/new', validateJWT, async (req, res) => {
 
 routerRequests.patch('/add-teacher', validateJWT, async (req, res) => {
     const { identificador, professor } = req.body;
-  
+
     // Validação dos dados de entrada
     if (!identificador || !professor) {
-      return res.status(400).json({ message: 'Identificador e professor são obrigatórios' });
+        return res.status(400).json({ message: 'Identificador e professor são obrigatórios' });
     }
-  
+
     try {
-      const processoExistente = await prisma.processo.findUnique({
-        where: {
-          id: Number(identificador), 
-        },
-      });
-  
-      if (!processoExistente) {
-        console.error('Registro não encontrado para atualizar:', identificador);
-        Logger(`PATCH - REQUESTS - add-teacher`, `Registro não encontrado: ${identificador}`, "error");
-        return res.status(404).json({ message: 'Registro não encontrado' });
-      }
-  
-      const field = await prisma.processo.update({
-        where: {
-          id: Number(identificador),
-        },
-        data: {
-          professor_avaliador: Number(professor),
-        },
-      });
-  
-      Logger(`PATCH - REQUESTS - add-teacher`, JSON.stringify(field), "success");
-      res.status(200).json(field);
-    } catch (error) {
-      if (error instanceof Prisma.PrismaClientKnownRequestError) {
-        if (error.code === 'P2025') { // Registro não encontrado
-          console.error('Registro não encontrado para atualizar:', identificador);
-          Logger(`PATCH - REQUESTS - add-teacher`, `Registro não encontrado: ${identificador}`, "error");
-          return res.status(404).json({ message: 'Registro não encontrado' });
+        const processoExistente = await prisma.processo.findUnique({
+            where: {
+                id: Number(identificador),
+            },
+        });
+
+        if (!processoExistente) {
+            console.error('Registro não encontrado para atualizar:', identificador);
+            Logger(`PATCH - REQUESTS - add-teacher`, `Registro não encontrado: ${identificador}`, "error");
+            return res.status(404).json({ message: 'Registro não encontrado' });
         }
-        // Você pode tratar outros códigos de erro do Prisma aqui, se necessário
-      }
-  
-      if (error instanceof Error) {
-        console.error('Erro ao atualizar professor avaliador:', error.message);
-        Logger(`PATCH - REQUESTS - add-teacher`, error.message, "error");
-        res.status(500).json({ message: 'Erro ao atualizar professor avaliador', error: error.message });
-      } else {
-        console.error('Erro ao atualizar professor avaliador: Erro desconhecido');
-        Logger(`PATCH - REQUESTS - add-teacher`, "Erro desconhecido", "error");
-        res.status(500).json({ message: 'Erro ao atualizar professor avaliador', error: 'Erro desconhecido' });
-      }
+
+        const field = await prisma.processo.update({
+            where: {
+                id: Number(identificador),
+            },
+            data: {
+                professor_avaliador: Number(professor),
+            },
+        });
+        Timeline("Professor Vinculado", identificador, "Um professor foi notificado para atuar neste chamado", Number(TimelineTypes.NEW_TEACHER), Number(processoExistente.aluno))
+
+        Logger(`PATCH - REQUESTS - add-teacher`, JSON.stringify(field), "success");
+        res.status(200).json(field);
+    } catch (error) {
+        if (error instanceof Prisma.PrismaClientKnownRequestError) {
+            if (error.code === 'P2025') { // Registro não encontrado
+                console.error('Registro não encontrado para atualizar:', identificador);
+                Logger(`PATCH - REQUESTS - add-teacher`, `Registro não encontrado: ${identificador}`, "error");
+                return res.status(404).json({ message: 'Registro não encontrado' });
+            }
+            // Você pode tratar outros códigos de erro do Prisma aqui, se necessário
+        }
+
+        if (error instanceof Error) {
+            console.error('Erro ao atualizar professor avaliador:', error.message);
+            Logger(`PATCH - REQUESTS - add-teacher`, error.message, "error");
+            res.status(500).json({ message: 'Erro ao atualizar professor avaliador', error: error.message });
+        } else {
+            console.error('Erro ao atualizar professor avaliador: Erro desconhecido');
+            Logger(`PATCH - REQUESTS - add-teacher`, "Erro desconhecido", "error");
+            res.status(500).json({ message: 'Erro ao atualizar professor avaliador', error: 'Erro desconhecido' });
+        }
     }
-  });
-  
+});
+
 routerRequests.patch('/change-stage', validateJWT, async (req, res) => {
     const { identificador, stage } = req.body;
 
     try {
+        const processoExistente = await prisma.processo.findUnique({
+            where: {
+                id: Number(identificador),
+            },
+        });
+
+        if (!processoExistente) {
+            console.error('Registro não encontrado para atualizar:', identificador);
+            Logger(`PATCH - REQUESTS - change-stage`, `Registro não encontrado: ${identificador}`, "error");
+            return res.status(404).json({ message: 'Registro não encontrado' });
+        }
+
         const field = await prisma.processo.update({
             where: {
                 identificador
@@ -141,6 +155,9 @@ routerRequests.patch('/change-stage', validateJWT, async (req, res) => {
                 etapa_atual: Number(stage),
             }
         });
+
+        const stageName = getNomeEtapaById(stage);
+        Timeline("Novo Estágio do processo: " + stageName, identificador, "Seu chamado está agora no estágio de '" + stageName + "'!", Number(TimelineTypes.NEW_STAGE), Number(processoExistente.aluno))
 
         Logger(`PATCH - REQUESTS - change-stage`, JSON.stringify(field), "success");
         res.status(200).json(field);
@@ -161,6 +178,17 @@ routerRequests.patch('/change-status', validateJWT, async (req, res) => {
     const { identificador, status } = req.body;
 
     try {
+        const processoExistente = await prisma.processo.findUnique({
+            where: {
+                id: Number(identificador),
+            },
+        });
+
+        if (!processoExistente) {
+            console.error('Registro não encontrado para atualizar:', identificador);
+            Logger(`PATCH - REQUESTS - change-status`, `Registro não encontrado: ${identificador}`, "error");
+            return res.status(404).json({ message: 'Registro não encontrado' });
+        }
         const field = await prisma.processo.update({
             where: {
                 identificador
@@ -169,6 +197,9 @@ routerRequests.patch('/change-status', validateJWT, async (req, res) => {
                 status: Number(status),
             }
         });
+
+        const statusName = getNomeStatusById(status);
+        Timeline("Novo Status do processo: " + statusName, identificador, "O Status atual de seu processo é '" + statusName + "'!", Number(TimelineTypes.NEW_STATUS), Number(processoExistente.aluno))
 
         Logger(`PATCH - REQUESTS - change-status`, JSON.stringify(field), "success");
         res.status(200).json(field);
@@ -184,11 +215,24 @@ routerRequests.patch('/change-status', validateJWT, async (req, res) => {
         }
     }
 });
-  
+
 routerRequests.patch('/add-server', validateJWT, async (req, res) => {
     const { identificador, servidor } = req.body;
 
     try {
+
+        const processoExistente = await prisma.processo.findUnique({
+            where: {
+                id: Number(identificador),
+            },
+        });
+
+        if (!processoExistente) {
+            console.error('Registro não encontrado para atualizar:', identificador);
+            Logger(`PATCH - REQUESTS - add-server`, `Registro não encontrado: ${identificador}`, "error");
+            return res.status(404).json({ message: 'Registro não encontrado' });
+        }
+
         const field = await prisma.processo.update({
             where: {
                 identificador
@@ -197,7 +241,7 @@ routerRequests.patch('/add-server', validateJWT, async (req, res) => {
                 servidor_responsavel: servidor,
             }
         });
-
+        Timeline("Servidor UFPR Vinculado", identificador, "Um servidor já acolheu sua solicitação", Number(TimelineTypes.NEW_SERVER), Number(processoExistente.aluno))
         Logger(`PATCH - REQUESTS - add-server`, JSON.stringify(field), "success");
         res.status(200).json(field);
     } catch (error) {
@@ -214,7 +258,7 @@ routerRequests.patch('/add-server', validateJWT, async (req, res) => {
 });
 
 routerRequests.get('/all-status-types', validateJWT, async (req, res) => {
-        return res.status(201).json(ProcessStatusTypeInfo);
+    return res.status(201).json(ProcessStatusTypeInfo);
 });
 
 routerRequests.post('/new-question-reply', validateJWT, async (req, res) => {

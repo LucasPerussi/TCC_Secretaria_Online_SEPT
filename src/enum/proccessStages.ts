@@ -110,3 +110,8 @@ export const ProcessoEtapaInfo: Record<ProcessoEtapas, StageType> = {
         cor: "#DC143C", // Carmesim
     },
 };
+
+export function getNomeEtapaById(id: number): string | undefined {
+    const etapa = Object.values(ProcessoEtapaInfo).find(stage => stage.id === id);
+    return etapa ? etapa.nome : undefined;
+}

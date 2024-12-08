@@ -83,3 +83,8 @@ export const ProcessStatusTypeInfo: Record<ProcessStatusTypes, ProcessStatusType
         encerrado: true,
     },
 };
+
+export function getNomeStatusById(id: number): string | undefined {
+    const status = Object.values(ProcessStatusTypeInfo).find(statusIndex => statusIndex.id === id);
+    return status ? status.nome : undefined;
+}
