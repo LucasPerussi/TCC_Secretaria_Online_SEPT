@@ -138,6 +138,79 @@ routerTrainingHours.get('/percentual-por-tipo/:aluno', validateJWT, async (req, 
     }
 });
 
+routerTrainingHours.get('/horas-aluno/:aluno', validateJWT, async (req, res) => {
+    const aluno = Number(req.params.aluno);
+
+    try {
+        // Buscar aluno pelo ID
+        const student = await prisma.usuario.findFirst({
+            where: { id: aluno },
+        });
+
+        if (!student) {
+            Logger(`GET - HORAS-ALUNO - by-student/${aluno}`, `404 - Aluno não encontrado`, 'error');
+            return res.status(404).json({ error: true, message: 'Aluno não encontrado!' });
+        }
+
+        // Buscar curso associado ao aluno
+        const course = await prisma.curso.findFirst({
+            where: { id: Number(student.curso) },
+        });
+
+        if (!course) {
+            Logger(`GET - HORAS-ALUNO - by-student/${aluno}`, `404 - Curso não encontrado`, 'error');
+            return res.status(404).json({ error: true, message: 'Curso não encontrado para o aluno!' });
+        }
+
+        const horasCurso = course.horas_formativas ?? 0; // Total de horas solicitadas pelo curso
+
+        // Buscar registros de horas formativas para o aluno
+        const recordData = await prisma.horas_formativas.findMany({
+            where: { aluno: aluno },
+        });
+
+        // Calcular total de horas solicitadas e concedidas
+        const totalHorasSolicitadas = recordData.reduce((acc, record) => acc + (record.horas_solicitadas || 0), 0);
+        const totalHorasConcedidas = recordData.reduce((acc, record) => acc + (record.horas_concedidas || 0), 0);
+
+        // Construir resposta
+        const response = {
+            aluno: {
+                id: student.id,
+                nome: student.nome,
+            },
+            curso: {
+                id: course.id,
+                nome: course.nome,
+                totalHorasCurso: horasCurso,
+            },
+            horas: {
+                solicitadas: totalHorasSolicitadas,
+                concedidas: totalHorasConcedidas,
+                restante: Math.max(horasCurso - totalHorasConcedidas, 0),
+                percentualConcluido: ((totalHorasConcedidas / horasCurso) * 100).toFixed(2), // Em porcentagem
+            },
+            registros: recordData.map(record => ({
+                id: record.id,
+                descricao: record.descricao,
+                horasSolicitadas: record.horas_solicitadas,
+                horasConcedidas: record.horas_concedidas,
+                dataEnvio: record.data_envio,
+                dataEvento: record.data_evento,
+                statusAprovacao: record.status_aprovacao,
+            })),
+        };
+
+        Logger(`GET - HORAS-ALUNO - by-student/${aluno}`, `200 - Relação de horas calculada com sucesso`, 'success');
+        return res.status(200).json(response);
+
+    } catch (error) {
+        Logger(`GET - HORAS-ALUNO - by-student/${aluno}`, `500 - Erro interno: ${error}`, 'error');
+        return res.status(500).json({ message: 'Erro ao recuperar a relação de horas.', error: error });
+    }
+});
+
+
 routerTrainingHours.get('/types/:id', validateJWT, (req, res) => {
     const { id } = req.params;
 

@@ -32,7 +32,7 @@ routerCourses.post('/new', validateJWT, async (req, res) => {
                 coordenador: Number(coordenador),
                 identificador,
                 horas_formativas: Number(horas_formativas),
-                semestres,
+                semestres: Number(semestres),
                 criado_em: new Date(),
             }
         })
@@ -92,6 +92,34 @@ routerCourses.delete('/id/:id', validateJWT, async (req, res) => {
         }
     } catch (error) {
         Logger(`DELETE - COURSES - id/${id}`, `Error deleting requested course. ${JSON.stringify(error)} `, "error");
+        res.status(500).json({ message: 'Error deleting requested course.' });
+    }
+});
+
+routerCourses.get('/by-user/:id', validateJWT, async (req, res) => {
+    const id = Number(req.params.id);
+    try {
+        const student = await prisma.usuario.findFirst({
+            where: {
+                id: id
+            }
+        })
+
+        if (student) {
+            const course = await prisma.curso.findFirst({
+                where: {
+                    id: Number(student.curso)
+                }
+            })
+
+            Logger(`GET - COURSES - by-user/${id}`, `200 - Found and Authorized`, "success");
+            res.status(200).send(JSON.stringify(course));
+        } else {
+            Logger(`GET - COURSES - by-user/${id}`, `404 - Not Found`, "error");
+            res.status(404).send({ error: true, message: 'Course not found!' });
+        }
+    } catch (error) {
+        Logger(`GET - COURSES - by-user/${id}`, `Error deleting requested course. ${JSON.stringify(error)} `, "error");
         res.status(500).json({ message: 'Error deleting requested course.' });
     }
 });

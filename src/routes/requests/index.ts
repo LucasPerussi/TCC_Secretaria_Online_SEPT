@@ -173,6 +173,84 @@ routerRequests.patch('/change-stage', validateJWT, async (req, res) => {
         }
     }
 });
+routerRequests.post('/close-ticket', validateJWT, async (req, res) => {
+    const { identificador, stage, comentario, usuario } = req.body;
+
+    // Validação de entrada
+    if (!identificador || !stage || !comentario) {
+        Logger(`POST - REQUESTS - close-ticket`, `Parâmetros ausentes: identificador=${identificador}, stage=${stage}, comentario=${comentario}`, "error");
+        return res.status(400).json({ message: 'Parâmetros inválidos ou ausentes' });
+    }
+
+    try {
+        // Verificar se o processo existe
+        const processoExistente = await prisma.processo.findUnique({
+            where: {
+                id: Number(identificador),
+            },
+        });
+
+        if (!processoExistente) {
+            Logger(`POST - REQUESTS - close-ticket`, `Registro não encontrado: ${identificador}`, "error");
+            return res.status(404).json({ message: 'Registro não encontrado' });
+        }
+
+        // Criar novo comentário
+        const novoComentario = await prisma.comentarios.create({
+            data: {
+                data: new Date(),
+                processo: Number(identificador),
+                usuario: Number(usuario),
+                comentario: comentario.trim(),
+            },
+        });
+        Logger(`POST - REQUESTS - close-ticket`, `Comentário criado: ${JSON.stringify(novoComentario)}`, "success");
+
+        // Atualizar o processo
+        const field = await prisma.processo.update({
+            where: {
+                id: Number(identificador),
+            },
+            data: {
+                etapa_atual: Number(stage),
+                status: 10,
+            },
+        });
+        Logger(`POST - REQUESTS - close-ticket`, `Processo atualizado: ${JSON.stringify(field)}`, "success");
+
+        // Atualizar a timeline
+        Timeline(
+            "Chamado encerrado!",
+            identificador,
+            "Seu chamado foi encerrado. Se precisar, estamos à disposição!",
+            Number(TimelineTypes.TICKET_CLOSED),
+            Number(processoExistente.aluno)
+        );
+
+        // Resposta de sucesso
+        return res.status(200).json({
+            message: 'Chamado encerrado com sucesso',
+            processo: field,
+            comentario: novoComentario,
+        });
+    } catch (error) {
+        // Tratamento de erros
+        if (error instanceof Error) {
+            Logger(`POST - REQUESTS - close-ticket`, `Erro interno: ${error.message}`, "error");
+            return res.status(500).json({
+                message: 'Erro interno ao encerrar chamado',
+                error: error.message,
+            });
+        } else {
+            Logger(`POST - REQUESTS - close-ticket`, `Erro desconhecido`, "error");
+            return res.status(500).json({
+                message: 'Erro interno ao encerrar chamado',
+                error: 'Erro desconhecido',
+            });
+        }
+    }
+});
+
 
 routerRequests.patch('/change-status', validateJWT, async (req, res) => {
     const { identificador, status } = req.body;
