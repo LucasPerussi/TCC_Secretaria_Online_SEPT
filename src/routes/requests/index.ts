@@ -173,6 +173,7 @@ routerRequests.patch('/change-stage', validateJWT, async (req, res) => {
         }
     }
 });
+
 routerRequests.post('/close-ticket', validateJWT, async (req, res) => {
     const { identificador, stage, comentario, usuario } = req.body;
 
@@ -558,6 +559,61 @@ routerRequests.get('/all-responses-process/:identificador', validateJWT, async (
         }
     } catch (error) {
         Logger(`GET - REQUESTS - all-responses-process/${identificador}`, `Error fetching requested Field type. ${JSON.stringify(error)} `, "error");
+        res.status(500).json({ message: 'Error fetching requested Field type.' });
+    }
+});
+
+routerRequests.get('/processes-without-server', validateJWT, async (req, res) => {
+    const aluno = Number(req.params.student);
+    try {
+        const steps = await prisma.processo.findMany({
+            where: {
+                servidor_responsavel: null,
+                status: 1
+            },
+            include: {
+                usuario_processo_alunoTousuario: {
+                    select: {
+                        nome: true,
+                        sobrenome: true,
+                        email: true,
+                        foto: true,
+                    },
+                },
+                usuario_processo_professor_avaliadorTousuario: {
+                    select: {
+                        nome: true,
+                        sobrenome: true,
+                        email: true,
+                        foto: true,
+                    },
+                },
+                usuario_processo_servidor_responsavelTousuario: {
+                    select: {
+                        nome: true,
+                        sobrenome: true,
+                        email: true,
+                        foto: true,
+                    },
+                },
+                tipo_solicitacao_processo_tipo_solicitacaoTotipo_solicitacao: {
+                    select: {
+                        nome: true,
+                    },
+                }
+            }
+
+        })
+
+        if (steps) {
+            Logger(`GET - REQUESTS - /processes-without-server`, `200 - Found and Authorized`, "success");
+            res.status(200).send(JSON.stringify(steps));
+        } else {
+            Logger(`GET - REQUESTS - /processes-without-server`, `404 - Not Found`, "error");
+            res.status(404).send({ error: true, message: 'Field type not found!' });
+        }
+    } catch (error) {
+        Logger(`GET - REQUESTS - /processes-without-server`, `Error fetching requested Field type. ${JSON.stringify(error)} `, "error");
         res.status(500).json({ message: 'Error fetching requested Field type.' });
     }
 });
