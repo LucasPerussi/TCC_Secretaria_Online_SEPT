@@ -6,6 +6,7 @@ import { numberGenerator } from '../../middlewares/randomCodeGenerator';
 import { addMonths, parseISO } from 'date-fns';
 import { CheckUserExists } from '../../middlewares/checkUserExists';
 import { CheckEmpresaExists } from '../../middlewares/checkCompanyExists';
+import { CompanyTypeInfo, CompanyTypes } from '../../enum/empresas';
 
 
 export const routerCompanies = Router()
@@ -26,7 +27,7 @@ routerCompanies.post('/new', validateJWT, async (req, res) => {
                 nome,
                 cnpj: cnpj ? cnpj : 'Não informado',
                 email_contato: emailContato ? emailContato : 'Não informado',
-                tipo: tipo ? tipo : 99
+                tipo: Number(tipo)
             }
         })
         Logger('GET - COMPANY -/new', `200 - Nova empresa cadastrada: ${newCompany.nome}`, "success");
@@ -44,7 +45,6 @@ routerCompanies.post('/new', validateJWT, async (req, res) => {
     }
 });
 
-
 routerCompanies.get('/id/:id', validateJWT, async (req, res) => {
     const companyId = Number(req.params.id);
     try {
@@ -52,11 +52,23 @@ routerCompanies.get('/id/:id', validateJWT, async (req, res) => {
             where: {
                 id: companyId
             }
-        })
+        });
 
         if (companyData) {
+            // Enriquecendo o campo tipo com os dados completos do enum
+            const tipoKey = companyData.tipo as unknown as CompanyTypes;
+            const typeInfo = tipoKey in CompanyTypeInfo
+                ? CompanyTypeInfo[tipoKey]
+                : CompanyTypeInfo[CompanyTypes.NAO_INFORMADO];
+
+            // Atualiza o campo `tipo` com os dados enriquecidos
+            const enrichedCompanyData = {
+                ...companyData,
+                tipo: typeInfo
+            };
+
             Logger(`GET - COMPANY - id/${companyId}`, `200 - Found and Authorized`, "success");
-            res.status(200).send(JSON.stringify(companyData));
+            res.status(200).json(enrichedCompanyData);
         } else {
             Logger(`GET - COMPANY - id/${companyId}`, `404 - Not Found`, "error");
             res.status(404).send({ error: true, message: 'Company not found!' });
@@ -69,10 +81,26 @@ routerCompanies.get('/id/:id', validateJWT, async (req, res) => {
 
 routerCompanies.get('/all', validateJWT, async (req, res) => {
     try {
-        const companyData = await prisma.empresas.findMany()
-        if (companyData) {
+        const companyData = await prisma.empresas.findMany();
+        if (companyData && companyData.length > 0) {
+            // Mapeia os dados e inclui informações do tipo
+            const enrichedCompanyData = companyData.map(company => {
+                // Converte para unknown antes de asserir o tipo
+                const tipoKey = company.tipo as unknown as CompanyTypes;
+
+                // Verifica se tipoKey é uma chave válida no CompanyTypeInfo
+                const typeInfo = tipoKey in CompanyTypeInfo 
+                    ? CompanyTypeInfo[tipoKey] 
+                    : CompanyTypeInfo[CompanyTypes.NAO_INFORMADO];
+
+                return {
+                    ...company,
+                    tipo: typeInfo, // Substitui o ID pelo objeto completo do tipo
+                };
+            });
+
             Logger(`GET - COMPANY - all-companies`, `200 - Found and Authorized`, "success");
-            res.status(200).send(JSON.stringify(companyData));
+            res.status(200).json(enrichedCompanyData);
         } else {
             Logger(`GET - COMPANY - all-companies`, `404 - Not Found`, "error");
             res.status(404).send({ error: true, message: 'No company found' });
@@ -81,6 +109,11 @@ routerCompanies.get('/all', validateJWT, async (req, res) => {
         Logger(`GET - COMPANY - all-companies`, `Error fetching companies. ${JSON.stringify(error)} `, "error");
         res.status(500).json({ message: 'Error fetching companies.' });
     }
+});
+
+
+routerCompanies.get('/types', validateJWT, async (req, res) => {
+    res.status(200).send(JSON.stringify(CompanyTypeInfo));
 });
 
 

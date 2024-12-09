@@ -59,7 +59,7 @@ routerInternship.post('/new', validateJWT, async (req, res) => {
         const newInternship = await prisma.estagio.create({
             data: {
                 aluno,
-                professor_orientador,
+                professor_orientador: Number(professor_orientador),
                 empresa,
                 area_atuacao,
                 data_inicio: dataInicioDate,
@@ -100,6 +100,53 @@ routerInternship.get('/id/:id', validateJWT, async (req, res) => {
         }
     } catch (error) {
         Logger(`GET - INTERNSHIP - id/${id}`, `Error fetching requested Internship. ${JSON.stringify(error)} `, "error");
+        res.status(500).json({ message: 'Error fetching requested Internship.' });
+    }
+});
+
+routerInternship.get('/recent-by-student/:id', validateJWT, async (req, res) => {
+    const id = Number(req.params.id);
+    try {
+        const internshipData = await prisma.estagio.findFirst({
+            where: {
+                aluno: id
+            },
+            orderBy: {
+                id: 'desc' 
+            }
+        });
+
+        if (internshipData) {
+            Logger(`GET - INTERNSHIP - recent-by-student/${id}`, `200 - Found and Authorized`, "success");
+            res.status(200).send(JSON.stringify(internshipData));
+        } else {
+            Logger(`GET - INTERNSHIP - recent-by-student/${id}`, `404 - Not Found`, "error");
+            res.status(404).send({ error: true, message: 'Internship not found!' });
+        }
+    } catch (error) {
+        Logger(`GET - INTERNSHIP - recent-by-student/${id}`, `Error fetching requested Internship. ${JSON.stringify(error)} `, "error");
+        res.status(500).json({ message: 'Error fetching requested Internship.' });
+    }
+});
+
+routerInternship.delete('/id/:id', validateJWT, async (req, res) => {
+    const id = Number(req.params.id);
+    try {
+        const internshipData = await prisma.estagio.delete({
+            where: {
+                id: Number(id)
+            }
+        })
+
+        if (internshipData) {
+            Logger(`DELETE - INTERNSHIP - id/${id}`, `200 - Found and Authorized`, "success");
+            res.status(200).send(JSON.stringify(internshipData));
+        } else {
+            Logger(`DELETE - INTERNSHIP - id/${id}`, `404 - Not Found`, "error");
+            res.status(404).send({ error: true, message: 'Internship not found!' });
+        }
+    } catch (error) {
+        Logger(`DELETE - INTERNSHIP - id/${id}`, `Error fetching requested Internship. ${JSON.stringify(error)} `, "error");
         res.status(500).json({ message: 'Error fetching requested Internship.' });
     }
 });
