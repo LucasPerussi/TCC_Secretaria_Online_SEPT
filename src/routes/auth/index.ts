@@ -1,6 +1,6 @@
 import { Router, Request } from 'express';
-import prisma from '../../prismaClient'; 
-import { PrismaClient, Prisma } from '@prisma/client';  
+import prisma from '../../prismaClient';
+import { PrismaClient, Prisma } from '@prisma/client';
 import { extractUserDataFromToken, validateJWT } from '../../middlewares/JWTVerifier';
 import { TimelineTypes, TimelineTypeInfo } from '../../enum/timeline';
 
@@ -29,7 +29,7 @@ routerAuth.get('/', (req, res) => res.send('API de Autenticação'))
 
 routerAuth.post('/login', async (req, res) => {
     let { email, senha } = req.body;
-    email = email.toLowerCase(); 
+    email = email.toLowerCase();
     try {
         let user = await prisma.usuario.findUnique({
             where: { email },
@@ -109,12 +109,103 @@ routerAuth.post('/login', async (req, res) => {
     }
 });
 
+
+const generateRandomCodeSize = (length: number) => {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let code = '';
+    for (let i = 0; i < length; i++) {
+        code += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return code;
+};
+
+routerAuth.post('/check-recovery', async (req, res) => {
+    const { email, registro, nascimento } = req.body;
+
+    // Validação básica dos campos de entrada
+    if (!email || !registro || !nascimento) {
+        return res.status(400).json({
+            success: false,
+            message: 'Todos os campos (email, registro, nascimento) são obrigatórios.'
+        });
+    }
+
+    try {
+        // Busca o usuário pelo email (convertido para minúsculas)
+        const userExist = await prisma.usuario.findFirst({
+            where: {
+                email: email.toLowerCase()
+            }
+        });
+
+        if (!userExist) {
+            return res.status(404).json({
+                success: false,
+                message: 'Usuário não encontrado.'
+            });
+        }
+
+        // Normaliza os dados para comparação
+        const inputRegistro = registro.toLowerCase();
+        const inputNascimento = new Date(nascimento).toISOString().split('T')[0]; // Formato YYYY-MM-DD
+
+        const userRegistro = userExist.registro.toLowerCase();
+        const userNascimento = new Date(userExist.nascimento).toISOString().split('T')[0]; // Assegura o mesmo formato
+
+        // Verifica se registro e nascimento correspondem
+        if (inputRegistro !== userRegistro || inputNascimento !== userNascimento) {
+            return res.status(400).json({
+                success: false,
+                message: 'Registro ou data de nascimento incorretos.'
+            });
+        }
+
+        const recoveryCode = generateRandomCodeSize(60);
+
+        // Cria um hash do código para armazenar no banco de dados
+        const recoveryCodeHash = await bcrypt.hash(recoveryCode, 10);
+
+        // Cria um novo registro na tabela 'codigos' usando a relação correta
+        const novoCodigo = await prisma.codigos.create({
+            data: { 
+                codigo: recoveryCodeHash, // Armazena o hash
+                status: 1,
+                data_solicitacao: new Date(), // Campo obrigatório
+                usuario_codigos_usuarioTousuario: { 
+                    connect: { id: userExist.id } 
+                }
+            }
+        });
+
+        console.log('Novo código de recuperação criado:', novoCodigo);
+
+        // Retorna o código simples (não hasheado) para o cliente
+        return res.status(200).json({
+            success: true,
+            message: 'Informações validadas com sucesso.',
+            data: {
+                userId: userExist.id,
+                recoveryCode: recoveryCode // Retorna o código simples
+            }
+        });
+
+    } catch (error) {
+        console.error('Erro na verificação de recuperação:', error);
+        return res.status(500).json({
+            success: false,
+            message: 'Ocorreu um erro ao processar sua solicitação. Por favor, tente novamente mais tarde.'
+        });
+    }
+});
+
+
+
 routerAuth.post('/create', async (req, res) => {
     const { email, senha, nome, sobrenome, nascimento, registro } = req.body;
 
     try {
-        const emailLC = email.toLowerCase(); 
-        const registroLC = registro.toLowerCase(); 
+        const emailLC = email.toLowerCase();
+        const registroLC = registro.toLowerCase();
 
         // Verifica se pode criar o usuário
         const canCreateUser = await checkCanCreateuser(email, registro);
@@ -137,11 +228,11 @@ routerAuth.post('/create', async (req, res) => {
                 sobrenome,
                 nascimento: new Date(nascimento),
                 criado_em: new Date(),
-                funcao: 1, 
+                funcao: 1,
                 registro: registroLC,
-                foto: 'src/img/avatars/generic.webp', 
-                status_usuario: 1, 
-                status_curso: 1, 
+                foto: 'src/img/avatars/generic.webp',
+                status_usuario: 1,
+                status_curso: 1,
             },
             select: {
                 id: true,
@@ -199,16 +290,16 @@ routerAuth.post('/create', async (req, res) => {
         }
 
         // Envio da resposta com o token e informações do usuário
-        res.status(201).json({ 
-            token, 
-            user: { 
+        res.status(201).json({
+            token,
+            user: {
                 id: createdUser.id,
                 name: `${createdUser.nome} ${createdUser.sobrenome}`,
                 email: createdUser.email,
                 role: roleText,
                 picture: createdUser.foto,
                 registro: createdUser.registro
-            } 
+            }
         });
     } catch (error) {
         if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
@@ -222,6 +313,81 @@ routerAuth.post('/create', async (req, res) => {
     }
 });
 
+routerAuth.post('/change-password-validate', async (req, res) => {
+    const { codigo, senha, confirmacaoSenha } = req.body;
+
+    try {
+        // Validação básica dos campos
+        if (!codigo || !senha || !confirmacaoSenha) {
+            return res.status(400).json({ message: 'Todos os campos são obrigatórios.' });
+        }
+
+        if (senha !== confirmacaoSenha) {
+            return res.status(400).json({ message: 'As senhas não conferem.' });
+        }
+
+        // Buscar todos os códigos ativos (status: 1)
+        const codigosAtivos = await prisma.codigos.findMany({
+            where: {
+                status: 1, // Considerando que status 1 significa ativo
+            },
+            include: {
+                usuario_codigos_usuarioTousuario: true, // Inclui informações do usuário relacionado
+            }
+        });
+
+        // Encontrar o código que corresponde ao fornecido usando bcrypt.compare
+        let codigoRegistro = null;
+        for (const codigoDB of codigosAtivos) {
+            const isMatch = await bcrypt.compare(codigo, codigoDB.codigo);
+            if (isMatch) {
+                codigoRegistro = codigoDB;
+                break;
+            }
+        }
+
+        if (!codigoRegistro) {
+            return res.status(400).json({ message: 'Código de recuperação inválido ou já utilizado.' });
+        }
+
+        const usuarioId = codigoRegistro.usuario_codigos_usuarioTousuario.id;
+
+        // Atualizar a senha do usuário
+        const hashedPassword = await bcrypt.hash(senha, 10);
+
+        await prisma.usuario.update({
+            where: { id: usuarioId }, 
+            data: {
+                senha: hashedPassword,
+            },
+        });
+
+        // Marcar o código como usado
+        await prisma.codigos.update({
+            where: { id: codigoRegistro.id },
+            data: {
+                status: 0, // Considerando que status 0 significa usado/inativo
+            },
+        });
+
+        // Opcional: Registrar no Logger e Timeline
+        Logger('auth/change-password-validate', `Senha alterada com sucesso para o usuário ID: ${usuarioId}`, "success", usuarioId);
+        Timeline(
+            'Senha alterada com sucesso.',
+            usuarioId.toString(),
+            'A senha do usuário foi alterada através do código de recuperação.',
+            Number(TimelineTypes.PASSWORD_CHANGE),
+            usuarioId
+        );
+
+        res.status(200).json({ message: 'Senha alterada com sucesso.' });
+
+    } catch (error) {
+        Logger('auth/change-password-validate', `500 - Erro - ${error}`, "error");
+        console.error('Erro ao validar e alterar a senha:', error);
+        res.status(500).json({ message: 'Erro interno do servidor.' });
+    }
+});
 
 async function checkCanCreateuser(email: string, registro: string) {
 
