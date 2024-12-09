@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Dec 06, 2024 at 01:21 PM
+-- Generation Time: Dec 09, 2024 at 01:37 AM
 -- Server version: 10.6.18-MariaDB-0ubuntu0.22.04.1
 -- PHP Version: 8.2.26
 
@@ -46,7 +46,15 @@ INSERT INTO `campos_solicitacao` (`id`, `tipo`, `nome`, `nome_exibicao`, `tipo_p
 (5, 7, 'nome', 'Nome', 6),
 (6, 8, 'sobrenome', 'Sobrenome', 6),
 (7, 9, 'email', 'Email', 6),
-(8, 12, 'data', 'Data', 6);
+(8, 12, 'data', 'Data', 6),
+(10, 8, 'sobrenome', 'Sobrenome', 8),
+(11, 9, 'email', 'Email', 8),
+(12, 10, 'telefone', 'Telefone', 8),
+(13, 11, 'descricao', 'Descrição', 8),
+(14, 12, 'data', 'Data', 8),
+(15, 13, 'horas', 'Carga Horária', 8),
+(17, 7, 'nome', 'Nome', 8),
+(18, 16, 'numero_da_cor', 'telefone', 8);
 
 -- --------------------------------------------------------
 
@@ -75,6 +83,22 @@ CREATE TABLE `comentarios` (
   `comentario` varchar(255) NOT NULL,
   `data` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `comentarios`
+--
+
+INSERT INTO `comentarios` (`id`, `processo`, `usuario`, `comentario`, `data`) VALUES
+(1, 13, 31, 'kjfkjsfksgs', '2024-12-06 14:39:43'),
+(2, 13, 31, 'kjfkjsfksgs', '2024-12-06 14:39:49'),
+(3, 13, 31, 'kjfkjsfksgs', '2024-12-06 14:39:49'),
+(4, 13, 31, 'kjfkjsfksgs', '2024-12-06 14:39:50'),
+(5, 13, 31, 'kjfkjsfksgs', '2024-12-06 14:39:50'),
+(6, 13, 31, 'kjfkjsfksgs', '2024-12-06 14:39:50'),
+(7, 13, 31, 'kjfkjsfksgs', '2024-12-06 14:39:51'),
+(8, 13, 31, 'kjfkjsfksgs', '2024-12-06 14:39:51'),
+(9, 13, 31, 'kjfkjsfksgs', '2024-12-06 14:39:51'),
+(10, 13, 31, 'pppppp', '2024-12-06 14:39:59');
 
 -- --------------------------------------------------------
 
@@ -120,7 +144,8 @@ CREATE TABLE `empresas` (
 --
 
 INSERT INTO `empresas` (`id`, `nome`, `cnpj`, `email_contato`, `tipo`) VALUES
-(1, 'Apple', '23.000.000/0001-35', 'perussilucas@apple.com', 1);
+(1, 'Apple', '23.000.000/0001-35', 'perussilucas@apple.com', 1),
+(4, 'Teste', '11.000.000/0001-35', 'testeempresa@teste.com', 1);
 
 -- --------------------------------------------------------
 
@@ -161,10 +186,13 @@ CREATE TABLE `estagio` (
 --
 
 INSERT INTO `estagio` (`id`, `aluno`, `professor_orientador`, `codigo_estagio`, `empresa`, `area_atuacao`, `data_inicio`, `data_renovacao`, `documentos_referencia`, `status`) VALUES
-(1, 24, 25, 1880846715, 1, 'Desenvolvimento de Software', '2023-10-11', '2024-04-11', NULL, 1),
+(1, 24, 25, 1880846715, 1, 'Desenvolvimento de Software', '2023-10-11', '2024-04-11', NULL, 2),
 (3, 24, 25, 2147483647, 1, 'Desenvolvimento de Software', '2023-10-11', '2024-04-11', NULL, 1),
 (8, 24, 25, 2147483647, 1, 'Desenvolvimento de Software', '2023-10-11', '2024-04-11', NULL, 1),
-(9, 24, 25, 2147483647, 1, 'Desenvolvimento de Software', '2023-10-11', '2024-04-11', NULL, 1);
+(9, 24, 25, 2147483647, 1, 'Desenvolvimento de Software', '2023-10-11', '2024-04-11', NULL, 1),
+(10, 31, 25, 2098204026, 1, 'Teste 2', '2024-12-03', '2025-06-03', NULL, 1),
+(11, 31, 26, 1603568889, 4, 'Teste', '2024-11-05', '2025-05-05', NULL, 1),
+(12, 31, 26, 849276615, 4, 'Teste', '2024-11-05', '2025-05-05', NULL, 1);
 
 -- --------------------------------------------------------
 
@@ -229,7 +257,11 @@ INSERT INTO `fila_emails` (`id`, `identificador`, `destinatario`, `titulo`, `ope
 (8, '5GNzHEcO8aazcxU', 'aluno@aluno.com', 'Bem-vindo(a) à secretaria online do SEPT!', 1, 'Este é um teste!', '200', '2024-11-22 11:08:01', 31, 1),
 (9, 'EluImU0yDKn4v87', 'teste-erro@erro.com', 'Bem-vindo(a) à secretaria online do SEPT!', 1, 'Este é um teste!', '200', '2024-11-30 11:33:52', 32, 1),
 (10, 'uo1d81dezni5xci', 'teste@testou.com', 'Bem-vindo(a) à secretaria online do SEPT!', 1, 'Este é um teste!', '200', '2024-12-06 10:43:29', 33, 1),
-(11, '1zwE5Aw6AZCjEvq', 'aluno@lucas.com', 'Bem-vindo(a) à secretaria online do SEPT!', 1, 'Este é um teste!', '200', '2024-12-06 11:44:28', 34, 1);
+(11, '1zwE5Aw6AZCjEvq', 'aluno@lucas.com', 'Bem-vindo(a) à secretaria online do SEPT!', 1, 'Este é um teste!', '200', '2024-12-06 11:44:28', 34, 1),
+(12, 'jXt3LabozIx5XEz', 'matheus.fiori@ufpr.br', 'Bem-vindo(a) à secretaria online do SEPT!', 1, 'Este é um teste!', '200', '2024-12-06 14:13:44', 35, 1),
+(13, 'xI5wMXZrb4OcHGQ', 'cadastro@fix.com', 'Bem-vindo(a) à secretaria online do SEPT!', 1, 'Este é um teste!', '200', '2024-12-06 14:23:36', 36, 1),
+(14, '0ZdhUpqbh1HHGuN', 'xcxzc@hotmail.com', 'Bem-vindo(a) à secretaria online do SEPT!', 1, 'Este é um teste!', '200', '2024-12-06 14:33:37', 37, 1),
+(15, 'KYWwbAhIU5CVV4F', 'mathfiori00@gmail.com', 'Bem-vindo(a) à secretaria online do SEPT!', 1, 'Este é um teste!', '200', '2024-12-08 22:10:14', 38, 1);
 
 -- --------------------------------------------------------
 
@@ -248,26 +280,30 @@ CREATE TABLE `horas_formativas` (
   `status_aprovacao` int(11) NOT NULL DEFAULT 1,
   `comprovante` text DEFAULT NULL,
   `horas_solicitadas` double NOT NULL,
-  `horas_concedidas` double DEFAULT NULL
+  `horas_concedidas` double DEFAULT NULL,
+  `justificativa` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `horas_formativas`
 --
 
-INSERT INTO `horas_formativas` (`id`, `aluno`, `servidor_avaliador`, `data_envio`, `data_evento`, `descricao`, `tipo`, `status_aprovacao`, `comprovante`, `horas_solicitadas`, `horas_concedidas`) VALUES
-(1, 24, NULL, '2024-10-11 19:49:13', '2023-10-11', 'Participei de um curso de italiano', 1, 1, 'link pro comprovante', 30, NULL),
-(3, 31, NULL, '2024-11-30 18:51:35', '2023-10-11', 'Participei de um curso de italiano', 1, 1, 'link pro comprovante', 30, NULL),
-(4, 31, NULL, '2024-11-30 18:52:08', '2024-10-11', 'Participei de um curso de francês', 2, 1, 'link pro comprovante', 20, NULL),
-(5, 31, NULL, '2024-11-30 18:52:25', '2024-11-11', 'Participei de um curso de tailandês', 3, 1, 'link pro comprovante', 5, NULL),
-(6, 31, NULL, '2024-11-30 18:52:36', '2024-11-30', 'Participei de um curso de vietnamita', 4, 1, 'link pro comprovante', 5, NULL),
-(7, 31, NULL, '2024-12-01 22:55:19', '2023-10-11', 'Participei de um curso de italiano', 1, 1, 'link pro comprovante', 30, NULL),
-(8, 28, NULL, '2024-12-01 22:56:31', '2023-10-11', 'Participei de um curso de italiano', 1, 1, 'link pro comprovante', 30, NULL),
-(9, 28, NULL, '2024-12-01 22:56:45', '2023-10-16', 'Participei de um curso de francês', 1, 1, 'link pro comprovante', 20, NULL),
-(10, 28, NULL, '2024-12-01 22:56:59', '2023-10-23', 'Participei de um curso de tailandês', 1, 1, 'link pro comprovante', 5, NULL),
-(11, 28, NULL, '2024-12-01 22:57:10', '2023-11-29', 'Participei de um curso de vietnamita', 1, 1, 'link pro comprovante', 5, NULL),
-(12, 31, NULL, '2024-12-02 10:06:53', '2002-01-22', 'Fiz um curso de fiehgiwehfniwjurwehewiug', 5, 1, 'asdafafaf', 9, NULL),
-(13, 31, NULL, '2024-12-06 10:55:27', '1991-11-11', 'dsdadads', 1, 1, 'youtube.com', 20, NULL);
+INSERT INTO `horas_formativas` (`id`, `aluno`, `servidor_avaliador`, `data_envio`, `data_evento`, `descricao`, `tipo`, `status_aprovacao`, `comprovante`, `horas_solicitadas`, `horas_concedidas`, `justificativa`) VALUES
+(1, 24, NULL, '2024-10-11 19:49:13', '2023-10-11', 'Participei de um curso de italiano', 1, 1, 'link pro comprovante', 30, NULL, NULL),
+(3, 31, NULL, '2024-11-30 18:51:35', '2023-10-11', 'Participei de um curso de italiano', 1, 1, 'link pro comprovante', 30, NULL, NULL),
+(4, 31, NULL, '2024-11-30 18:52:08', '2024-10-11', 'Participei de um curso de francês', 2, 1, 'link pro comprovante', 20, NULL, NULL),
+(5, 31, NULL, '2024-11-30 18:52:25', '2024-11-11', 'Participei de um curso de tailandês', 3, 1, 'link pro comprovante', 5, NULL, NULL),
+(6, 31, NULL, '2024-11-30 18:52:36', '2024-11-30', 'Participei de um curso de vietnamita', 4, 1, 'link pro comprovante', 5, NULL, NULL),
+(7, 31, NULL, '2024-12-01 22:55:19', '2023-10-11', 'Participei de um curso de italiano', 1, 1, 'link pro comprovante', 30, NULL, NULL),
+(8, 28, NULL, '2024-12-01 22:56:31', '2023-10-11', 'Participei de um curso de italiano', 1, 1, 'link pro comprovante', 30, NULL, NULL),
+(9, 28, NULL, '2024-12-01 22:56:45', '2023-10-16', 'Participei de um curso de francês', 1, 1, 'link pro comprovante', 20, NULL, NULL),
+(10, 28, NULL, '2024-12-01 22:56:59', '2023-10-23', 'Participei de um curso de tailandês', 1, 1, 'link pro comprovante', 5, NULL, NULL),
+(11, 28, NULL, '2024-12-01 22:57:10', '2023-11-29', 'Participei de um curso de vietnamita', 1, 1, 'link pro comprovante', 5, NULL, NULL),
+(12, 31, NULL, '2024-12-02 10:06:53', '2002-01-22', 'Fiz um curso de fiehgiwehfniwjurwehewiug', 5, 1, 'asdafafaf', 9, NULL, NULL),
+(13, 31, NULL, '2024-12-06 10:55:27', '1991-11-11', 'dsdadads', 1, 1, 'youtube.com', 20, NULL, NULL),
+(14, 31, NULL, '2024-12-06 15:16:48', '1911-11-11', 'sfsfsfds', 1, 1, 'youtube.com', 8, NULL, NULL),
+(15, 38, NULL, '2024-12-08 22:16:49', '1994-01-22', 'Participei de alguma coisa', 1, 1, 'youtube.com', 8, NULL, NULL),
+(16, 38, NULL, '2024-12-08 22:17:39', '1912-01-01', 'Participei de outra coisa aqui', 2, 1, 'comprovante', 12, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -342,7 +378,33 @@ INSERT INTO `logins` (`id`, `usuario`, `data`, `local`, `chave_sessao`, `status`
 (152, 28, '2024-12-06 10:58:47', 'Informações de IP não disponíveis', 'ed6065e33ec73705', 1, '2804:1b3:6081:6c7c:2549:a809:f0f6:68b5,172.71.10.116'),
 (153, 24, '2024-12-06 11:43:10', 'Informações de IP não disponíveis', 'a2a164f9bdf46e46', 1, '2804:14c:87c0:c475:5df2:7b5a:bbb4:f7f2,172.68.206.137'),
 (154, 34, '2024-12-06 11:46:29', 'Informações de IP não disponíveis', '31c92382c3254dd6', 1, '2804:14c:87c0:c475:5df2:7b5a:bbb4:f7f2,172.68.206.131'),
-(155, 24, '2024-12-06 11:51:34', 'Informações de IP não disponíveis', 'a72dbb5d6103c15a', 1, '2804:14c:87c0:c475:5df2:7b5a:bbb4:f7f2,172.68.206.137');
+(155, 24, '2024-12-06 11:51:34', 'Informações de IP não disponíveis', 'a72dbb5d6103c15a', 1, '2804:14c:87c0:c475:5df2:7b5a:bbb4:f7f2,172.68.206.137'),
+(156, 28, '2024-12-06 14:20:53', 'Informações de IP não disponíveis', 'ace6ae8d7f4cd3d0', 1, '2804:1b3:6081:6c7c:7751:dd66:9a52:3410,172.71.11.159'),
+(157, 37, '2024-12-06 14:33:37', 'Informações de IP não disponíveis', '73fa8746258b853b', 1, '2804:14c:87c0:c475:5df2:7b5a:bbb4:f7f2,172.68.206.130'),
+(158, 28, '2024-12-06 14:36:23', 'Informações de IP não disponíveis', '196780e095611269', 1, '2804:1b3:6081:6c7c:7751:dd66:9a52:3410,172.69.138.11'),
+(159, 31, '2024-12-06 16:37:18', 'Informações de IP não disponíveis', '2e1ddd610b7e593b', 1, '45.230.103.53,172.68.28.163'),
+(160, 29, '2024-12-06 17:17:34', 'Informações de IP não disponíveis', '96628a1c36bb341c', 1, '45.230.103.53,172.68.28.162'),
+(161, 31, '2024-12-06 17:29:35', 'Informações de IP não disponíveis', '84b64602367c8ad0', 1, '45.230.103.53,172.68.28.154'),
+(162, 24, '2024-12-06 18:46:44', 'Informações de IP não disponíveis', 'b5d530cba9b9eb7b', 1, '45.230.103.53,172.68.28.155'),
+(163, 27, '2024-12-06 18:57:50', 'Informações de IP não disponíveis', '861d908633cbc467', 1, '2804:14c:87c0:c475:5df2:7b5a:bbb4:f7f2,172.68.206.139'),
+(164, 24, '2024-12-06 18:58:13', 'Informações de IP não disponíveis', '8cf89036ad692507', 1, '2804:14c:87c0:c475:5df2:7b5a:bbb4:f7f2,172.68.206.130'),
+(165, 27, '2024-12-06 18:59:22', 'Informações de IP não disponíveis', '88a5e39f3ec3c059', 1, '2804:14c:87c0:c475:5df2:7b5a:bbb4:f7f2,172.68.206.139'),
+(166, 24, '2024-12-06 19:00:16', 'Informações de IP não disponíveis', '12bd8a71003357c4', 1, '2804:14c:87c0:c475:5df2:7b5a:bbb4:f7f2,172.68.206.133'),
+(167, 36, '2024-12-06 19:01:00', 'Informações de IP não disponíveis', '7cb28566bcaa1d9e', 1, '2804:14c:87c0:c475:5df2:7b5a:bbb4:f7f2,172.68.206.137'),
+(168, 31, '2024-12-06 22:14:17', 'Informações de IP não disponíveis', 'f91106e6b2878bef', 1, '45.230.103.53,172.71.234.142'),
+(169, 28, '2024-12-07 01:10:55', 'Informações de IP não disponíveis', 'eaaf150d630b0ab3', 1, '2804:1b3:6081:86ad:8e18:48a1:b4fd:a069,172.71.11.128'),
+(170, 28, '2024-12-07 14:05:39', 'Informações de IP não disponíveis', 'ece66c03bd989091', 1, '2804:1b3:6081:86ad:21d3:8d55:87fa:34a,172.69.138.209'),
+(171, 28, '2024-12-07 20:13:52', 'Informações de IP não disponíveis', '609c11d86695980b', 1, '2804:1b3:6081:86ad:21d3:8d55:87fa:34a,172.68.19.32'),
+(172, 28, '2024-12-08 11:38:44', 'Informações de IP não disponíveis', 'f9bb1b29f2f82af7', 1, '2804:1b3:6081:86ad:867b:8851:63b7:1d97,172.71.11.18'),
+(173, 24, '2024-12-08 18:26:54', 'Informações de IP não disponíveis', 'ed210536fec8bc10', 1, '45.230.103.53,172.68.28.155'),
+(174, 28, '2024-12-08 18:39:13', 'Informações de IP não disponíveis', '3cd75d51cd83c395', 1, '2804:1b3:6081:86ad:e15d:7a03:e850:97fb,172.69.138.11'),
+(175, 29, '2024-12-08 22:08:45', 'Informações de IP não disponíveis', '6838a81af4e21c27', 1, '45.230.103.53,172.68.28.148'),
+(176, 38, '2024-12-08 22:10:14', 'Informações de IP não disponíveis', '007f7d7bd5610046', 1, '2804:1b3:6081:86ad:f123:6998:861a:3e36,172.71.234.120'),
+(177, 29, '2024-12-08 22:11:12', 'Informações de IP não disponíveis', 'f6bbc1330ca18cc6', 1, '45.230.103.53,172.68.28.148'),
+(178, 24, '2024-12-08 22:11:55', 'Informações de IP não disponíveis', '64c7c3ceb8d7f500', 1, '45.230.103.53,172.68.28.163'),
+(179, 29, '2024-12-08 22:12:47', 'Informações de IP não disponíveis', '6365af2c7ce864f1', 1, '45.230.103.53,172.68.28.155'),
+(180, 24, '2024-12-08 23:21:11', 'Informações de IP não disponíveis', 'c60112fc8e46bf4e', 1, '45.230.103.53,172.68.28.154'),
+(181, 24, '2024-12-09 00:22:36', 'Informações de IP não disponíveis', 'a14b7acf43170e8d', 1, '179.94.45.189,172.68.19.186');
 
 -- --------------------------------------------------------
 
@@ -1981,7 +2043,744 @@ INSERT INTO `logs` (`id`, `funcao`, `mensagem`, `usuario`, `status`, `data`) VAL
 (1624, 'GET - FIELDS - all-default-fields', '200 - Found and Authorized', NULL, 'success', '2024-12-06 12:56:32'),
 (1625, 'GET - STEPS - all-default', '200 - Found and Authorized', NULL, 'success', '2024-12-06 12:56:34'),
 (1626, 'GET - STEPS - all-customized', '200 - Found and Authorized', NULL, 'success', '2024-12-06 12:56:35'),
-(1627, 'GET - STEPS - link-step-to-proccess/6', '200 - Found and Authorized', NULL, 'success', '2024-12-06 12:56:38');
+(1627, 'GET - STEPS - link-step-to-proccess/6', '200 - Found and Authorized', NULL, 'success', '2024-12-06 12:56:38'),
+(1628, 'GET - REQUEST TYPE - id/6', '200 - Found and Authorized', NULL, 'success', '2024-12-06 13:49:20'),
+(1629, 'GET - FIELDS - all-default-fields', '200 - Found and Authorized', NULL, 'success', '2024-12-06 13:49:23'),
+(1630, 'GET - STEPS - all-default', '200 - Found and Authorized', NULL, 'success', '2024-12-06 13:49:24'),
+(1631, 'GET - STEPS - all-customized', '200 - Found and Authorized', NULL, 'success', '2024-12-06 13:49:26'),
+(1632, 'GET - STEPS - link-step-to-proccess/6', '200 - Found and Authorized', NULL, 'success', '2024-12-06 13:49:28'),
+(1633, 'GET - SYSTEM - logs/last50', '200 - Found and Authorized', NULL, 'success', '2024-12-06 13:49:34'),
+(1634, 'GET - SYSTEM - logs/last50', '200 - Found and Authorized', NULL, 'success', '2024-12-06 13:56:07'),
+(1635, 'GET - USERS - all-students', '200 - Found and Authorized', NULL, 'success', '2024-12-06 13:56:16'),
+(1636, 'GET - SYSTEM - logs/last50', '200 - Found and Authorized', NULL, 'success', '2024-12-06 13:56:19'),
+(1637, 'GET - REQUEST TYPE - all', '200 - Found and Authorized', NULL, 'success', '2024-12-06 13:56:21'),
+(1638, 'GET - REQUESTS - /all-requests-as-student', '404 - Not Found', NULL, 'error', '2024-12-06 14:08:20'),
+(1639, 'GET - REQUESTS - /all-requests-as-student', '404 - Not Found', NULL, 'error', '2024-12-06 14:09:11'),
+(1640, 'GET - HOURS - by-student/31', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:09:20'),
+(1641, 'GET - PERCENTUAL-POR-TIPO - by-student/31', '200 - Percentuais calculados com sucesso', NULL, 'success', '2024-12-06 14:09:21'),
+(1642, 'GET - REQUESTS - /all-requests-as-student', '404 - Not Found', NULL, 'error', '2024-12-06 14:09:27'),
+(1643, 'GET - REQUEST TYPE - all', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:09:34'),
+(1644, 'GET - SYSTEM - logs/last50', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:09:37'),
+(1645, 'auth/create', 'Usuário criado com sucesso! {\"user\":{\"id\":35,\"email\":\"matheus.fiori@ufpr.br\",\"nome\":\"teteu\",\"sobrenome\":\"teteu\",\"nascimento\":\"2002-01-22T00:00:00.000Z\",\"registro\":\"grr55555555\",\"funcao\":1,\"status_usuario\":1}}', 35, 'success', '2024-12-06 14:13:44'),
+(1646, 'sendEmail', 'Encontrados 1 novos registros.', NULL, 'info', '2024-12-06 14:14:09'),
+(1647, 'sendEmail', 'Enviando email para matheus.fiori@ufpr.br com o título \"Bem-vindo(a) à secretaria online do SEPT!\"...', NULL, 'info', '2024-12-06 14:14:09'),
+(1648, 'sendEmail', 'Email enviado com sucesso!', NULL, 'success', '2024-12-06 14:14:14'),
+(1649, 'GET - USERS - all-students', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:16:45'),
+(1650, 'GET - USERS - all-teachers', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:16:51'),
+(1651, 'GET - SYSTEM - logs/last50', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:16:58'),
+(1652, 'GET - REQUEST TYPE - all', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:18:12'),
+(1653, 'GET - SYSTEM - logs/last50', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:18:17'),
+(1654, 'GET - SYSTEM - logs/last50', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:18:20'),
+(1655, 'GET - SYSTEM - logs/last50', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:18:25'),
+(1656, 'GET - SYSTEM - logs/last50', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:20:53'),
+(1657, 'GET - REQUESTS - /all-requests-as-student', '404 - Not Found', NULL, 'error', '2024-12-06 14:21:02'),
+(1658, 'auth/create', 'Usuário criado com sucesso! {\"user\":{\"id\":36,\"email\":\"cadastro@fix.com\",\"nome\":\"Lucas\",\"sobrenome\":\"Cadastro\",\"nascimento\":\"1999-07-28T00:00:00.000Z\",\"registro\":\"registroooo\",\"funcao\":1,\"status_usuario\":1}}', 36, 'success', '2024-12-06 14:23:36'),
+(1659, 'sendEmail', 'Encontrados 1 novos registros.', NULL, 'info', '2024-12-06 14:23:39'),
+(1660, 'sendEmail', 'Enviando email para cadastro@fix.com com o título \"Bem-vindo(a) à secretaria online do SEPT!\"...', NULL, 'info', '2024-12-06 14:23:39'),
+(1661, 'sendEmail', 'Email enviado com sucesso!', NULL, 'success', '2024-12-06 14:23:42'),
+(1662, 'GET - REQUESTS - /all-requests-as-student', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:25:17'),
+(1663, 'GET - REQUEST TYPE - all', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:32:59'),
+(1664, 'GET - REQUEST TYPE - all', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:33:27'),
+(1665, 'GET - REQUEST TYPE - id/7', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:33:28'),
+(1666, 'GET - FIELDS - request-field-by-process-type/7', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:33:29'),
+(1667, 'GET - FIELDS - all-default-fields', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:33:29'),
+(1668, 'GET - FIELDS - all-field-types', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:33:30'),
+(1669, 'GET - STEPS - link-step-to-proccess/7', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:33:30'),
+(1670, 'GET - STEPS - all-default', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:33:31'),
+(1671, 'GET - STEPS - all-customized', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:33:32'),
+(1672, 'auth/create', 'Usuário criado com sucesso! {\"user\":{\"id\":37,\"email\":\"xcxzc@hotmail.com\",\"nome\":\"Lucas\",\"sobrenome\":\"Perussi de Oliveira\",\"nascimento\":\"1999-07-28T00:00:00.000Z\",\"registro\":\"sdfsdfsdfsdfsdf\",\"funcao\":1,\"status_usuario\":1,\"foto\":\"\"}}', 37, 'success', '2024-12-06 14:33:37'),
+(1673, 'sendEmail', 'Encontrados 1 novos registros.', NULL, 'info', '2024-12-06 14:33:37'),
+(1674, 'sendEmail', 'Enviando email para xcxzc@hotmail.com com o título \"Bem-vindo(a) à secretaria online do SEPT!\"...', NULL, 'info', '2024-12-06 14:33:37'),
+(1675, 'GET - REQUESTS - /all-requests-as-student', '404 - Not Found', NULL, 'error', '2024-12-06 14:33:38'),
+(1676, 'sendEmail', 'Email enviado com sucesso!', NULL, 'success', '2024-12-06 14:33:40'),
+(1677, 'GET - USERS - id/37', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:33:48'),
+(1678, 'PATCH - USERS - FOTO - 37', '200 - Foto atualizada com sucesso', NULL, 'success', '2024-12-06 14:36:08'),
+(1679, 'PATCH - USERS - SOBRENOME - 37', '200 - Sobrenome atualizado com sucesso', NULL, 'success', '2024-12-06 14:36:18'),
+(1680, 'GET - REQUESTS - /all-requests-as-student', '404 - Not Found', NULL, 'error', '2024-12-06 14:36:20'),
+(1681, 'GET - SYSTEM - logs/last50', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:36:24'),
+(1682, 'GET - USERS - id/37', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:36:25'),
+(1683, 'GET - REQUESTS - /all-requests-as-student', '404 - Not Found', NULL, 'error', '2024-12-06 14:36:29'),
+(1684, 'GET - REQUEST TYPE - all', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:36:34'),
+(1685, 'GET - REQUEST TYPE - all', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:36:38'),
+(1686, 'GET - REQUEST TYPE - id/7', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:36:40'),
+(1687, 'GET - FIELDS - request-field-by-process-type/7', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:36:41'),
+(1688, 'GET - FIELDS - all-default-fields', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:36:41'),
+(1689, 'GET - FIELDS - all-field-types', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:36:42'),
+(1690, 'GET - STEPS - link-step-to-proccess/7', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:36:43'),
+(1691, 'GET - STEPS - all-default', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:36:44'),
+(1692, 'GET - STEPS - all-customized', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:36:45'),
+(1693, 'GET - REQUESTS - /all-requests-as-student', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:37:31'),
+(1694, 'GET - REQUESTS - /all-requests-as-student', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:37:50'),
+(1695, 'GET - REQUESTS - process-identificador/dsqwKhoCi65', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:37:58'),
+(1696, 'GET - REQUEST TYPE - id/7', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:37:59'),
+(1697, 'GET - FIELDS - request-field-by-process-type/7', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:37:59'),
+(1698, 'GET - FIELDS - all-default-fields', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:38:00'),
+(1699, 'GET - FIELDS - all-field-types', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:38:00'),
+(1700, 'GET - STEPS - link-step-to-proccess/7', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:38:00'),
+(1701, 'GET - STEPS - all-default', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:38:00'),
+(1702, 'GET - STEPS - all-customized', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:38:01'),
+(1703, 'GET - COMENTARIOS - /all-from-proccess/13', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:38:03'),
+(1704, 'GET - REQUEST TYPE - all', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:38:18'),
+(1705, 'POST - COMENTARIOS - new', '{\"id\":1,\"processo\":13,\"usuario\":31,\"comentario\":\"kjfkjsfksgs\",\"data\":\"2024-12-06T14:39:43.000Z\",\"usuario_comentarios_usuarioTousuario\":{\"nome\":\"Aluno\",\"sobrenome\":\"da Silva\",\"email\":\"aluno@aluno.com\",\"foto\":\"\"}}', NULL, 'success', '2024-12-06 14:39:43'),
+(1706, 'GET - REQUESTS - process-identificador/dsqwKhoCi65', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:39:44'),
+(1707, 'GET - REQUEST TYPE - id/7', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:39:45'),
+(1708, 'GET - FIELDS - request-field-by-process-type/7', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:39:45'),
+(1709, 'GET - FIELDS - all-default-fields', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:39:46'),
+(1710, 'GET - FIELDS - all-field-types', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:39:46'),
+(1711, 'GET - STEPS - link-step-to-proccess/7', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:39:46'),
+(1712, 'GET - STEPS - all-default', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:39:46'),
+(1713, 'GET - STEPS - all-customized', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:39:47'),
+(1714, 'GET - COMENTARIOS - /all-from-proccess/13', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:39:49'),
+(1715, 'POST - COMENTARIOS - new', '{\"id\":2,\"processo\":13,\"usuario\":31,\"comentario\":\"kjfkjsfksgs\",\"data\":\"2024-12-06T14:39:49.000Z\",\"usuario_comentarios_usuarioTousuario\":{\"nome\":\"Aluno\",\"sobrenome\":\"da Silva\",\"email\":\"aluno@aluno.com\",\"foto\":\"\"}}', NULL, 'success', '2024-12-06 14:39:49'),
+(1716, 'POST - COMENTARIOS - new', '{\"id\":3,\"processo\":13,\"usuario\":31,\"comentario\":\"kjfkjsfksgs\",\"data\":\"2024-12-06T14:39:49.000Z\",\"usuario_comentarios_usuarioTousuario\":{\"nome\":\"Aluno\",\"sobrenome\":\"da Silva\",\"email\":\"aluno@aluno.com\",\"foto\":\"\"}}', NULL, 'success', '2024-12-06 14:39:49'),
+(1717, 'POST - COMENTARIOS - new', '{\"id\":4,\"processo\":13,\"usuario\":31,\"comentario\":\"kjfkjsfksgs\",\"data\":\"2024-12-06T14:39:50.000Z\",\"usuario_comentarios_usuarioTousuario\":{\"nome\":\"Aluno\",\"sobrenome\":\"da Silva\",\"email\":\"aluno@aluno.com\",\"foto\":\"\"}}', NULL, 'success', '2024-12-06 14:39:50'),
+(1718, 'POST - COMENTARIOS - new', '{\"id\":5,\"processo\":13,\"usuario\":31,\"comentario\":\"kjfkjsfksgs\",\"data\":\"2024-12-06T14:39:50.000Z\",\"usuario_comentarios_usuarioTousuario\":{\"nome\":\"Aluno\",\"sobrenome\":\"da Silva\",\"email\":\"aluno@aluno.com\",\"foto\":\"\"}}', NULL, 'success', '2024-12-06 14:39:50'),
+(1719, 'POST - COMENTARIOS - new', '{\"id\":6,\"processo\":13,\"usuario\":31,\"comentario\":\"kjfkjsfksgs\",\"data\":\"2024-12-06T14:39:50.000Z\",\"usuario_comentarios_usuarioTousuario\":{\"nome\":\"Aluno\",\"sobrenome\":\"da Silva\",\"email\":\"aluno@aluno.com\",\"foto\":\"\"}}', NULL, 'success', '2024-12-06 14:39:50'),
+(1720, 'POST - COMENTARIOS - new', '{\"id\":7,\"processo\":13,\"usuario\":31,\"comentario\":\"kjfkjsfksgs\",\"data\":\"2024-12-06T14:39:51.000Z\",\"usuario_comentarios_usuarioTousuario\":{\"nome\":\"Aluno\",\"sobrenome\":\"da Silva\",\"email\":\"aluno@aluno.com\",\"foto\":\"\"}}', NULL, 'success', '2024-12-06 14:39:51'),
+(1721, 'POST - COMENTARIOS - new', '{\"id\":8,\"processo\":13,\"usuario\":31,\"comentario\":\"kjfkjsfksgs\",\"data\":\"2024-12-06T14:39:51.000Z\",\"usuario_comentarios_usuarioTousuario\":{\"nome\":\"Aluno\",\"sobrenome\":\"da Silva\",\"email\":\"aluno@aluno.com\",\"foto\":\"\"}}', NULL, 'success', '2024-12-06 14:39:51'),
+(1722, 'POST - COMENTARIOS - new', '{\"id\":9,\"processo\":13,\"usuario\":31,\"comentario\":\"kjfkjsfksgs\",\"data\":\"2024-12-06T14:39:51.000Z\",\"usuario_comentarios_usuarioTousuario\":{\"nome\":\"Aluno\",\"sobrenome\":\"da Silva\",\"email\":\"aluno@aluno.com\",\"foto\":\"\"}}', NULL, 'success', '2024-12-06 14:39:51'),
+(1723, 'POST - COMENTARIOS - new', '{\"id\":10,\"processo\":13,\"usuario\":31,\"comentario\":\"pppppp\",\"data\":\"2024-12-06T14:39:59.000Z\",\"usuario_comentarios_usuarioTousuario\":{\"nome\":\"Aluno\",\"sobrenome\":\"da Silva\",\"email\":\"aluno@aluno.com\",\"foto\":\"\"}}', NULL, 'success', '2024-12-06 14:39:59'),
+(1724, 'GET - REQUESTS - process-identificador/dsqwKhoCi65', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:40:00'),
+(1725, 'GET - REQUEST TYPE - id/7', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:40:00'),
+(1726, 'GET - FIELDS - request-field-by-process-type/7', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:40:01'),
+(1727, 'GET - FIELDS - all-default-fields', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:40:01'),
+(1728, 'GET - FIELDS - all-field-types', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:40:01'),
+(1729, 'GET - STEPS - link-step-to-proccess/7', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:40:01'),
+(1730, 'GET - STEPS - all-default', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:40:02'),
+(1731, 'GET - STEPS - all-customized', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:40:02'),
+(1732, 'GET - COMENTARIOS - /all-from-proccess/13', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:40:04'),
+(1733, 'GET - REQUESTS - /all-requests-as-student', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:41:46'),
+(1734, 'GET - REQUESTS - process-identificador/dsqwKhoCi65', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:41:49'),
+(1735, 'GET - REQUEST TYPE - id/7', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:41:49'),
+(1736, 'GET - FIELDS - request-field-by-process-type/7', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:41:50'),
+(1737, 'GET - FIELDS - all-default-fields', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:41:50'),
+(1738, 'GET - FIELDS - all-field-types', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:41:50'),
+(1739, 'GET - STEPS - link-step-to-proccess/7', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:41:50'),
+(1740, 'GET - STEPS - all-default', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:41:51'),
+(1741, 'GET - STEPS - all-customized', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:41:51'),
+(1742, 'GET - COMENTARIOS - /all-from-proccess/13', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:41:53'),
+(1743, 'GET - REQUESTS - /all-requests-as-student', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:47:22'),
+(1744, 'GET - USERS - all-students', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:47:32'),
+(1745, 'GET - SYSTEM - logs/last50', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:47:46'),
+(1746, 'GET - USERS - all-students', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:48:23'),
+(1747, 'GET - REQUESTS - /all-requests-as-student', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:59:17'),
+(1748, 'GET - REQUESTS - process-identificador/dsqwKhoCi65', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:59:21'),
+(1749, 'GET - REQUEST TYPE - id/7', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:59:23'),
+(1750, 'GET - FIELDS - request-field-by-process-type/7', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:59:23'),
+(1751, 'GET - FIELDS - all-default-fields', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:59:24'),
+(1752, 'GET - FIELDS - all-field-types', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:59:24'),
+(1753, 'GET - STEPS - link-step-to-proccess/7', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:59:25'),
+(1754, 'GET - STEPS - all-default', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:59:26'),
+(1755, 'GET - STEPS - all-customized', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:59:27'),
+(1756, 'GET - COMENTARIOS - /all-from-proccess/13', '200 - Found and Authorized', NULL, 'success', '2024-12-06 14:59:29'),
+(1757, 'GET - USERS - all-teachers', '200 - Found and Authorized', NULL, 'success', '2024-12-06 15:04:51'),
+(1758, 'GET - USERS - all-admins', '200 - Found and Authorized', NULL, 'success', '2024-12-06 15:04:53'),
+(1759, 'GET - SYSTEM - logs/last50', '200 - Found and Authorized', NULL, 'success', '2024-12-06 15:08:46'),
+(1760, 'GET - USERS - all-students', '200 - Found and Authorized', NULL, 'success', '2024-12-06 15:09:41'),
+(1761, 'GET - HOURS - by-student/31', '200 - Found and Authorized', NULL, 'success', '2024-12-06 15:10:40'),
+(1762, 'GET - PERCENTUAL-POR-TIPO - by-student/31', '200 - Percentuais calculados com sucesso', NULL, 'success', '2024-12-06 15:10:41');
+INSERT INTO `logs` (`id`, `funcao`, `mensagem`, `usuario`, `status`, `data`) VALUES
+(1763, 'GET - REQUESTS - /all-requests-as-student', '200 - Found and Authorized', NULL, 'success', '2024-12-06 15:11:05'),
+(1764, 'GET - HOURS - by-student/31', '200 - Found and Authorized', NULL, 'success', '2024-12-06 15:11:08'),
+(1765, 'GET - PERCENTUAL-POR-TIPO - by-student/31', '200 - Percentuais calculados com sucesso', NULL, 'success', '2024-12-06 15:11:08'),
+(1766, 'POST - HOURS - /new', '200 - New training hours record created: ID 14', NULL, 'success', '2024-12-06 15:16:48'),
+(1767, 'GET - HOURS - by-student/31', '200 - Found and Authorized', NULL, 'success', '2024-12-06 15:16:48'),
+(1768, 'GET - PERCENTUAL-POR-TIPO - by-student/31', '200 - Percentuais calculados com sucesso', NULL, 'success', '2024-12-06 15:16:49'),
+(1769, 'GET - HOURS - by-student/24', '200 - Found and Authorized', NULL, 'success', '2024-12-06 15:50:19'),
+(1770, 'GET - PERCENTUAL-POR-TIPO - by-student/24', '200 - Percentuais calculados com sucesso', NULL, 'success', '2024-12-06 15:50:21'),
+(1771, 'GET - SYSTEM - logs/last50', '200 - Found and Authorized', NULL, 'success', '2024-12-06 16:19:53'),
+(1772, 'GET - SYSTEM - logs/last50', '200 - Found and Authorized', NULL, 'success', '2024-12-06 16:20:05'),
+(1773, 'GET - MURAL - all', '200 - Found and Authorized', NULL, 'success', '2024-12-06 16:25:13'),
+(1774, 'GET - REQUESTS - /all-requests-as-student', '200 - Found and Authorized', NULL, 'success', '2024-12-06 16:25:44'),
+(1775, 'GET - MURAL - all', '200 - Found and Authorized', NULL, 'success', '2024-12-06 16:25:46'),
+(1776, 'GET - SYSTEM - logs/last50', '200 - Found and Authorized', NULL, 'success', '2024-12-06 16:26:01'),
+(1777, 'GET - MURAL - all', '200 - Found and Authorized', NULL, 'success', '2024-12-06 16:26:04'),
+(1778, 'GET - MURAL - id/1', '200 - Found and Authorized', NULL, 'success', '2024-12-06 16:26:08'),
+(1779, 'GET - MURAL - id/1', '200 - Found and Authorized', NULL, 'success', '2024-12-06 16:26:08'),
+(1780, 'GET - USERS - id/24', '200 - Found and Authorized', NULL, 'success', '2024-12-06 16:26:09'),
+(1781, 'GET - MURAL - id/1', '200 - Found and Authorized', NULL, 'success', '2024-12-06 16:26:38'),
+(1782, 'GET - MURAL - id/1', '200 - Found and Authorized', NULL, 'success', '2024-12-06 16:26:39'),
+(1783, 'GET - USERS - id/24', '200 - Found and Authorized', NULL, 'success', '2024-12-06 16:26:39'),
+(1784, 'GET - MURAL - all', '200 - Found and Authorized', NULL, 'success', '2024-12-06 16:27:21'),
+(1785, 'GET - MURAL - all', '200 - Found and Authorized', NULL, 'success', '2024-12-06 16:27:25'),
+(1786, 'GET - Course - all-courses', '200 - Found and Authorized', NULL, 'success', '2024-12-06 16:27:39'),
+(1787, 'GET - SYSTEM - logs/last50', '200 - Found and Authorized', NULL, 'success', '2024-12-06 16:32:56'),
+(1788, 'GET - SYSTEM - logs', '200 - Found and Authorized', NULL, 'success', '2024-12-06 16:33:14'),
+(1789, 'GET - REQUESTS - /all-requests-as-student', '200 - Found and Authorized', NULL, 'success', '2024-12-06 16:37:19'),
+(1790, 'GET - HOURS - by-student/31', '200 - Found and Authorized', NULL, 'success', '2024-12-06 16:37:23'),
+(1791, 'GET - PERCENTUAL-POR-TIPO - by-student/31', '200 - Percentuais calculados com sucesso', NULL, 'success', '2024-12-06 16:37:24'),
+(1792, 'GET - INTERNSHIP - id/1', '200 - Found and Authorized', NULL, 'success', '2024-12-06 16:38:07'),
+(1793, 'GET - INTERNSHIP - id/2', '404 - Not Found', NULL, 'error', '2024-12-06 16:38:19'),
+(1794, 'GET - INTERNSHIP - id/1', '200 - Found and Authorized', NULL, 'success', '2024-12-06 16:38:23'),
+(1795, 'GET - INTERNSHIP - id/2', '404 - Not Found', NULL, 'error', '2024-12-06 16:40:17'),
+(1796, 'GET - USERS - all-students', '200 - Found and Authorized', NULL, 'success', '2024-12-06 16:41:03'),
+(1797, 'GET - INTERNSHIP - internships/24', '200 - Found and Authorized', NULL, 'success', '2024-12-06 16:41:35'),
+(1798, 'GET - REQUESTS - /all-requests-as-student', '200 - Found and Authorized', NULL, 'success', '2024-12-06 16:41:58'),
+(1799, 'GET - INTERNSHIP - internships/30', '200 - Found and Authorized', NULL, 'success', '2024-12-06 16:42:36'),
+(1800, 'GET - HOURS - by-student/31', '200 - Found and Authorized', NULL, 'success', '2024-12-06 16:44:06'),
+(1801, 'GET - PERCENTUAL-POR-TIPO - by-student/31', '200 - Percentuais calculados com sucesso', NULL, 'success', '2024-12-06 16:44:07'),
+(1802, 'GET - INTERNSHIP - internships/30', '200 - Found and Authorized', NULL, 'success', '2024-12-06 16:44:30'),
+(1803, 'GET - REQUEST TYPE - all', '200 - Found and Authorized', NULL, 'success', '2024-12-06 16:45:53'),
+(1804, 'GET - REQUEST TYPE - all', '200 - Found and Authorized', NULL, 'success', '2024-12-06 16:45:56'),
+(1805, 'GET - REQUEST TYPE - id/6', '200 - Found and Authorized', NULL, 'success', '2024-12-06 16:45:57'),
+(1806, 'GET - FIELDS - request-field-by-process-type/6', '200 - Found and Authorized', NULL, 'success', '2024-12-06 16:45:57'),
+(1807, 'GET - FIELDS - all-default-fields', '200 - Found and Authorized', NULL, 'success', '2024-12-06 16:45:58'),
+(1808, 'GET - FIELDS - all-field-types', '200 - Found and Authorized', NULL, 'success', '2024-12-06 16:45:59'),
+(1809, 'GET - STEPS - link-step-to-proccess/6', '200 - Found and Authorized', NULL, 'success', '2024-12-06 16:45:59'),
+(1810, 'GET - STEPS - all-default', '200 - Found and Authorized', NULL, 'success', '2024-12-06 16:46:00'),
+(1811, 'GET - STEPS - all-customized', '200 - Found and Authorized', NULL, 'success', '2024-12-06 16:46:00'),
+(1812, 'GET - REQUEST TYPE - all', '200 - Found and Authorized', NULL, 'success', '2024-12-06 17:04:09'),
+(1813, 'GET - REQUESTS - /all-requests-as-student', '200 - Found and Authorized', NULL, 'success', '2024-12-06 17:04:12'),
+(1814, 'GET - REQUESTS - process-identificador/dsqwKhoCi65', '200 - Found and Authorized', NULL, 'success', '2024-12-06 17:04:14'),
+(1815, 'GET - REQUEST TYPE - id/7', '200 - Found and Authorized', NULL, 'success', '2024-12-06 17:04:15'),
+(1816, 'GET - FIELDS - request-field-by-process-type/7', '200 - Found and Authorized', NULL, 'success', '2024-12-06 17:04:16'),
+(1817, 'GET - FIELDS - all-default-fields', '200 - Found and Authorized', NULL, 'success', '2024-12-06 17:04:17'),
+(1818, 'GET - FIELDS - all-field-types', '200 - Found and Authorized', NULL, 'success', '2024-12-06 17:04:17'),
+(1819, 'GET - STEPS - link-step-to-proccess/7', '200 - Found and Authorized', NULL, 'success', '2024-12-06 17:04:18'),
+(1820, 'GET - STEPS - all-default', '200 - Found and Authorized', NULL, 'success', '2024-12-06 17:04:18'),
+(1821, 'GET - STEPS - all-customized', '200 - Found and Authorized', NULL, 'success', '2024-12-06 17:04:20'),
+(1822, 'GET - COMENTARIOS - /all-from-proccess/13', '200 - Found and Authorized', NULL, 'success', '2024-12-06 17:04:23'),
+(1823, 'GET - REQUESTS - process-identificador/dsqwKhoCi65', '200 - Found and Authorized', NULL, 'success', '2024-12-06 17:04:23'),
+(1824, 'GET - REQUEST TYPE - id/7', '200 - Found and Authorized', NULL, 'success', '2024-12-06 17:04:23'),
+(1825, 'GET - FIELDS - request-field-by-process-type/7', '200 - Found and Authorized', NULL, 'success', '2024-12-06 17:04:24'),
+(1826, 'GET - FIELDS - all-default-fields', '200 - Found and Authorized', NULL, 'success', '2024-12-06 17:04:24'),
+(1827, 'GET - FIELDS - all-field-types', '200 - Found and Authorized', NULL, 'success', '2024-12-06 17:04:24'),
+(1828, 'GET - STEPS - link-step-to-proccess/7', '200 - Found and Authorized', NULL, 'success', '2024-12-06 17:04:24'),
+(1829, 'GET - STEPS - all-default', '200 - Found and Authorized', NULL, 'success', '2024-12-06 17:04:25'),
+(1830, 'GET - STEPS - all-customized', '200 - Found and Authorized', NULL, 'success', '2024-12-06 17:04:26'),
+(1831, 'GET - COMENTARIOS - /all-from-proccess/13', '200 - Found and Authorized', NULL, 'success', '2024-12-06 17:04:28'),
+(1832, 'GET - REQUESTS - process-identificador/dsqwKhoCi65', '200 - Found and Authorized', NULL, 'success', '2024-12-06 17:04:28'),
+(1833, 'GET - REQUEST TYPE - id/7', '200 - Found and Authorized', NULL, 'success', '2024-12-06 17:04:28'),
+(1834, 'GET - FIELDS - request-field-by-process-type/7', '200 - Found and Authorized', NULL, 'success', '2024-12-06 17:04:29'),
+(1835, 'GET - FIELDS - all-default-fields', '200 - Found and Authorized', NULL, 'success', '2024-12-06 17:04:29'),
+(1836, 'GET - FIELDS - all-field-types', '200 - Found and Authorized', NULL, 'success', '2024-12-06 17:04:29'),
+(1837, 'GET - STEPS - link-step-to-proccess/7', '200 - Found and Authorized', NULL, 'success', '2024-12-06 17:04:30'),
+(1838, 'GET - STEPS - all-default', '200 - Found and Authorized', NULL, 'success', '2024-12-06 17:04:30'),
+(1839, 'GET - STEPS - all-customized', '200 - Found and Authorized', NULL, 'success', '2024-12-06 17:04:31'),
+(1840, 'GET - COMENTARIOS - /all-from-proccess/13', '200 - Found and Authorized', NULL, 'success', '2024-12-06 17:04:33'),
+(1841, 'GET - REQUESTS - process-identificador/dsqwKhoCi65', '200 - Found and Authorized', NULL, 'success', '2024-12-06 17:04:33'),
+(1842, 'GET - REQUEST TYPE - id/7', '200 - Found and Authorized', NULL, 'success', '2024-12-06 17:04:34'),
+(1843, 'GET - FIELDS - request-field-by-process-type/7', '200 - Found and Authorized', NULL, 'success', '2024-12-06 17:04:34'),
+(1844, 'GET - FIELDS - all-default-fields', '200 - Found and Authorized', NULL, 'success', '2024-12-06 17:04:34'),
+(1845, 'GET - FIELDS - all-field-types', '200 - Found and Authorized', NULL, 'success', '2024-12-06 17:04:34'),
+(1846, 'GET - STEPS - link-step-to-proccess/7', '200 - Found and Authorized', NULL, 'success', '2024-12-06 17:04:35'),
+(1847, 'GET - STEPS - all-default', '200 - Found and Authorized', NULL, 'success', '2024-12-06 17:04:35'),
+(1848, 'GET - STEPS - all-customized', '200 - Found and Authorized', NULL, 'success', '2024-12-06 17:04:36'),
+(1849, 'GET - COMENTARIOS - /all-from-proccess/13', '200 - Found and Authorized', NULL, 'success', '2024-12-06 17:04:38'),
+(1850, 'GET - REQUESTS - process-identificador/dsqwKhoCi65', '200 - Found and Authorized', NULL, 'success', '2024-12-06 17:04:38'),
+(1851, 'GET - REQUEST TYPE - id/7', '200 - Found and Authorized', NULL, 'success', '2024-12-06 17:04:39'),
+(1852, 'GET - FIELDS - request-field-by-process-type/7', '200 - Found and Authorized', NULL, 'success', '2024-12-06 17:04:39'),
+(1853, 'GET - FIELDS - all-default-fields', '200 - Found and Authorized', NULL, 'success', '2024-12-06 17:04:39'),
+(1854, 'GET - FIELDS - all-field-types', '200 - Found and Authorized', NULL, 'success', '2024-12-06 17:04:40'),
+(1855, 'GET - STEPS - link-step-to-proccess/7', '200 - Found and Authorized', NULL, 'success', '2024-12-06 17:04:40'),
+(1856, 'GET - STEPS - all-default', '200 - Found and Authorized', NULL, 'success', '2024-12-06 17:04:40'),
+(1857, 'GET - STEPS - all-customized', '200 - Found and Authorized', NULL, 'success', '2024-12-06 17:04:41'),
+(1858, 'GET - COMENTARIOS - /all-from-proccess/13', '200 - Found and Authorized', NULL, 'success', '2024-12-06 17:04:43'),
+(1859, 'GET - REQUESTS - /all-requests-as-student', '200 - Found and Authorized', NULL, 'success', '2024-12-06 17:17:21'),
+(1860, 'GET - SYSTEM - logs/last50', '200 - Found and Authorized', NULL, 'success', '2024-12-06 17:17:35'),
+(1861, 'GET - REQUESTS - /all-requests-as-student', '200 - Found and Authorized', NULL, 'success', '2024-12-06 17:29:36'),
+(1862, 'GET - INTERNSHIP - id/30', '404 - Not Found', NULL, 'error', '2024-12-06 17:30:21'),
+(1863, 'GET - REQUESTS - /all-requests-as-student', '200 - Found and Authorized', NULL, 'success', '2024-12-06 17:48:41'),
+(1864, 'GET - REQUESTS - /all-requests-as-student', '200 - Found and Authorized', NULL, 'success', '2024-12-06 17:51:22'),
+(1865, 'GET - REQUESTS - /all-requests-as-student', '200 - Found and Authorized', NULL, 'success', '2024-12-06 17:51:32'),
+(1866, 'GET - REQUEST TYPE - all', '200 - Found and Authorized', NULL, 'success', '2024-12-06 17:51:49'),
+(1867, 'GET - REQUEST TYPE - all', '200 - Found and Authorized', NULL, 'success', '2024-12-06 17:51:54'),
+(1868, 'GET - REQUEST TYPE - id/7', '200 - Found and Authorized', NULL, 'success', '2024-12-06 17:51:56'),
+(1869, 'GET - FIELDS - request-field-by-process-type/7', '200 - Found and Authorized', NULL, 'success', '2024-12-06 17:51:56'),
+(1870, 'GET - FIELDS - all-default-fields', '200 - Found and Authorized', NULL, 'success', '2024-12-06 17:51:57'),
+(1871, 'GET - FIELDS - all-field-types', '200 - Found and Authorized', NULL, 'success', '2024-12-06 17:51:58'),
+(1872, 'GET - STEPS - link-step-to-proccess/7', '200 - Found and Authorized', NULL, 'success', '2024-12-06 17:51:59'),
+(1873, 'GET - STEPS - all-default', '200 - Found and Authorized', NULL, 'success', '2024-12-06 17:52:00'),
+(1874, 'GET - STEPS - all-customized', '200 - Found and Authorized', NULL, 'success', '2024-12-06 17:52:02'),
+(1875, 'GET - REQUESTS - /all-requests-as-student', '200 - Found and Authorized', NULL, 'success', '2024-12-06 17:56:18'),
+(1876, 'GET - REQUEST TYPE - all', '200 - Found and Authorized', NULL, 'success', '2024-12-06 17:58:44'),
+(1877, 'GET - REQUEST TYPE - all', '200 - Found and Authorized', NULL, 'success', '2024-12-06 17:58:48'),
+(1878, 'GET - REQUEST TYPE - id/7', '200 - Found and Authorized', NULL, 'success', '2024-12-06 17:58:49'),
+(1879, 'GET - FIELDS - request-field-by-process-type/7', '200 - Found and Authorized', NULL, 'success', '2024-12-06 17:58:50'),
+(1880, 'GET - FIELDS - all-default-fields', '200 - Found and Authorized', NULL, 'success', '2024-12-06 17:58:50'),
+(1881, 'GET - FIELDS - all-field-types', '200 - Found and Authorized', NULL, 'success', '2024-12-06 17:58:51'),
+(1882, 'GET - STEPS - link-step-to-proccess/7', '200 - Found and Authorized', NULL, 'success', '2024-12-06 17:58:52'),
+(1883, 'GET - STEPS - all-default', '200 - Found and Authorized', NULL, 'success', '2024-12-06 17:58:52'),
+(1884, 'GET - STEPS - all-customized', '200 - Found and Authorized', NULL, 'success', '2024-12-06 17:58:54'),
+(1885, 'GET - INTERNSHIP - internships/30', '200 - Found and Authorized', NULL, 'success', '2024-12-06 18:02:22'),
+(1886, 'GET - COMPANY - all-companies', '200 - Found and Authorized', NULL, 'success', '2024-12-06 18:03:51'),
+(1887, 'GET - COMPANY -/new', '200 - Nova empresa cadastrada: Teste', NULL, 'success', '2024-12-06 18:04:27'),
+(1888, 'GET - COMPANY - all-companies', '200 - Found and Authorized', NULL, 'success', '2024-12-06 18:04:39'),
+(1889, 'GET - USERS - all-teachers', '200 - Found and Authorized', NULL, 'success', '2024-12-06 18:05:25'),
+(1890, 'GET - REQUEST TYPE - all', '200 - Found and Authorized', NULL, 'success', '2024-12-06 18:07:48'),
+(1891, 'GET - REQUEST TYPE - id/7', '200 - Found and Authorized', NULL, 'success', '2024-12-06 18:07:49'),
+(1892, 'GET - FIELDS - request-field-by-process-type/7', '200 - Found and Authorized', NULL, 'success', '2024-12-06 18:07:49'),
+(1893, 'GET - FIELDS - all-default-fields', '200 - Found and Authorized', NULL, 'success', '2024-12-06 18:07:50'),
+(1894, 'GET - FIELDS - all-field-types', '200 - Found and Authorized', NULL, 'success', '2024-12-06 18:07:50'),
+(1895, 'GET - STEPS - link-step-to-proccess/7', '200 - Found and Authorized', NULL, 'success', '2024-12-06 18:07:51'),
+(1896, 'GET - STEPS - all-default', '200 - Found and Authorized', NULL, 'success', '2024-12-06 18:07:52'),
+(1897, 'GET - STEPS - all-customized', '200 - Found and Authorized', NULL, 'success', '2024-12-06 18:07:53'),
+(1898, 'GET - INTERNSHIP - code/1603568889', '200 - Found and Authorized', NULL, 'success', '2024-12-06 18:13:45'),
+(1899, 'GET - INTERNSHIP - internships/30', '200 - Found and Authorized', NULL, 'success', '2024-12-06 18:14:09'),
+(1900, 'GET - REQUEST TYPE - all', '200 - Found and Authorized', NULL, 'success', '2024-12-06 18:22:49'),
+(1901, 'GET - REQUEST TYPE - id/7', '200 - Found and Authorized', NULL, 'success', '2024-12-06 18:22:50'),
+(1902, 'GET - FIELDS - request-field-by-process-type/7', '200 - Found and Authorized', NULL, 'success', '2024-12-06 18:22:51'),
+(1903, 'GET - FIELDS - all-default-fields', '200 - Found and Authorized', NULL, 'success', '2024-12-06 18:22:51'),
+(1904, 'GET - FIELDS - all-field-types', '200 - Found and Authorized', NULL, 'success', '2024-12-06 18:22:52'),
+(1905, 'GET - STEPS - link-step-to-proccess/7', '200 - Found and Authorized', NULL, 'success', '2024-12-06 18:22:52'),
+(1906, 'GET - STEPS - all-default', '200 - Found and Authorized', NULL, 'success', '2024-12-06 18:22:53'),
+(1907, 'GET - STEPS - all-customized', '200 - Found and Authorized', NULL, 'success', '2024-12-06 18:22:54'),
+(1908, 'GET - REQUESTS - /all-requests-as-student', '200 - Found and Authorized', NULL, 'success', '2024-12-06 18:30:12'),
+(1909, 'GET - REQUEST TYPE - all', '200 - Found and Authorized', NULL, 'success', '2024-12-06 18:30:18'),
+(1910, 'GET - REQUEST TYPE - all', '200 - Found and Authorized', NULL, 'success', '2024-12-06 18:30:21'),
+(1911, 'GET - REQUEST TYPE - id/7', '200 - Found and Authorized', NULL, 'success', '2024-12-06 18:30:22'),
+(1912, 'GET - FIELDS - request-field-by-process-type/7', '200 - Found and Authorized', NULL, 'success', '2024-12-06 18:30:23'),
+(1913, 'GET - FIELDS - all-default-fields', '200 - Found and Authorized', NULL, 'success', '2024-12-06 18:30:23'),
+(1914, 'GET - FIELDS - all-field-types', '200 - Found and Authorized', NULL, 'success', '2024-12-06 18:30:24'),
+(1915, 'GET - STEPS - link-step-to-proccess/7', '200 - Found and Authorized', NULL, 'success', '2024-12-06 18:30:24'),
+(1916, 'GET - STEPS - all-default', '200 - Found and Authorized', NULL, 'success', '2024-12-06 18:30:24'),
+(1917, 'GET - STEPS - all-customized', '200 - Found and Authorized', NULL, 'success', '2024-12-06 18:30:25'),
+(1918, 'GET - REQUEST TYPE - all', '200 - Found and Authorized', NULL, 'success', '2024-12-06 18:38:16'),
+(1919, 'GET - REQUEST TYPE - id/7', '200 - Found and Authorized', NULL, 'success', '2024-12-06 18:38:17'),
+(1920, 'GET - FIELDS - request-field-by-process-type/7', '200 - Found and Authorized', NULL, 'success', '2024-12-06 18:38:17'),
+(1921, 'GET - FIELDS - all-default-fields', '200 - Found and Authorized', NULL, 'success', '2024-12-06 18:38:18'),
+(1922, 'GET - FIELDS - all-field-types', '200 - Found and Authorized', NULL, 'success', '2024-12-06 18:38:18'),
+(1923, 'GET - STEPS - link-step-to-proccess/7', '200 - Found and Authorized', NULL, 'success', '2024-12-06 18:38:19'),
+(1924, 'GET - INTERNSHIP - id/1', '200 - Found and Authorized', NULL, 'success', '2024-12-06 18:38:19'),
+(1925, 'GET - STEPS - all-default', '200 - Found and Authorized', NULL, 'success', '2024-12-06 18:38:20'),
+(1926, 'GET - STEPS - all-customized', '200 - Found and Authorized', NULL, 'success', '2024-12-06 18:38:20'),
+(1927, 'GET - REQUEST TYPE - all', '200 - Found and Authorized', NULL, 'success', '2024-12-06 18:40:45'),
+(1928, 'GET - REQUEST TYPE - id/7', '200 - Found and Authorized', NULL, 'success', '2024-12-06 18:40:46'),
+(1929, 'GET - FIELDS - request-field-by-process-type/7', '200 - Found and Authorized', NULL, 'success', '2024-12-06 18:40:46'),
+(1930, 'GET - FIELDS - all-default-fields', '200 - Found and Authorized', NULL, 'success', '2024-12-06 18:40:47'),
+(1931, 'GET - FIELDS - all-field-types', '200 - Found and Authorized', NULL, 'success', '2024-12-06 18:40:47'),
+(1932, 'GET - STEPS - link-step-to-proccess/7', '200 - Found and Authorized', NULL, 'success', '2024-12-06 18:40:48'),
+(1933, 'GET - STEPS - all-default', '200 - Found and Authorized', NULL, 'success', '2024-12-06 18:40:48'),
+(1934, 'GET - STEPS - all-customized', '200 - Found and Authorized', NULL, 'success', '2024-12-06 18:40:49'),
+(1935, 'GET - REQUESTS - /all-requests-as-student', '200 - Found and Authorized', NULL, 'success', '2024-12-06 18:46:33'),
+(1936, 'GET - SYSTEM - logs/last50', '200 - Found and Authorized', NULL, 'success', '2024-12-06 18:46:45'),
+(1937, 'GET - FIELDS - all-default-fields', '200 - Found and Authorized', NULL, 'success', '2024-12-06 18:47:25'),
+(1938, 'GET - REQUESTS - /all-requests-as-student', '200 - Found and Authorized', NULL, 'success', '2024-12-06 18:47:39'),
+(1939, 'GET - SYSTEM - logs/last50', '200 - Found and Authorized', NULL, 'success', '2024-12-06 18:57:51'),
+(1940, 'GET - SYSTEM - logs/last50', '200 - Found and Authorized', NULL, 'success', '2024-12-06 18:58:01'),
+(1941, 'GET - SYSTEM - logs/last50', '200 - Found and Authorized', NULL, 'success', '2024-12-06 18:58:13'),
+(1942, 'GET - REQUEST TYPE - all', '200 - Found and Authorized', NULL, 'success', '2024-12-06 18:58:19'),
+(1943, 'GET - USERS - all-students', '200 - Found and Authorized', NULL, 'success', '2024-12-06 18:58:24'),
+(1944, 'GET - SYSTEM - logs/last50', '200 - Found and Authorized', NULL, 'success', '2024-12-06 18:59:23'),
+(1945, 'GET - SYSTEM - logs/last50', '200 - Found and Authorized', NULL, 'success', '2024-12-06 18:59:45'),
+(1946, 'GET - HOURS - by-student/24', '200 - Found and Authorized', NULL, 'success', '2024-12-06 18:59:55'),
+(1947, 'GET - PERCENTUAL-POR-TIPO - by-student/24', '200 - Percentuais calculados com sucesso', NULL, 'success', '2024-12-06 18:59:56'),
+(1948, 'GET - SYSTEM - logs/last50', '200 - Found and Authorized', NULL, 'success', '2024-12-06 18:59:59'),
+(1949, 'GET - SYSTEM - logs/last50', '200 - Found and Authorized', NULL, 'success', '2024-12-06 19:00:01'),
+(1950, 'GET - SYSTEM - logs/last50', '200 - Found and Authorized', NULL, 'success', '2024-12-06 19:00:16'),
+(1951, 'GET - REQUEST TYPE - all', '200 - Found and Authorized', NULL, 'success', '2024-12-06 19:00:34'),
+(1952, 'GET - SYSTEM - logs/last50', '200 - Found and Authorized', NULL, 'success', '2024-12-06 19:00:40'),
+(1953, 'GET - USERS - all-students', '200 - Found and Authorized', NULL, 'success', '2024-12-06 19:00:43'),
+(1954, 'GET - REQUESTS - /all-requests-as-student', '404 - Not Found', NULL, 'error', '2024-12-06 19:01:01'),
+(1955, 'getMyRequestsStudent', 'Erro ao listar admins. Error: Erro interno (404)', 36, 'error', '2024-12-06 19:01:02'),
+(1956, 'GET - USERS - id/36', '200 - Found and Authorized', NULL, 'success', '2024-12-06 19:01:07'),
+(1957, 'PATCH - USERS - FOTO - 36', '200 - Foto atualizada com sucesso', NULL, 'success', '2024-12-06 19:01:11'),
+(1958, 'PATCH - USERS - FOTO - 36', '200 - Foto atualizada com sucesso', NULL, 'success', '2024-12-06 19:01:14'),
+(1959, 'GET - REQUESTS - /all-requests-as-student', '404 - Not Found', NULL, 'error', '2024-12-06 19:01:17'),
+(1960, 'getMyRequestsStudent', 'Erro ao listar admins. Error: Erro interno (404)', 36, 'error', '2024-12-06 19:01:17'),
+(1961, 'GET - REQUEST TYPE - all', '200 - Found and Authorized', NULL, 'success', '2024-12-06 19:01:20'),
+(1962, 'GET - REQUEST TYPE - all', '200 - Found and Authorized', NULL, 'success', '2024-12-06 19:01:24'),
+(1963, 'GET - REQUEST TYPE - id/6', '200 - Found and Authorized', NULL, 'success', '2024-12-06 19:01:26'),
+(1964, 'GET - FIELDS - request-field-by-process-type/6', '200 - Found and Authorized', NULL, 'success', '2024-12-06 19:01:27'),
+(1965, 'GET - FIELDS - all-default-fields', '200 - Found and Authorized', NULL, 'success', '2024-12-06 19:01:27'),
+(1966, 'GET - FIELDS - all-field-types', '200 - Found and Authorized', NULL, 'success', '2024-12-06 19:01:28'),
+(1967, 'GET - STEPS - link-step-to-proccess/6', '200 - Found and Authorized', NULL, 'success', '2024-12-06 19:01:29'),
+(1968, 'GET - STEPS - all-default', '200 - Found and Authorized', NULL, 'success', '2024-12-06 19:01:29'),
+(1969, 'getUnifiedStages', 'Resposta inesperada ao listar etapas padrão: []', 36, 'warning', '2024-12-06 19:01:30'),
+(1970, 'GET - STEPS - all-customized', '200 - Found and Authorized', NULL, 'success', '2024-12-06 19:01:31'),
+(1971, 'getUnifiedStages', 'Resposta inesperada ao listar etapas personalizadas: []', 36, 'warning', '2024-12-06 19:01:31'),
+(1972, 'getUnifiedStages', 'Etapas unificadas retornadas com sucesso.', 36, 'info', '2024-12-06 19:01:32'),
+(1973, 'POST - REQUESTS - new', '\nInvalid `prisma.processo.create()` invocation:\n\n\nForeign key constraint failed on the field: `etapa_atual`', NULL, 'error', '2024-12-06 19:01:47'),
+(1974, 'GET - REQUEST TYPE - all', '200 - Found and Authorized', NULL, 'success', '2024-12-06 19:01:50'),
+(1975, 'GET - REQUEST TYPE - id/6', '200 - Found and Authorized', NULL, 'success', '2024-12-06 19:01:50'),
+(1976, 'GET - FIELDS - request-field-by-process-type/6', '200 - Found and Authorized', NULL, 'success', '2024-12-06 19:01:51'),
+(1977, 'GET - FIELDS - all-default-fields', '200 - Found and Authorized', NULL, 'success', '2024-12-06 19:01:52'),
+(1978, 'GET - FIELDS - all-field-types', '200 - Found and Authorized', NULL, 'success', '2024-12-06 19:01:52'),
+(1979, 'GET - STEPS - link-step-to-proccess/6', '200 - Found and Authorized', NULL, 'success', '2024-12-06 19:01:53'),
+(1980, 'GET - STEPS - all-default', '200 - Found and Authorized', NULL, 'success', '2024-12-06 19:01:53'),
+(1981, 'getUnifiedStages', 'Resposta inesperada ao listar etapas padrão: []', 36, 'warning', '2024-12-06 19:01:54'),
+(1982, 'GET - STEPS - all-customized', '200 - Found and Authorized', NULL, 'success', '2024-12-06 19:01:54'),
+(1983, 'getUnifiedStages', 'Resposta inesperada ao listar etapas personalizadas: []', 36, 'warning', '2024-12-06 19:01:55'),
+(1984, 'getUnifiedStages', 'Etapas unificadas retornadas com sucesso.', 36, 'info', '2024-12-06 19:01:56'),
+(1985, 'GET - REQUESTS - /all-requests-as-student', '404 - Not Found', NULL, 'error', '2024-12-06 19:02:03'),
+(1986, 'getMyRequestsStudent', 'Erro ao listar admins. Error: Erro interno (404)', 36, 'error', '2024-12-06 19:02:04'),
+(1987, 'GET - REQUESTS - /all-requests-as-student', '404 - Not Found', NULL, 'error', '2024-12-06 19:02:23'),
+(1988, 'getMyRequestsStudent', 'Erro ao listar admins. Error: Erro interno (404)', 36, 'error', '2024-12-06 19:02:24'),
+(1989, 'GET - REQUESTS - process-identificador/dsqwKhoCi65', '200 - Found and Authorized', NULL, 'success', '2024-12-06 19:42:21'),
+(1990, 'GET - REQUEST TYPE - id/7', '200 - Found and Authorized', NULL, 'success', '2024-12-06 19:42:23'),
+(1991, 'GET - FIELDS - request-field-by-process-type/7', '200 - Found and Authorized', NULL, 'success', '2024-12-06 19:42:23'),
+(1992, 'GET - FIELDS - all-default-fields', '200 - Found and Authorized', NULL, 'success', '2024-12-06 19:42:24'),
+(1993, 'GET - FIELDS - all-field-types', '200 - Found and Authorized', NULL, 'success', '2024-12-06 19:42:24'),
+(1994, 'GET - STEPS - link-step-to-proccess/7', '200 - Found and Authorized', NULL, 'success', '2024-12-06 19:42:53'),
+(1995, 'GET - STEPS - all-default', '200 - Found and Authorized', NULL, 'success', '2024-12-06 19:42:53'),
+(1996, 'GET - STEPS - all-customized', '200 - Found and Authorized', NULL, 'success', '2024-12-06 19:42:54'),
+(1997, 'GET - COMENTARIOS - /all-from-proccess/13', '200 - Found and Authorized', NULL, 'success', '2024-12-06 19:42:56'),
+(1998, 'GET - REQUESTS - /all-requests-as-student', '200 - Found and Authorized', NULL, 'success', '2024-12-06 22:14:18'),
+(1999, 'GET - USERS - id/31', '200 - Found and Authorized', NULL, 'success', '2024-12-06 22:14:27'),
+(2000, 'PATCH - USERS - FOTO - 31', '200 - Foto atualizada com sucesso', NULL, 'success', '2024-12-06 22:14:32'),
+(2001, 'GET - REQUESTS - /all-requests-as-student', '200 - Found and Authorized', NULL, 'success', '2024-12-06 22:14:42'),
+(2002, 'GET - REQUEST TYPE - all', '200 - Found and Authorized', NULL, 'success', '2024-12-06 22:14:52'),
+(2003, 'GET - REQUEST TYPE - all', '200 - Found and Authorized', NULL, 'success', '2024-12-06 22:14:58'),
+(2004, 'GET - REQUEST TYPE - id/7', '200 - Found and Authorized', NULL, 'success', '2024-12-06 22:14:59'),
+(2005, 'GET - FIELDS - request-field-by-process-type/7', '200 - Found and Authorized', NULL, 'success', '2024-12-06 22:15:00'),
+(2006, 'GET - FIELDS - all-default-fields', '200 - Found and Authorized', NULL, 'success', '2024-12-06 22:15:01'),
+(2007, 'GET - FIELDS - all-field-types', '200 - Found and Authorized', NULL, 'success', '2024-12-06 22:15:01'),
+(2008, 'GET - STEPS - link-step-to-proccess/7', '200 - Found and Authorized', NULL, 'success', '2024-12-06 22:15:02'),
+(2009, 'GET - STEPS - all-default', '200 - Found and Authorized', NULL, 'success', '2024-12-06 22:15:03'),
+(2010, 'GET - STEPS - all-customized', '200 - Found and Authorized', NULL, 'success', '2024-12-06 22:15:04'),
+(2011, 'GET - HOURS - by-student/31', '200 - Found and Authorized', NULL, 'success', '2024-12-06 22:15:24'),
+(2012, 'GET - PERCENTUAL-POR-TIPO - by-student/31', '200 - Percentuais calculados com sucesso', NULL, 'success', '2024-12-06 22:15:26'),
+(2013, 'GET - HOURS - by-student/31', '200 - Found and Authorized', NULL, 'success', '2024-12-06 22:15:36'),
+(2014, 'GET - PERCENTUAL-POR-TIPO - by-student/31', '200 - Percentuais calculados com sucesso', NULL, 'success', '2024-12-06 22:15:37'),
+(2015, 'GET - REQUESTS - /all-requests-as-student', '200 - Found and Authorized', NULL, 'success', '2024-12-06 22:15:41'),
+(2016, 'GET - SYSTEM - logs', '200 - Found and Authorized', NULL, 'success', '2024-12-06 22:15:46'),
+(2017, 'GET - REQUESTS - /all-requests-as-student', '200 - Found and Authorized', NULL, 'success', '2024-12-06 22:16:24'),
+(2018, 'GET - USERS - all', '200 - Found and Authorized', NULL, 'success', '2024-12-07 01:05:29'),
+(2019, 'PATCH - USER - role', '{\"id\":29,\"email\":\"ruan.cunha@ufpr.br\",\"senha\":\"$2a$10$aNT72/DE7Gnamng/CFeVoevaG4R75s8qB8G6xQrTdrC61DZDi1qjO\",\"registro\":\"GRR20220043\",\"nome\":\"Ruan\",\"sobrenome\":\"Brito\",\"nascimento\":\"1998-09-06T00:00:00.000Z\",\"criado_em\":\"2024-11-09T14:13:41.000Z\",\"funcao\"', NULL, 'success', '2024-12-07 01:08:20'),
+(2020, 'GET - SYSTEM - logs/last50', '200 - Found and Authorized', NULL, 'success', '2024-12-07 01:10:56'),
+(2021, 'GET - USERS - all-students', '200 - Found and Authorized', NULL, 'success', '2024-12-07 01:11:00'),
+(2022, 'GET - SYSTEM - logs/last50', '200 - Found and Authorized', NULL, 'success', '2024-12-07 01:13:01'),
+(2023, 'GET - SYSTEM - logs', '200 - Found and Authorized', NULL, 'success', '2024-12-07 01:13:05'),
+(2024, 'GET - SYSTEM - logs/last50', '200 - Found and Authorized', NULL, 'success', '2024-12-07 01:20:19'),
+(2025, 'GET - FIELDS - all-default-fields', '200 - Found and Authorized', NULL, 'success', '2024-12-07 01:20:25'),
+(2026, 'GET - SYSTEM - logs/last50', '200 - Found and Authorized', NULL, 'success', '2024-12-07 01:20:37'),
+(2027, 'GET - FIELDS - all-default-fields', '200 - Found and Authorized', NULL, 'success', '2024-12-07 01:20:39'),
+(2028, 'GET - SYSTEM - logs/last50', '200 - Found and Authorized', NULL, 'success', '2024-12-07 01:25:59'),
+(2029, 'GET - STEPS - all-default', '200 - Found and Authorized', NULL, 'success', '2024-12-07 01:26:25'),
+(2030, 'GET - SYSTEM - logs/last50', '200 - Found and Authorized', NULL, 'success', '2024-12-07 01:31:58'),
+(2031, 'GET - SYSTEM - logs/last50', '200 - Found and Authorized', NULL, 'success', '2024-12-07 01:32:03'),
+(2032, 'GET - SYSTEM - logs/last50', '200 - Found and Authorized', NULL, 'success', '2024-12-07 14:05:40'),
+(2033, 'GET - SYSTEM - logs', '200 - Found and Authorized', NULL, 'success', '2024-12-07 14:09:12'),
+(2034, 'GET - SYSTEM - logs/last50', '200 - Found and Authorized', NULL, 'success', '2024-12-07 14:09:25'),
+(2035, 'GET - SYSTEM - logs', '200 - Found and Authorized', NULL, 'success', '2024-12-07 14:09:29'),
+(2036, 'GET - SYSTEM - logs/last50', '200 - Found and Authorized', NULL, 'success', '2024-12-07 14:11:12'),
+(2037, 'GET - REQUEST TYPE - all', '200 - Found and Authorized', NULL, 'success', '2024-12-07 14:11:15'),
+(2038, 'GET - SYSTEM - logs/last50', '200 - Found and Authorized', NULL, 'success', '2024-12-07 14:11:21'),
+(2039, 'GET - SYSTEM - logs', '200 - Found and Authorized', NULL, 'success', '2024-12-07 14:13:17'),
+(2040, 'GET - SYSTEM - logs/last50', '200 - Found and Authorized', NULL, 'success', '2024-12-07 14:16:56'),
+(2041, 'GET - SYSTEM - logs', '200 - Found and Authorized', NULL, 'success', '2024-12-07 14:17:18'),
+(2042, 'GET - SYSTEM - logs/last50', '200 - Found and Authorized', NULL, 'success', '2024-12-07 14:19:33'),
+(2043, 'GET - FIELDS - all-default-fields', '200 - Found and Authorized', NULL, 'success', '2024-12-07 14:19:51'),
+(2044, 'GET - SYSTEM - logs/last50', '200 - Found and Authorized', NULL, 'success', '2024-12-07 14:20:20'),
+(2045, 'GET - FIELDS - all-default-fields', '200 - Found and Authorized', NULL, 'success', '2024-12-07 14:20:43'),
+(2046, 'GET - SYSTEM - logs/last50', '200 - Found and Authorized', NULL, 'success', '2024-12-07 14:23:17'),
+(2047, 'GET - STEPS - all-default', '200 - Found and Authorized', NULL, 'success', '2024-12-07 14:23:20'),
+(2048, 'GET - SYSTEM - logs/last50', '200 - Found and Authorized', NULL, 'success', '2024-12-07 14:24:29'),
+(2049, 'GET - STEPS - all-default', '200 - Found and Authorized', NULL, 'success', '2024-12-07 14:24:47'),
+(2050, 'GET - SYSTEM - logs/last50', '200 - Found and Authorized', NULL, 'success', '2024-12-07 14:27:30'),
+(2051, 'GET - SYSTEM - logs', '200 - Found and Authorized', NULL, 'success', '2024-12-07 14:45:50'),
+(2052, 'GET - SYSTEM - logs/last50', '200 - Found and Authorized', NULL, 'success', '2024-12-07 14:48:52'),
+(2053, 'GET - SYSTEM - logs', '200 - Found and Authorized', NULL, 'success', '2024-12-07 14:49:30'),
+(2054, 'GET - SYSTEM - logs/last50', '200 - Found and Authorized', NULL, 'success', '2024-12-07 14:58:54'),
+(2055, 'GET - FIELDS - all-default-fields', '200 - Found and Authorized', NULL, 'success', '2024-12-07 14:59:06'),
+(2056, 'GET - SYSTEM - logs/last50', '200 - Found and Authorized', NULL, 'success', '2024-12-07 15:13:16'),
+(2057, 'GET - SYSTEM - logs', '200 - Found and Authorized', NULL, 'success', '2024-12-07 15:13:31'),
+(2058, 'GET - SYSTEM - logs/last50', '200 - Found and Authorized', NULL, 'success', '2024-12-07 15:14:29'),
+(2059, 'GET - USERS - all-students', '200 - Found and Authorized', NULL, 'success', '2024-12-07 15:14:32'),
+(2060, 'GET - USERS - all-teachers', '200 - Found and Authorized', NULL, 'success', '2024-12-07 15:15:55'),
+(2061, 'GET - USERS - all-servers', '200 - Found and Authorized', NULL, 'success', '2024-12-07 15:15:57'),
+(2062, 'GET - USERS - all-admins', '200 - Found and Authorized', NULL, 'success', '2024-12-07 15:15:59'),
+(2063, 'GET - USERS - all-servers', '200 - Found and Authorized', NULL, 'success', '2024-12-07 15:16:02'),
+(2064, 'GET - USERS - all-teachers', '200 - Found and Authorized', NULL, 'success', '2024-12-07 15:16:03'),
+(2065, 'GET - USERS - all-students', '200 - Found and Authorized', NULL, 'success', '2024-12-07 15:16:08'),
+(2066, 'GET - USERS - all-teachers', '200 - Found and Authorized', NULL, 'success', '2024-12-07 15:16:20'),
+(2067, 'GET - SYSTEM - logs/last50', '200 - Found and Authorized', NULL, 'success', '2024-12-07 15:16:22'),
+(2068, 'GET - FIELDS - all-default-fields', '200 - Found and Authorized', NULL, 'success', '2024-12-07 15:16:29'),
+(2069, 'GET - SYSTEM - logs/last50', '200 - Found and Authorized', NULL, 'success', '2024-12-07 15:17:48'),
+(2070, 'GET - STEPS - all-default', '200 - Found and Authorized', NULL, 'success', '2024-12-07 15:17:51'),
+(2071, 'GET - SYSTEM - logs/last50', '200 - Found and Authorized', NULL, 'success', '2024-12-07 15:26:58'),
+(2072, 'GET - FIELDS - all-default-fields', '200 - Found and Authorized', NULL, 'success', '2024-12-07 15:27:01'),
+(2073, 'GET - SYSTEM - logs/last50', '200 - Found and Authorized', NULL, 'success', '2024-12-07 15:31:56'),
+(2074, 'GET - STEPS - all-default', '200 - Found and Authorized', NULL, 'success', '2024-12-07 15:31:59'),
+(2075, 'GET - SYSTEM - logs/last50', '200 - Found and Authorized', NULL, 'success', '2024-12-07 15:37:45'),
+(2076, 'GET - SYSTEM - logs/last50', '200 - Found and Authorized', NULL, 'success', '2024-12-07 15:37:48'),
+(2077, 'GET - SYSTEM - logs/last50', '200 - Found and Authorized', NULL, 'success', '2024-12-07 19:15:36'),
+(2078, 'GET - SYSTEM - logs/last50', '200 - Found and Authorized', NULL, 'success', '2024-12-07 20:13:52'),
+(2079, 'GET - SYSTEM - logs', '200 - Found and Authorized', NULL, 'success', '2024-12-07 20:27:27'),
+(2080, 'GET - SYSTEM - logs/last50', '200 - Found and Authorized', NULL, 'success', '2024-12-07 20:27:39'),
+(2081, 'GET - REQUEST TYPE - all', '200 - Found and Authorized', NULL, 'success', '2024-12-07 20:30:48'),
+(2082, 'GET - SYSTEM - logs/last50', '200 - Found and Authorized', NULL, 'success', '2024-12-07 20:33:43'),
+(2083, 'GET - SYSTEM - logs', '200 - Found and Authorized', NULL, 'success', '2024-12-07 20:45:55'),
+(2084, 'GET - SYSTEM - logs/last50', '200 - Found and Authorized', NULL, 'success', '2024-12-07 20:47:39'),
+(2085, 'GET - SYSTEM - logs', '200 - Found and Authorized', NULL, 'success', '2024-12-07 20:48:31'),
+(2086, 'GET - SYSTEM - logs/last50', '200 - Found and Authorized', NULL, 'success', '2024-12-07 21:42:10'),
+(2087, 'GET - FIELDS - all-default-fields', '200 - Found and Authorized', NULL, 'success', '2024-12-07 21:42:17'),
+(2088, 'GET - SYSTEM - logs/last50', '200 - Found and Authorized', NULL, 'success', '2024-12-07 22:06:45'),
+(2089, 'GET - STEPS - all-default', '200 - Found and Authorized', NULL, 'success', '2024-12-07 22:06:48'),
+(2090, 'GET - SYSTEM - logs/last50', '200 - Found and Authorized', NULL, 'success', '2024-12-07 22:19:16'),
+(2091, 'GET - SYSTEM - logs/last50', '200 - Found and Authorized', NULL, 'success', '2024-12-08 11:38:44'),
+(2092, 'GET - SYSTEM - logs', '200 - Found and Authorized', NULL, 'success', '2024-12-08 11:38:48'),
+(2093, 'GET - SYSTEM - logs/last50', '200 - Found and Authorized', NULL, 'success', '2024-12-08 11:39:26'),
+(2094, 'GET - SYSTEM - logs', '200 - Found and Authorized', NULL, 'success', '2024-12-08 11:39:28'),
+(2095, 'GET - SYSTEM - logs/last50', '200 - Found and Authorized', NULL, 'success', '2024-12-08 12:08:24'),
+(2096, 'GET - FIELDS - all-default-fields', '200 - Found and Authorized', NULL, 'success', '2024-12-08 12:08:28'),
+(2097, 'GET - SYSTEM - logs/last50', '200 - Found and Authorized', NULL, 'success', '2024-12-08 12:20:13'),
+(2098, 'GET - STEPS - all-default', '200 - Found and Authorized', NULL, 'success', '2024-12-08 12:20:17'),
+(2099, 'GET - SYSTEM - logs/last50', '200 - Found and Authorized', NULL, 'success', '2024-12-08 12:22:40'),
+(2100, 'GET - SYSTEM - logs/last50', '200 - Found and Authorized', NULL, 'success', '2024-12-08 12:22:46'),
+(2101, 'GET - REQUEST TYPE - all', '200 - Found and Authorized', NULL, 'success', '2024-12-08 12:22:49'),
+(2102, 'GET - REQUEST TYPE - id/6', '200 - Found and Authorized', NULL, 'success', '2024-12-08 12:22:57'),
+(2103, 'GET - FIELDS - request-field-by-process-type/6', '200 - Found and Authorized', NULL, 'success', '2024-12-08 12:22:58'),
+(2104, 'GET - STEPS - link-step-to-proccess/6', '200 - Found and Authorized', NULL, 'success', '2024-12-08 12:22:58'),
+(2105, 'GET - STEPS - all-default', '200 - Found and Authorized', NULL, 'success', '2024-12-08 12:22:59'),
+(2106, 'GET - STEPS - all-customized', '200 - Found and Authorized', NULL, 'success', '2024-12-08 12:23:00'),
+(2107, 'GET - REQUEST TYPE - id/6', '200 - Found and Authorized', NULL, 'success', '2024-12-08 12:23:10'),
+(2108, 'GET - FIELDS - all-default-fields', '200 - Found and Authorized', NULL, 'success', '2024-12-08 12:23:11'),
+(2109, 'GET - STEPS - all-default', '200 - Found and Authorized', NULL, 'success', '2024-12-08 12:23:12'),
+(2110, 'GET - STEPS - all-customized', '200 - Found and Authorized', NULL, 'success', '2024-12-08 12:23:12'),
+(2111, 'GET - STEPS - link-step-to-proccess/6', '200 - Found and Authorized', NULL, 'success', '2024-12-08 12:23:14'),
+(2112, 'GET - REQUEST TYPE - id/NaN', 'Error fetching requested Field type. {\"name\":\"PrismaClientValidationError\",\"clientVersion\":\"5.5.2\"} ', NULL, 'error', '2024-12-08 12:23:21'),
+(2113, 'GET - FIELDS - all-default-fields', '200 - Found and Authorized', NULL, 'success', '2024-12-08 12:23:22'),
+(2114, 'GET - STEPS - all-default', '200 - Found and Authorized', NULL, 'success', '2024-12-08 12:23:23'),
+(2115, 'GET - STEPS - all-customized', '200 - Found and Authorized', NULL, 'success', '2024-12-08 12:23:24'),
+(2116, 'GET - REQUEST TYPE - id/6', '200 - Found and Authorized', NULL, 'success', '2024-12-08 12:23:26'),
+(2117, 'GET - FIELDS - all-default-fields', '200 - Found and Authorized', NULL, 'success', '2024-12-08 12:23:27'),
+(2118, 'GET - REQUEST TYPE - id/6', '200 - Found and Authorized', NULL, 'success', '2024-12-08 12:23:28'),
+(2119, 'GET - FIELDS - request-field-by-process-type/6', '200 - Found and Authorized', NULL, 'success', '2024-12-08 12:23:28'),
+(2120, 'GET - STEPS - link-step-to-proccess/6', '200 - Found and Authorized', NULL, 'success', '2024-12-08 12:23:28'),
+(2121, 'GET - STEPS - all-default', '200 - Found and Authorized', NULL, 'success', '2024-12-08 12:23:28'),
+(2122, 'GET - STEPS - all-customized', '200 - Found and Authorized', NULL, 'success', '2024-12-08 12:23:29'),
+(2123, 'GET - REQUEST TYPE - all', '200 - Found and Authorized', NULL, 'success', '2024-12-08 12:23:31'),
+(2124, 'GET - SYSTEM - logs/last50', '200 - Found and Authorized', NULL, 'success', '2024-12-08 12:23:34'),
+(2125, 'GET - SYSTEM - logs/last50', '200 - Found and Authorized', NULL, 'success', '2024-12-08 12:33:16'),
+(2126, 'GET - REQUEST TYPE - all', '200 - Found and Authorized', NULL, 'success', '2024-12-08 12:33:21'),
+(2127, 'POST - REQUEST TYPE - new', '{\"id\":8,\"nome\":\"teste\",\"fluxograma\":\"sdsds\",\"hrs_resposta\":4,\"hrs_resolucao\":4}', NULL, 'success', '2024-12-08 12:33:33'),
+(2128, 'GET - REQUEST TYPE - id/8', '200 - Found and Authorized', NULL, 'success', '2024-12-08 12:33:34'),
+(2129, 'GET - FIELDS - all-default-fields', '200 - Found and Authorized', NULL, 'success', '2024-12-08 12:33:34'),
+(2130, 'GET - FIELDS - all-default-fields', '200 - Found and Authorized', NULL, 'success', '2024-12-08 12:33:35'),
+(2131, 'GET - FIELDS - request-field-by-process-type/8', '200 - Found and Authorized', NULL, 'success', '2024-12-08 12:33:36'),
+(2132, 'POST - FIELDS - new-request-field', '{\"id\":9,\"tipo\":7,\"nome\":\"nome\",\"nome_exibicao\":\"Nome\",\"tipo_processo\":8}', NULL, 'success', '2024-12-08 12:34:26'),
+(2133, 'POST - FIELDS - new-request-field', '{\"id\":10,\"tipo\":8,\"nome\":\"sobrenome\",\"nome_exibicao\":\"Sobrenome\",\"tipo_processo\":8}', NULL, 'success', '2024-12-08 12:34:27'),
+(2134, 'GET - FIELDS - all-default-fields', '200 - Found and Authorized', NULL, 'success', '2024-12-08 12:34:27'),
+(2135, 'GET - FIELDS - all-default-fields', '200 - Found and Authorized', NULL, 'success', '2024-12-08 12:34:27'),
+(2136, 'GET - FIELDS - request-field-by-process-type/8', '200 - Found and Authorized', NULL, 'success', '2024-12-08 12:34:27'),
+(2137, 'GET - FIELDS - request-field-by-process-type/8', '200 - Found and Authorized', NULL, 'success', '2024-12-08 12:34:28'),
+(2138, 'POST - FIELDS - new-request-field', '{\"id\":11,\"tipo\":9,\"nome\":\"email\",\"nome_exibicao\":\"Email\",\"tipo_processo\":8}', NULL, 'success', '2024-12-08 12:34:29'),
+(2139, 'GET - FIELDS - all-default-fields', '200 - Found and Authorized', NULL, 'success', '2024-12-08 12:34:29'),
+(2140, 'POST - FIELDS - new-request-field', '{\"id\":12,\"tipo\":10,\"nome\":\"telefone\",\"nome_exibicao\":\"Telefone\",\"tipo_processo\":8}', NULL, 'success', '2024-12-08 12:34:29'),
+(2141, 'GET - FIELDS - request-field-by-process-type/8', '200 - Found and Authorized', NULL, 'success', '2024-12-08 12:34:30'),
+(2142, 'POST - FIELDS - new-request-field', '{\"id\":13,\"tipo\":11,\"nome\":\"descricao\",\"nome_exibicao\":\"Descrição\",\"tipo_processo\":8}', NULL, 'success', '2024-12-08 12:34:30'),
+(2143, 'GET - FIELDS - all-default-fields', '200 - Found and Authorized', NULL, 'success', '2024-12-08 12:34:30'),
+(2144, 'GET - FIELDS - all-default-fields', '200 - Found and Authorized', NULL, 'success', '2024-12-08 12:34:31'),
+(2145, 'GET - FIELDS - request-field-by-process-type/8', '200 - Found and Authorized', NULL, 'success', '2024-12-08 12:34:31'),
+(2146, 'POST - FIELDS - new-request-field', '{\"id\":14,\"tipo\":12,\"nome\":\"data\",\"nome_exibicao\":\"Data\",\"tipo_processo\":8}', NULL, 'success', '2024-12-08 12:34:31'),
+(2147, 'GET - FIELDS - request-field-by-process-type/8', '200 - Found and Authorized', NULL, 'success', '2024-12-08 12:34:31'),
+(2148, 'POST - FIELDS - new-request-field', '{\"id\":15,\"tipo\":13,\"nome\":\"horas\",\"nome_exibicao\":\"Carga Horária\",\"tipo_processo\":8}', NULL, 'success', '2024-12-08 12:34:32'),
+(2149, 'GET - FIELDS - all-default-fields', '200 - Found and Authorized', NULL, 'success', '2024-12-08 12:34:32'),
+(2150, 'GET - FIELDS - all-default-fields', '200 - Found and Authorized', NULL, 'success', '2024-12-08 12:34:33'),
+(2151, 'GET - FIELDS - request-field-by-process-type/8', '200 - Found and Authorized', NULL, 'success', '2024-12-08 12:34:33'),
+(2152, 'GET - FIELDS - request-field-by-process-type/8', '200 - Found and Authorized', NULL, 'success', '2024-12-08 12:34:33'),
+(2153, 'POST - FIELDS - remove-link-field-to-request', '{\"count\":1}', NULL, 'success', '2024-12-08 12:34:39'),
+(2154, 'GET - FIELDS - all-default-fields', '200 - Found and Authorized', NULL, 'success', '2024-12-08 12:34:39'),
+(2155, 'GET - FIELDS - request-field-by-process-type/8', '200 - Found and Authorized', NULL, 'success', '2024-12-08 12:34:40'),
+(2156, 'POST - FIELDS - new-request-field', '{\"id\":16,\"tipo\":7,\"nome\":\"nome\",\"nome_exibicao\":\"Nome\",\"tipo_processo\":8}', NULL, 'success', '2024-12-08 12:34:41'),
+(2157, 'GET - FIELDS - all-default-fields', '200 - Found and Authorized', NULL, 'success', '2024-12-08 12:34:41'),
+(2158, 'GET - FIELDS - request-field-by-process-type/8', '200 - Found and Authorized', NULL, 'success', '2024-12-08 12:34:42'),
+(2159, 'POST - FIELDS - remove-link-field-to-request', '{\"count\":1}', NULL, 'success', '2024-12-08 12:39:46'),
+(2160, 'GET - FIELDS - all-default-fields', '200 - Found and Authorized', NULL, 'success', '2024-12-08 12:39:46'),
+(2161, 'GET - FIELDS - request-field-by-process-type/8', '200 - Found and Authorized', NULL, 'success', '2024-12-08 12:39:46'),
+(2162, 'POST - FIELDS - new-request-field', '{\"id\":17,\"tipo\":7,\"nome\":\"nome\",\"nome_exibicao\":\"Nome\",\"tipo_processo\":8}', NULL, 'success', '2024-12-08 12:39:47'),
+(2163, 'GET - FIELDS - all-default-fields', '200 - Found and Authorized', NULL, 'success', '2024-12-08 12:39:48'),
+(2164, 'GET - FIELDS - request-field-by-process-type/8', '200 - Found and Authorized', NULL, 'success', '2024-12-08 12:39:48'),
+(2165, 'POST - FIELDS - new-type-for-process', '{\"id\":16,\"nome\":\"numero_da_cor\",\"etiqueta\":\"telefone\",\"obrigatorio\":0,\"tipo_dado\":3,\"campo_padrao\":0}', NULL, 'success', '2024-12-08 12:45:04'),
+(2166, 'POST - FIELDS - new-type-for-process', '{\"id\":18,\"tipo\":16,\"nome\":\"numero_da_cor\",\"nome_exibicao\":\"telefone\",\"tipo_processo\":8}', NULL, 'success', '2024-12-08 12:45:04'),
+(2167, 'GET - FIELDS - all-default-fields', '200 - Found and Authorized', NULL, 'success', '2024-12-08 12:45:05'),
+(2168, 'GET - FIELDS - request-field-by-process-type/8', '200 - Found and Authorized', NULL, 'success', '2024-12-08 12:45:05'),
+(2169, 'GET - INTERNSHIP - id/1', '200 - Found and Authorized', NULL, 'success', '2024-12-08 18:27:34'),
+(2170, 'GET - SYSTEM - logs/last50', '200 - Found and Authorized', NULL, 'success', '2024-12-08 18:39:14'),
+(2171, 'GET - MURAL - all', '200 - Found and Authorized', NULL, 'success', '2024-12-08 18:39:19'),
+(2172, 'GET - MURAL - id/1', '200 - Found and Authorized', NULL, 'success', '2024-12-08 18:39:21'),
+(2173, 'GET - MURAL - id/1', '200 - Found and Authorized', NULL, 'success', '2024-12-08 18:39:21'),
+(2174, 'GET - USERS - id/24', '200 - Found and Authorized', NULL, 'success', '2024-12-08 18:39:22'),
+(2175, 'GET - USERS - id/28', '200 - Found and Authorized', NULL, 'success', '2024-12-08 18:39:28'),
+(2176, 'GET - USERS - id/28', '200 - Found and Authorized', NULL, 'success', '2024-12-08 18:39:37'),
+(2177, 'GET - USERS - id/28', '200 - Found and Authorized', NULL, 'success', '2024-12-08 18:39:37'),
+(2178, 'GET - MURAL - all', '200 - Found and Authorized', NULL, 'success', '2024-12-08 18:39:41'),
+(2179, 'GET - MURAL - id/1', '200 - Found and Authorized', NULL, 'success', '2024-12-08 18:39:46'),
+(2180, 'GET - MURAL - id/1', '200 - Found and Authorized', NULL, 'success', '2024-12-08 18:39:46'),
+(2181, 'GET - USERS - id/24', '200 - Found and Authorized', NULL, 'success', '2024-12-08 18:39:46'),
+(2182, 'GET - REQUESTS - process-identificador/6', '404 - Not Found', NULL, 'error', '2024-12-08 20:16:36'),
+(2183, 'GET - REQUESTS - process-identificador/1', '404 - Not Found', NULL, 'error', '2024-12-08 20:16:43'),
+(2184, 'GET - REQUESTS - process-identificador/1', '404 - Not Found', NULL, 'error', '2024-12-08 21:32:58'),
+(2185, 'GET - REQUESTS - /all-requests-as-student', '404 - Not Found', NULL, 'error', '2024-12-08 21:33:06'),
+(2186, 'GET - REQUESTS - /all-requests-as-teacher', '404 - Not Found', NULL, 'error', '2024-12-08 22:08:46'),
+(2187, 'GET - REQUESTS - /all-requests-as-teacher', '404 - Not Found', NULL, 'error', '2024-12-08 22:08:55'),
+(2188, 'GET - REQUESTS - /all-requests-as-teacher', '404 - Not Found', NULL, 'error', '2024-12-08 22:08:58'),
+(2189, 'GET - USERS - all-students', '200 - Found and Authorized', NULL, 'success', '2024-12-08 22:09:03'),
+(2190, 'GET - INTERNSHIP - id/1', '200 - Found and Authorized', NULL, 'success', '2024-12-08 22:09:18'),
+(2191, 'GET - REQUESTS - process-identificador/6', '404 - Not Found', NULL, 'error', '2024-12-08 22:09:41'),
+(2192, 'GET - FIELDS - all-default-fields', '200 - Found and Authorized', NULL, 'success', '2024-12-08 22:09:44'),
+(2193, 'GET - FIELDS - all-field-types', '200 - Found and Authorized', NULL, 'success', '2024-12-08 22:09:45'),
+(2194, 'GET - STEPS - all-default', '200 - Found and Authorized', NULL, 'success', '2024-12-08 22:09:46'),
+(2195, 'auth/create', '400 - Erro - Motivo: Email já cadastrado para outro usuário! | email: matheus.fiori@ufpr.br | registro: GRR20211618', NULL, 'error', '2024-12-08 22:09:47'),
+(2196, 'GET - STEPS - all-customized', '200 - Found and Authorized', NULL, 'success', '2024-12-08 22:09:47'),
+(2197, 'GET - REQUESTS - all-responses-process/6', '404 - Not Found', NULL, 'error', '2024-12-08 22:09:49'),
+(2198, 'GET - REQUESTS - process-identificador/6', '404 - Not Found', NULL, 'error', '2024-12-08 22:09:51'),
+(2199, 'GET - FIELDS - all-default-fields', '200 - Found and Authorized', NULL, 'success', '2024-12-08 22:09:54'),
+(2200, 'GET - FIELDS - all-field-types', '200 - Found and Authorized', NULL, 'success', '2024-12-08 22:09:54'),
+(2201, 'GET - STEPS - all-default', '200 - Found and Authorized', NULL, 'success', '2024-12-08 22:09:55'),
+(2202, 'GET - STEPS - all-customized', '200 - Found and Authorized', NULL, 'success', '2024-12-08 22:09:56');
+INSERT INTO `logs` (`id`, `funcao`, `mensagem`, `usuario`, `status`, `data`) VALUES
+(2203, 'GET - REQUESTS - all-responses-process/6', '404 - Not Found', NULL, 'error', '2024-12-08 22:09:58'),
+(2204, 'GET - REQUESTS - process-identificador/2', '404 - Not Found', NULL, 'error', '2024-12-08 22:10:00'),
+(2205, 'auth/create', '400 - Erro - Motivo: Registro já atrelado a outro usuário! | email: mathfiori00@gmail.com | registro: GRR20211618', NULL, 'error', '2024-12-08 22:10:01'),
+(2206, 'GET - FIELDS - all-default-fields', '200 - Found and Authorized', NULL, 'success', '2024-12-08 22:10:02'),
+(2207, 'GET - FIELDS - all-field-types', '200 - Found and Authorized', NULL, 'success', '2024-12-08 22:10:03'),
+(2208, 'GET - STEPS - all-default', '200 - Found and Authorized', NULL, 'success', '2024-12-08 22:10:04'),
+(2209, 'GET - STEPS - all-customized', '200 - Found and Authorized', NULL, 'success', '2024-12-08 22:10:05'),
+(2210, 'GET - REQUESTS - all-responses-process/2', '404 - Not Found', NULL, 'error', '2024-12-08 22:10:06'),
+(2211, 'GET - REQUESTS - /all-requests-as-teacher', '404 - Not Found', NULL, 'error', '2024-12-08 22:10:14'),
+(2212, 'auth/create', 'Usuário criado com sucesso! {\"user\":{\"id\":38,\"email\":\"mathfiori00@gmail.com\",\"nome\":\"Matheus\",\"sobrenome\":\"Fiori\",\"nascimento\":\"2002-01-22T00:00:00.000Z\",\"registro\":\"grr20219999\",\"funcao\":1,\"status_usuario\":1,\"foto\":\"src/img/avatars/generic.webp\"}}', 38, 'success', '2024-12-08 22:10:14'),
+(2213, 'GET - SYSTEM - timelines-user/38', '200 - Found and Authorized', NULL, 'success', '2024-12-08 22:10:14'),
+(2214, 'GET - USERS - id/38', '200 - Found and Authorized', NULL, 'success', '2024-12-08 22:10:15'),
+(2215, 'sendEmail', 'Encontrados 1 novos registros.', NULL, 'info', '2024-12-08 22:10:21'),
+(2216, 'sendEmail', 'Enviando email para mathfiori00@gmail.com com o título \"Bem-vindo(a) à secretaria online do SEPT!\"...', NULL, 'info', '2024-12-08 22:10:21'),
+(2217, 'GET - REQUESTS - /all-requests-as-teacher', '404 - Not Found', NULL, 'error', '2024-12-08 22:10:26'),
+(2218, 'sendEmail', 'Email enviado com sucesso!', NULL, 'success', '2024-12-08 22:10:26'),
+(2219, 'GET - REQUESTS - /all-requests-as-teacher', '404 - Not Found', NULL, 'error', '2024-12-08 22:10:26'),
+(2220, 'GET - COURSES - by-user/38', '200 - Found and Authorized', NULL, 'success', '2024-12-08 22:10:34'),
+(2221, 'getCourseByStudent', 'Erro ao listar curso. Error: Nenhum registro encontrado', 38, 'error', '2024-12-08 22:10:34'),
+(2222, 'GET - USERS - all-teachers', '200 - Found and Authorized', NULL, 'success', '2024-12-08 22:10:34'),
+(2223, 'GET - REQUESTS - /all-requests-as-student', '404 - Not Found', NULL, 'error', '2024-12-08 22:10:35'),
+(2224, 'getMyRequestsStudent', 'Erro ao listar admins. Error: Erro interno (404)', 38, 'error', '2024-12-08 22:10:35'),
+(2225, 'GET - USERS - id/38', '200 - Found and Authorized', NULL, 'success', '2024-12-08 22:10:43'),
+(2226, 'GET - Course - all-courses', '200 - Found and Authorized', NULL, 'success', '2024-12-08 22:10:44'),
+(2227, 'PATCH - USERS - FOTO - 38', '200 - Foto atualizada com sucesso', NULL, 'success', '2024-12-08 22:10:49'),
+(2228, 'PATCH - USERS - REGISTRO - 38', '200 - Registro atualizado com sucesso', NULL, 'success', '2024-12-08 22:11:08'),
+(2229, 'PATCH - USERS - SOBRENOME - 38', '200 - Sobrenome atualizado com sucesso', NULL, 'success', '2024-12-08 22:11:09'),
+(2230, 'GET - REQUESTS - /all-requests-as-teacher', '404 - Not Found', NULL, 'error', '2024-12-08 22:11:13'),
+(2231, 'GET - SYSTEM - timelines-user/38', '200 - Found and Authorized', NULL, 'success', '2024-12-08 22:11:15'),
+(2232, 'GET - USERS - id/38', '200 - Found and Authorized', NULL, 'success', '2024-12-08 22:11:35'),
+(2233, 'GET - Course - all-courses', '200 - Found and Authorized', NULL, 'success', '2024-12-08 22:11:35'),
+(2234, 'GET - COURSES - by-user/38', '200 - Found and Authorized', NULL, 'success', '2024-12-08 22:11:39'),
+(2235, 'getCourseByStudent', 'Erro ao listar curso. Error: Nenhum registro encontrado', 38, 'error', '2024-12-08 22:11:39'),
+(2236, 'GET - USERS - all-teachers', '200 - Found and Authorized', NULL, 'success', '2024-12-08 22:11:39'),
+(2237, 'GET - REQUESTS - /all-requests-as-student', '404 - Not Found', NULL, 'error', '2024-12-08 22:11:39'),
+(2238, 'getMyRequestsStudent', 'Erro ao listar admins. Error: Erro interno (404)', 38, 'error', '2024-12-08 22:11:40'),
+(2239, 'GET - HOURS - by-student/38', '200 - Found and Authorized', NULL, 'success', '2024-12-08 22:11:44'),
+(2240, 'GET - COURSES - by-user/38', '200 - Found and Authorized', NULL, 'success', '2024-12-08 22:11:45'),
+(2241, 'getCourseByStudent', 'Erro ao listar curso. Error: Nenhum registro encontrado', 38, 'error', '2024-12-08 22:11:45'),
+(2242, 'GET - PERCENTUAL-POR-TIPO - by-student/38', '404 - Nenhum registro encontrado', NULL, 'error', '2024-12-08 22:11:46'),
+(2243, 'getHoursUser', 'Erro ao listar horas formativas de usuário 38. Error: Erro interno (404)', 38, 'error', '2024-12-08 22:11:46'),
+(2244, 'GET - HORAS-ALUNO - by-student/38', '404 - Curso não encontrado', NULL, 'error', '2024-12-08 22:11:46'),
+(2245, 'getHoursTotalUserPercentage', 'Erro ao listar horas formativas de usuário 38. Error: Erro interno (404)', 38, 'error', '2024-12-08 22:11:46'),
+(2246, 'GET - COURSES - by-user/38', '200 - Found and Authorized', NULL, 'success', '2024-12-08 22:11:53'),
+(2247, 'getCourseByStudent', 'Erro ao listar curso. Error: Nenhum registro encontrado', 38, 'error', '2024-12-08 22:11:53'),
+(2248, 'GET - USERS - all-teachers', '200 - Found and Authorized', NULL, 'success', '2024-12-08 22:11:53'),
+(2249, 'GET - REQUESTS - /all-requests-as-student', '404 - Not Found', NULL, 'error', '2024-12-08 22:11:53'),
+(2250, 'getMyRequestsStudent', 'Erro ao listar admins. Error: Erro interno (404)', 38, 'error', '2024-12-08 22:11:53'),
+(2251, 'GET - SYSTEM - logs/last50', '200 - Found and Authorized', NULL, 'success', '2024-12-08 22:11:56'),
+(2252, 'GET - REQUEST TYPE - all', '200 - Found and Authorized', NULL, 'success', '2024-12-08 22:11:59'),
+(2253, 'GET - REQUEST TYPE - all', '200 - Found and Authorized', NULL, 'success', '2024-12-08 22:12:03'),
+(2254, 'GET - REQUEST TYPE - id/6', '200 - Found and Authorized', NULL, 'success', '2024-12-08 22:12:04'),
+(2255, 'GET - FIELDS - request-field-by-process-type/6', '200 - Found and Authorized', NULL, 'success', '2024-12-08 22:12:04'),
+(2256, 'GET - FIELDS - all-default-fields', '200 - Found and Authorized', NULL, 'success', '2024-12-08 22:12:05'),
+(2257, 'GET - FIELDS - all-field-types', '200 - Found and Authorized', NULL, 'success', '2024-12-08 22:12:05'),
+(2258, 'GET - STEPS - link-step-to-proccess/6', '200 - Found and Authorized', NULL, 'success', '2024-12-08 22:12:06'),
+(2259, 'GET - STEPS - all-default', '200 - Found and Authorized', NULL, 'success', '2024-12-08 22:12:06'),
+(2260, 'getUnifiedStages', 'Resposta inesperada ao listar etapas padrão: []', 38, 'warning', '2024-12-08 22:12:06'),
+(2261, 'GET - STEPS - all-customized', '200 - Found and Authorized', NULL, 'success', '2024-12-08 22:12:07'),
+(2262, 'getUnifiedStages', 'Resposta inesperada ao listar etapas personalizadas: []', 38, 'warning', '2024-12-08 22:12:07'),
+(2263, 'getUnifiedStages', 'Etapas unificadas retornadas com sucesso.', 38, 'info', '2024-12-08 22:12:08'),
+(2264, 'GET - REQUESTS - process-identificador/6', '404 - Not Found', NULL, 'error', '2024-12-08 22:12:10'),
+(2265, 'GET - FIELDS - all-default-fields', '200 - Found and Authorized', NULL, 'success', '2024-12-08 22:12:12'),
+(2266, 'GET - FIELDS - all-field-types', '200 - Found and Authorized', NULL, 'success', '2024-12-08 22:12:13'),
+(2267, 'GET - STEPS - all-default', '200 - Found and Authorized', NULL, 'success', '2024-12-08 22:12:14'),
+(2268, 'GET - STEPS - all-customized', '200 - Found and Authorized', NULL, 'success', '2024-12-08 22:12:15'),
+(2269, 'GET - REQUESTS - all-responses-process/6', '404 - Not Found', NULL, 'error', '2024-12-08 22:12:16'),
+(2270, 'GET - SYSTEM - logs/last50', '200 - Found and Authorized', NULL, 'success', '2024-12-08 22:12:23'),
+(2271, 'GET - REQUESTS - /all-requests-as-teacher', '404 - Not Found', NULL, 'error', '2024-12-08 22:12:47'),
+(2272, 'POST - REQUESTS - new', '\nInvalid `prisma.processo.create()` invocation:\n\n\nForeign key constraint failed on the field: `etapa_atual`', NULL, 'error', '2024-12-08 22:13:28'),
+(2273, 'POST - REQUESTS - new', '\nInvalid `prisma.processo.create()` invocation:\n\n\nForeign key constraint failed on the field: `etapa_atual`', NULL, 'error', '2024-12-08 22:13:45'),
+(2274, 'POST - REQUESTS - new', '\nInvalid `prisma.processo.create()` invocation:\n\n\nForeign key constraint failed on the field: `etapa_atual`', NULL, 'error', '2024-12-08 22:16:22'),
+(2275, 'GET - HOURS - by-student/38', '200 - Found and Authorized', NULL, 'success', '2024-12-08 22:16:25'),
+(2276, 'GET - COURSES - by-user/38', '200 - Found and Authorized', NULL, 'success', '2024-12-08 22:16:25'),
+(2277, 'getCourseByStudent', 'Erro ao listar curso. Error: Nenhum registro encontrado', 38, 'error', '2024-12-08 22:16:26'),
+(2278, 'GET - PERCENTUAL-POR-TIPO - by-student/38', '404 - Nenhum registro encontrado', NULL, 'error', '2024-12-08 22:16:26'),
+(2279, 'getHoursUser', 'Erro ao listar horas formativas de usuário 38. Error: Erro interno (404)', 38, 'error', '2024-12-08 22:16:26'),
+(2280, 'GET - HORAS-ALUNO - by-student/38', '404 - Curso não encontrado', NULL, 'error', '2024-12-08 22:16:27'),
+(2281, 'getHoursTotalUserPercentage', 'Erro ao listar horas formativas de usuário 38. Error: Erro interno (404)', 38, 'error', '2024-12-08 22:16:27'),
+(2282, 'POST - HOURS - /new', '200 - New training hours record created: ID 15', NULL, 'success', '2024-12-08 22:16:49'),
+(2283, 'GET - HOURS - by-student/38', '200 - Found and Authorized', NULL, 'success', '2024-12-08 22:16:49'),
+(2284, 'GET - COURSES - by-user/38', '200 - Found and Authorized', NULL, 'success', '2024-12-08 22:16:50'),
+(2285, 'getCourseByStudent', 'Erro ao listar curso. Error: Nenhum registro encontrado', 38, 'error', '2024-12-08 22:16:50'),
+(2286, 'GET - PERCENTUAL-POR-TIPO - by-student/38', '200 - Percentuais calculados com sucesso', NULL, 'success', '2024-12-08 22:16:50'),
+(2287, 'GET - HORAS-ALUNO - by-student/38', '404 - Curso não encontrado', NULL, 'error', '2024-12-08 22:16:50'),
+(2288, 'getHoursTotalUserPercentage', 'Erro ao listar horas formativas de usuário 38. Error: Erro interno (404)', 38, 'error', '2024-12-08 22:16:51'),
+(2289, 'POST - HOURS - /new', '200 - New training hours record created: ID 16', NULL, 'success', '2024-12-08 22:17:39'),
+(2290, 'GET - HOURS - by-student/38', '200 - Found and Authorized', NULL, 'success', '2024-12-08 22:17:40'),
+(2291, 'GET - COURSES - by-user/38', '200 - Found and Authorized', NULL, 'success', '2024-12-08 22:17:40'),
+(2292, 'getCourseByStudent', 'Erro ao listar curso. Error: Nenhum registro encontrado', 38, 'error', '2024-12-08 22:17:40'),
+(2293, 'GET - PERCENTUAL-POR-TIPO - by-student/38', '200 - Percentuais calculados com sucesso', NULL, 'success', '2024-12-08 22:17:41'),
+(2294, 'GET - HORAS-ALUNO - by-student/38', '404 - Curso não encontrado', NULL, 'error', '2024-12-08 22:17:41'),
+(2295, 'getHoursTotalUserPercentage', 'Erro ao listar horas formativas de usuário 38. Error: Erro interno (404)', 38, 'error', '2024-12-08 22:17:41'),
+(2296, 'GET - SYSTEM - logs/last50', '200 - Found and Authorized', NULL, 'success', '2024-12-08 23:21:11'),
+(2297, 'GET - INTERNSHIP - id/1', '200 - Found and Authorized', NULL, 'success', '2024-12-08 23:21:21'),
+(2298, 'GET - INTERNSHIP - id/1', '200 - Found and Authorized', NULL, 'success', '2024-12-08 23:21:24'),
+(2299, 'GET - INTERNSHIP - id/1', '200 - Found and Authorized', NULL, 'success', '2024-12-08 23:24:04'),
+(2300, 'GET - INTERNSHIP - id/1', '200 - Found and Authorized', NULL, 'success', '2024-12-08 23:26:21'),
+(2301, 'GET - INTERNSHIP - id/1', '200 - Found and Authorized', NULL, 'success', '2024-12-08 23:47:10'),
+(2302, 'GET - INTERNSHIP - code/1', '200 - Found and Authorized', NULL, 'success', '2024-12-08 23:50:31'),
+(2303, 'GET - INTERNSHIP - id/1', '200 - Found and Authorized', NULL, 'success', '2024-12-08 23:50:40'),
+(2304, 'GET - INTERNSHIP - id/1', '200 - Found and Authorized', NULL, 'success', '2024-12-08 23:50:58'),
+(2305, 'GET - INTERNSHIP - code/1', '200 - Found and Authorized', NULL, 'success', '2024-12-08 23:51:22'),
+(2306, 'GET - SYSTEM - logs/last50', '200 - Found and Authorized', NULL, 'success', '2024-12-08 23:51:28'),
+(2307, 'GET - INTERNSHIP - id/1', '200 - Found and Authorized', NULL, 'success', '2024-12-08 23:51:44'),
+(2308, 'GET - INTERNSHIP - code/1', '200 - Found and Authorized', NULL, 'success', '2024-12-08 23:51:56'),
+(2309, 'GET - SYSTEM - logs/last50', '200 - Found and Authorized', NULL, 'success', '2024-12-08 23:52:02'),
+(2310, 'GET - INTERNSHIP - id/1', '200 - Found and Authorized', NULL, 'success', '2024-12-08 23:52:15'),
+(2311, 'GET - INTERNSHIP - code/1', '200 - Found and Authorized', NULL, 'success', '2024-12-08 23:52:29'),
+(2312, 'GET - SYSTEM - logs/last50', '200 - Found and Authorized', NULL, 'success', '2024-12-08 23:52:35'),
+(2313, 'GET - INTERNSHIP - id/1', '200 - Found and Authorized', NULL, 'success', '2024-12-08 23:52:37'),
+(2314, 'GET - INTERNSHIP - code/1', '200 - Found and Authorized', NULL, 'success', '2024-12-08 23:52:44'),
+(2315, 'GET - SYSTEM - logs/last50', '200 - Found and Authorized', NULL, 'success', '2024-12-08 23:52:50'),
+(2316, 'GET - INTERNSHIP - id/1', '200 - Found and Authorized', NULL, 'success', '2024-12-09 00:01:48'),
+(2317, 'GET - INTERNSHIP - code/1', '200 - Found and Authorized', NULL, 'success', '2024-12-09 00:01:54'),
+(2318, 'GET - INTERNSHIP - id/1', '200 - Found and Authorized', NULL, 'success', '2024-12-09 00:02:00'),
+(2319, 'GET - USERS - all-students', '200 - Found and Authorized', NULL, 'success', '2024-12-09 00:10:47'),
+(2320, 'GET - INTERNSHIP - id/1', '200 - Found and Authorized', NULL, 'success', '2024-12-09 00:32:20'),
+(2321, 'GET - INTERNSHIP - id/1', '200 - Found and Authorized', NULL, 'success', '2024-12-09 00:34:27'),
+(2322, 'GET - INTERNSHIP - id/1', '200 - Found and Authorized', NULL, 'success', '2024-12-09 00:34:36'),
+(2323, 'GET - USERS - all-students', '200 - Found and Authorized', NULL, 'success', '2024-12-09 00:42:23'),
+(2324, 'GET - USERS - all-students', '200 - Found and Authorized', NULL, 'success', '2024-12-09 00:44:33'),
+(2325, 'GET - MURAL - all', '200 - Found and Authorized', NULL, 'success', '2024-12-09 00:44:51'),
+(2326, 'GET - INTERNSHIP - id/1', '200 - Found and Authorized', NULL, 'success', '2024-12-09 00:45:19'),
+(2327, 'GET - REQUESTS - process-identificador/6', '404 - Not Found', NULL, 'error', '2024-12-09 00:45:57'),
+(2328, 'getProccessIdentifier', 'Erro ao listar campos de processo. Error: Erro interno (404)', 24, 'error', '2024-12-09 00:45:58'),
+(2329, 'getProccessTypeId', 'Erro ao listar tipo de processo. Error: Erro interno (404)', 24, 'error', '2024-12-09 00:46:00'),
+(2330, 'getProccessFields', 'Erro ao listar campos de processo. Error: Erro interno (404)', 24, 'error', '2024-12-09 00:46:01'),
+(2331, 'GET - FIELDS - all-default-fields', '200 - Found and Authorized', NULL, 'success', '2024-12-09 00:46:02'),
+(2332, 'GET - FIELDS - all-field-types', '200 - Found and Authorized', NULL, 'success', '2024-12-09 00:46:02'),
+(2333, 'getProccessStages', 'Erro ao listar campos de processo. Error: Erro interno (404)', 24, 'error', '2024-12-09 00:46:04'),
+(2334, 'GET - STEPS - all-default', '200 - Found and Authorized', NULL, 'success', '2024-12-09 00:46:04'),
+(2335, 'getUnifiedStages', 'Resposta inesperada ao listar etapas padrão: []', 24, 'warning', '2024-12-09 00:46:05'),
+(2336, 'GET - STEPS - all-customized', '200 - Found and Authorized', NULL, 'success', '2024-12-09 00:46:06'),
+(2337, 'getUnifiedStages', 'Resposta inesperada ao listar etapas personalizadas: []', 24, 'warning', '2024-12-09 00:46:06'),
+(2338, 'getUnifiedStages', 'Etapas unificadas retornadas com sucesso.', 24, 'info', '2024-12-09 00:46:08'),
+(2339, 'GET - USERS - all-teachers', '200 - Found and Authorized', NULL, 'success', '2024-12-09 00:46:08'),
+(2340, 'GET - REQUESTS - all-responses-process/6', '404 - Not Found', NULL, 'error', '2024-12-09 00:46:09'),
+(2341, 'getAllProcessResponses', 'Erro ao listar etapas de padrões. Error: Erro interno (404)', 24, 'error', '2024-12-09 00:46:09'),
+(2342, 'getAllProcessComments', 'Erro ao listar etapas de padrões. Error: Erro interno (404)', 24, 'error', '2024-12-09 00:46:11'),
+(2343, 'GET - SYSTEM - logs/last50', '200 - Found and Authorized', NULL, 'success', '2024-12-09 00:46:18'),
+(2344, 'GET - USERS - all-students', '200 - Found and Authorized', NULL, 'success', '2024-12-09 00:55:25'),
+(2345, 'GET - USERS - all-students', '200 - Found and Authorized', NULL, 'success', '2024-12-09 00:57:30'),
+(2346, 'GET - USERS - all-students', '200 - Found and Authorized', NULL, 'success', '2024-12-09 01:04:15'),
+(2347, 'GET - USERS - all-students', '200 - Found and Authorized', NULL, 'success', '2024-12-09 01:05:48'),
+(2348, 'GET - USERS - all-students', '200 - Found and Authorized', NULL, 'success', '2024-12-09 01:10:30'),
+(2349, 'GET - USERS - all-students', '200 - Found and Authorized', NULL, 'success', '2024-12-09 01:10:45'),
+(2350, 'GET - USERS - all-students', '200 - Found and Authorized', NULL, 'success', '2024-12-09 01:12:15'),
+(2351, 'GET - USERS - all-teachers', '200 - Found and Authorized', NULL, 'success', '2024-12-09 01:12:51'),
+(2352, 'GET - USERS - all-students', '200 - Found and Authorized', NULL, 'success', '2024-12-09 01:12:54'),
+(2354, 'GET - USERS - all-students', '200 - Found and Authorized', NULL, 'success', '2024-12-09 01:14:12'),
+(2355, 'GET - USERS - all-teachers', '200 - Found and Authorized', NULL, 'success', '2024-12-09 01:14:18'),
+(2356, 'GET - INTERNSHIP - internships/24', '200 - Found and Authorized', NULL, 'success', '2024-12-09 01:19:20'),
+(2357, 'GET - USERS - all-teachers', '200 - Found and Authorized', NULL, 'success', '2024-12-09 01:20:58'),
+(2358, 'GET - USERS - all-servers', '200 - Found and Authorized', NULL, 'success', '2024-12-09 01:22:05'),
+(2359, 'GET - USERS - all-students', '200 - Found and Authorized', NULL, 'success', '2024-12-09 01:22:45'),
+(2360, 'GET - USERS - all-servers', '200 - Found and Authorized', NULL, 'success', '2024-12-09 01:22:50'),
+(2361, 'GET - USERS - all-admins', '200 - Found and Authorized', NULL, 'success', '2024-12-09 01:22:52'),
+(2362, 'GET - USERS - all-teachers', '200 - Found and Authorized', NULL, 'success', '2024-12-09 01:22:55'),
+(2363, 'GET - USERS - all-students', '200 - Found and Authorized', NULL, 'success', '2024-12-09 01:24:10');
 
 -- --------------------------------------------------------
 
@@ -2053,7 +2852,20 @@ CREATE TABLE `processo` (
 INSERT INTO `processo` (`id`, `titulo`, `descricao`, `identificador`, `aluno`, `data_abertura`, `servidor_responsavel`, `professor_avaliador`, `status`, `justificativa_conclusao`, `data_limite_resolucao`, `tipo_solicitacao`, `etapa_atual`, `numero`) VALUES
 (9, 'Quero pedir uma alteração cadastral', 'Preciso trocar meu GRR no cadastro.', 'SoL2Y5puBW7K4ANYX39Wiumcybf5qPCBGkDSUFUFAHO0d7X3AUldp2IchX1n', 34, '2024-12-06 12:09:02', NULL, NULL, 1, NULL, NULL, 7, 5, 91497504),
 (10, 'Quero pedir uma alteração cadastral', 'Preciso trocar meu GRR no cadastro.', 'Rut9353dFxrk3OFbgdgErBMn5OkUIRY4hrdRmpMylmJ9Q8qAfuZGr1Jczqxm', 34, '2024-12-06 12:09:48', NULL, NULL, 1, NULL, NULL, 7, 5, 69255059),
-(11, 'Quero pedir uma alteração cadastral', 'Preciso trocar meu GRR no cadastro.', 'G5kJphx7cmYJFi0j37UcXKYl4YLdmdgmbJeZ9olNWgeqEoOQfUTjdwJgNXjh', 34, '2024-12-06 12:11:03', NULL, NULL, 1, NULL, NULL, 7, 5, 14640684);
+(11, 'Quero pedir uma alteração cadastral', 'Preciso trocar meu GRR no cadastro.', 'G5kJphx7cmYJFi0j37UcXKYl4YLdmdgmbJeZ9olNWgeqEoOQfUTjdwJgNXjh', 34, '2024-12-06 12:11:03', NULL, NULL, 1, NULL, NULL, 7, 5, 14640684),
+(13, 'Quero trocar minha senha', 'Por favor, gostaria que minha senha fosse novamente redefinida para \"testeDeSenha@999\".', 'dsqwKhoCi65sLVCpTNvqXtxaxJfcWLwMmUFPaYnmEACA5hGMKOdaWeVeGXDu', 31, '2024-12-06 14:34:29', NULL, NULL, 1, NULL, NULL, 7, 5, 36200663),
+(14, 'aaaaaaaa', 'aaaaaaaaa', '5LKbtTJOhRjjF0IPLqfNJMAgb3RQFXeX9fYDtPtfJWn9OGKBpPW99jlX7xcB', 37, '2024-12-06 14:36:56', NULL, NULL, 1, NULL, NULL, 7, 5, 54583495),
+(15, 'aaaaa', 'aaaaaaaaaaaaaaaaaaaaaa', 'uHPtpokYsz2cUwBglLizw2tbGKjuKgTo0WF7dQfhswcRuPWISq85wVjcjD1q', 37, '2024-12-06 17:54:46', NULL, NULL, 1, NULL, NULL, 7, 5, 94764247),
+(16, 'aaaa', 'aaaaaaaaaaaa', 'fBUSAEXDgPyfhg4Wjdl2K12ioRRfAQw3ymja88pCyM59VWiY5qz615Mr9JTL', 37, '2024-12-06 18:08:08', NULL, NULL, 1, NULL, NULL, 7, 5, 10810629),
+(17, 'aaaa', 'aaaaaaaaaaaa', 'p1fXs7GKFEZcST8NOIAC3buoeP77j9Tt89XFgmksYhGthcnTSGJeMHta3rWG', 37, '2024-12-06 18:12:16', NULL, NULL, 1, NULL, NULL, 7, 5, 21575134),
+(18, 'bbbbbbbbbbbbbb', 'aaaaaaaaaaaa', '4hFv1AH9Xsp8l2Ap17a0ex9BG3NDbkmMavIS6ic6LU2cf6LmYweKDXxS2aUO', 37, '2024-12-06 18:20:36', NULL, NULL, 1, NULL, NULL, 7, 5, 798825),
+(19, 'bbbbbbbbbbbbbb', 'aaaaaaaaaaaa', 'CDF6gDSdagz6rdQX7SRigWhOkgjAvRNBXdQWHYWsU7rohiVOhe3mH3yDGTca', 37, '2024-12-06 18:21:33', NULL, NULL, 1, NULL, NULL, 7, 5, 9004783),
+(20, 'cccc', 'ccccccccc', 'JHh1TdQzCnJGOeQCayQkmweSqUF0grIBpITZoW1u2toM0jIzcpEvlaExb4m0', 37, '2024-12-06 18:23:25', NULL, NULL, 1, NULL, NULL, 7, 5, 57960765),
+(21, 'cvxcv', 'xcvxcvxc', 'RTdPbBp34wiyvqE3CM6GzjJDQ6UlPBqp5xaR9t5fPtUYuxgf09Vq92x4eH10', 37, '2024-12-06 18:30:44', NULL, NULL, 1, NULL, NULL, 7, 5, 35251278),
+(22, 'cccc', 'ccccccccc', 'O35U7m1q9UfkSpRRUSsFQauxFJ0EoT6gWUy9TsyBOD9hHrLYxsud5h0z5o9s', 37, '2024-12-06 18:32:50', NULL, NULL, 1, NULL, NULL, 7, 5, 53948612),
+(23, 'fgfdgfdg', 'dfgdfg', 'polMPquR0zR4Pz5f0S1FIQrYk024BUfDFrYL8VpLf3sfVXYmwLTqU8zjaqdU', 37, '2024-12-06 18:38:33', NULL, NULL, 1, NULL, NULL, 7, 5, 34057212),
+(24, 'fgfdgfdg', 'dfgdfg', 'WynBDegA4BVBF8zTUUshBH9gjW2D1HOTL7o5lvSRdYj9efzwAWDQrYZSISbj', 37, '2024-12-06 18:39:47', NULL, NULL, 1, NULL, NULL, 7, 5, 68100381),
+(25, 'asdasda', 'sdasdsa', 'NtC9t9udjX57F3AhtotirM40Yn4M8PWpJAjKlJpUp1ug1S19myAme4GvYclc', 37, '2024-12-06 18:43:05', NULL, NULL, 1, NULL, NULL, 7, 5, 84561721);
 
 -- --------------------------------------------------------
 
@@ -2117,7 +2929,36 @@ INSERT INTO `timelines` (`id`, `usuario`, `referencia`, `titulo`, `descricao`, `
 (12, 34, '34', 'Bem vindo(a) à secretaria online do SEPT!', 'Sua conta foi registrada com sucesso e atrelada ao registro GRR22222', 1, '2024-12-06 11:44:28'),
 (13, 34, '9', 'Chamado registrado', 'O chamado número 91497504 foi registrado com sucesso', 3, '2024-12-06 12:09:02'),
 (14, 34, '10', 'Chamado registrado', 'O chamado número 69255059 foi registrado com sucesso', 3, '2024-12-06 12:09:48'),
-(15, 34, '11', 'Chamado registrado', 'O chamado número 14640684 foi registrado com sucesso', 3, '2024-12-06 12:11:03');
+(15, 34, '11', 'Chamado registrado', 'O chamado número 14640684 foi registrado com sucesso', 3, '2024-12-06 12:11:03'),
+(16, 35, '35', 'Bem vindo(a) à secretaria online do SEPT!', 'Sua conta foi registrada com sucesso e atrelada ao registro GRR55555555', 1, '2024-12-06 14:13:44'),
+(17, 36, '36', 'Bem vindo(a) à secretaria online do SEPT!', 'Sua conta foi registrada com sucesso e atrelada ao registro registroooo', 1, '2024-12-06 14:23:36'),
+(18, 37, '37', 'Bem vindo(a) à secretaria online do SEPT!', 'Sua conta foi registrada com sucesso e atrelada ao registro sdfsdfsdfsdfsdf', 1, '2024-12-06 14:33:37'),
+(19, 31, '13', 'Chamado registrado', 'O chamado número 36200663 foi registrado com sucesso', 3, '2024-12-06 14:34:30'),
+(20, 37, '14', 'Chamado registrado', 'O chamado número 54583495 foi registrado com sucesso', 3, '2024-12-06 14:36:56'),
+(21, 31, '13', 'Novo comentário', 'Um novo comentário foi registrado em seu chamado!', 5, '2024-12-06 14:39:43'),
+(22, 31, '13', 'Novo comentário', 'Um novo comentário foi registrado em seu chamado!', 5, '2024-12-06 14:39:49'),
+(23, 31, '13', 'Novo comentário', 'Um novo comentário foi registrado em seu chamado!', 5, '2024-12-06 14:39:49'),
+(24, 31, '13', 'Novo comentário', 'Um novo comentário foi registrado em seu chamado!', 5, '2024-12-06 14:39:50'),
+(25, 31, '13', 'Novo comentário', 'Um novo comentário foi registrado em seu chamado!', 5, '2024-12-06 14:39:50'),
+(26, 31, '13', 'Novo comentário', 'Um novo comentário foi registrado em seu chamado!', 5, '2024-12-06 14:39:50'),
+(27, 31, '13', 'Novo comentário', 'Um novo comentário foi registrado em seu chamado!', 5, '2024-12-06 14:39:51'),
+(28, 31, '13', 'Novo comentário', 'Um novo comentário foi registrado em seu chamado!', 5, '2024-12-06 14:39:51'),
+(29, 31, '13', 'Novo comentário', 'Um novo comentário foi registrado em seu chamado!', 5, '2024-12-06 14:39:51'),
+(30, 31, '13', 'Novo comentário', 'Um novo comentário foi registrado em seu chamado!', 5, '2024-12-06 14:39:59'),
+(31, 37, '15', 'Chamado registrado', 'O chamado número 94764247 foi registrado com sucesso', 3, '2024-12-06 17:54:46'),
+(32, 37, '16', 'Chamado registrado', 'O chamado número 10810629 foi registrado com sucesso', 3, '2024-12-06 18:08:08'),
+(33, 37, '17', 'Chamado registrado', 'O chamado número 21575134 foi registrado com sucesso', 3, '2024-12-06 18:12:16'),
+(34, 37, '18', 'Chamado registrado', 'O chamado número 798825 foi registrado com sucesso', 3, '2024-12-06 18:20:36'),
+(35, 37, '19', 'Chamado registrado', 'O chamado número 9004783 foi registrado com sucesso', 3, '2024-12-06 18:21:33'),
+(36, 37, '21', 'Chamado registrado', 'O chamado número 35251278 foi registrado com sucesso', 3, '2024-12-06 18:30:44'),
+(37, 37, '22', 'Chamado registrado', 'O chamado número 53948612 foi registrado com sucesso', 3, '2024-12-06 18:32:50'),
+(38, 37, '23', 'Chamado registrado', 'O chamado número 34057212 foi registrado com sucesso', 3, '2024-12-06 18:38:33'),
+(39, 37, '24', 'Chamado registrado', 'O chamado número 68100381 foi registrado com sucesso', 3, '2024-12-06 18:39:47'),
+(40, 37, '25', 'Chamado registrado', 'O chamado número 84561721 foi registrado com sucesso', 3, '2024-12-06 18:43:05'),
+(41, 38, '38', 'Bem vindo(a) à secretaria online do SEPT!', 'Sua conta foi registrada com sucesso e atrelada ao registro GRR20219999', 1, '2024-12-08 22:10:14'),
+(42, 38, '38', 'Alteração de foto de perfil', 'Seu nascimento foi alterado', 16, '2024-12-08 22:10:49'),
+(43, 38, '38', 'Alteração de registro', 'Seu registro foi alterado', 12, '2024-12-08 22:11:08'),
+(44, 38, '38', 'Alteração de sobrenome', 'Seu sobrenome foi alterado', 14, '2024-12-08 22:11:09');
 
 -- --------------------------------------------------------
 
@@ -2147,7 +2988,8 @@ INSERT INTO `tipos_campos` (`id`, `nome`, `etiqueta`, `obrigatorio`, `tipo_dado`
 (12, 'data', 'Data', 0, 3, 1),
 (13, 'horas', 'Carga Horária', 0, 2, 1),
 (14, 'info', 'Dado a ser alterado', 0, 1, 0),
-(15, 'novo', 'Informação atualizada', 0, 1, 0);
+(15, 'novo', 'Informação atualizada', 0, 1, 0),
+(16, 'numero_da_cor', 'telefone', 0, 3, 0);
 
 -- --------------------------------------------------------
 
@@ -2169,7 +3011,8 @@ CREATE TABLE `tipo_solicitacao` (
 
 INSERT INTO `tipo_solicitacao` (`id`, `nome`, `fluxograma`, `hrs_resposta`, `hrs_resolucao`) VALUES
 (6, 'Quebra de requisito para TCC', 'testezin', 20, 60),
-(7, 'Alteração Cadastral', 'ertgttghfdh', 24, 24);
+(7, 'Alteração Cadastral', 'ertgttghfdh', 24, 24),
+(8, 'teste', 'sdsds', 4, 4);
 
 -- --------------------------------------------------------
 
@@ -2203,12 +3046,16 @@ INSERT INTO `usuario` (`id`, `email`, `senha`, `registro`, `nome`, `sobrenome`, 
 (26, 'proffdgdfgessor@hotmail.com', '$2a$10$ORd9E9JYh6MAwKwE3T.Ouug1Lzsw8Pk/etp0aOvOLCpclfAk9y4Na', 'PRF20df193759', 'Lucas', 'Professor', '1999-07-28', '2024-10-23 17:48:20', 3, '', 1, NULL, 1),
 (27, 'perussilucas@icloud.com', '$2a$10$fjQuLnfRhxUzDo2a/VgtA.cTEpKqTccTBvxNtcuD2ckqyWRqDkzoS', 'GRR20193750', 'Lucas', 'Perussi', '1999-07-28', '2024-10-23 18:10:46', 2, '', 1, NULL, 1),
 (28, 'math_fiori@hotmail.com', '$2a$10$XU4cEHvwbZFeEySvWWjyUutl75liJOFo5doQpY39vbMWnAqK0GW..', 'GRR20211618', 'Matheus', 'Fiori', '2002-01-22', '2024-11-04 18:43:21', 9, '', 1, NULL, 1),
-(29, 'ruan.cunha@ufpr.br', '$2a$10$aNT72/DE7Gnamng/CFeVoevaG4R75s8qB8G6xQrTdrC61DZDi1qjO', 'GRR20220043', 'Ruan', 'Brito', '1998-09-06', '2024-11-09 14:13:41', 9, 'src/img/avatars/art-2.webp', 1, NULL, 1),
-(30, 'aluno@teste.com', '$2a$10$aFYDeiE90EKcoSkmWBhm5uZDytJxsR6U1zUs2um3zdGqI1s1mJgbK', 'GRR20291618', 'Matheus', 'Aluno', '2002-01-22', '2024-11-11 23:16:02', 1, '', 1, NULL, 1),
-(31, 'aluno@aluno.com', '$2a$10$HqgwgJnAHGF2Z2k//NaXDuY95HeiVOv6tPpQwcxqdiGm9uEF27lFu', 'grr99999999', 'Aluno', 'da Silva', '2001-07-28', '2024-11-22 11:08:01', 1, '', 1, NULL, 1),
+(29, 'ruan.cunha@ufpr.br', '$2a$10$aNT72/DE7Gnamng/CFeVoevaG4R75s8qB8G6xQrTdrC61DZDi1qjO', 'GRR20220043', 'Ruan', 'Brito', '1998-09-06', '2024-11-09 14:13:41', 3, 'src/img/avatars/art-2.webp', 1, NULL, 1),
+(30, 'aluno@teste.com', '$2a$10$aFYDeiE90EKcoSkmWBhm5uZDytJxsR6U1zUs2um3zdGqI1s1mJgbK', 'GRR20291618', 'Matheus', 'Aluno', '2002-01-22', '2024-11-11 23:16:02', 0, '', 1, NULL, 1),
+(31, 'aluno@aluno.com', '$2a$10$HqgwgJnAHGF2Z2k//NaXDuY95HeiVOv6tPpQwcxqdiGm9uEF27lFu', 'grr99999999', 'Aluno', 'da Silva', '2001-07-28', '2024-11-22 11:08:01', 1, 'src/img/avatars/art-1.webp', 1, NULL, 1),
 (32, 'teste-erro@erro.com', '$2a$10$TeJTdc/BF7B38I3RCMj2W.UR9JLuo8PlJkrUxiPkihHjUR/BT3sdG', '343434343', 'Teste', 'de Erro', '1999-07-28', '2024-11-30 11:33:52', 1, '', 1, NULL, 1),
 (33, 'teste@testou.com', '$2a$10$uy4NmZfRcVkiX.r.IxT5UeDmL858NbhT92RNIQiuox.EVDuJdH4FG', 'grr2019000', 'Matheus', 'teste', '1991-11-11', '2024-12-06 10:43:29', 1, '', 1, NULL, 1),
-(34, 'aluno@lucas.com', '$2a$10$bjDakVrLxe63H6kfRqbi..ikwcszgGDYlHs0.HV10bac6hBh7I6kC', 'grr22222', 'Lucas', 'Perussi de Oliveira', '1999-07-28', '2024-12-06 11:44:28', 1, 'src/img/avatars/pessoa-1.webp', 1, NULL, 1);
+(34, 'aluno@lucas.com', '$2a$10$bjDakVrLxe63H6kfRqbi..ikwcszgGDYlHs0.HV10bac6hBh7I6kC', 'grr22222', 'Lucas', 'Perussi de Oliveira', '1999-07-28', '2024-12-06 11:44:28', 1, 'src/img/avatars/pessoa-1.webp', 1, NULL, 1),
+(35, 'matheus.fiori@ufpr.br', '$2a$10$lOkSdMUo7LIUAi//nwwGn.XdNFcl4NjQJ1rPQ98O.cVPKIQtHa/su', 'grr55555555', 'teteu', 'teteu', '2002-01-22', '2024-12-06 14:13:44', 1, '', 1, NULL, 1),
+(36, 'cadastro@fix.com', '$2a$10$t4Nwc25qbmZ4EDMkoGIG2eCyQnGM3ZHvBpyKSazHnCZatahJx58YG', 'registroooo', 'Lucas', 'Cadastro', '1999-07-28', '2024-12-06 14:23:36', 1, 'src/img/avatars/pessoa-8.webp', 1, NULL, 1),
+(37, 'xcxzc@hotmail.com', '$2a$10$CilGySIu7YSfibh.fPCmr.PlbDZKUdiPtyReo7CHSD3XK9bfPiFlq', 'sdfsdfsdfsdfsdf', 'Lucas', 'Perussi', '1999-07-28', '2024-12-06 14:33:37', 1, 'src/img/avatars/art-2.webp', 1, NULL, 1),
+(38, 'mathfiori00@gmail.com', '$2a$10$3wHkQ6P6AlxGdqDHCVzsuOOL3dJojQ1sKioUnDKaEhy0GfuEcscIK', 'grr20219998', 'Matheus', 'Correa', '2002-01-22', '2024-12-08 22:10:14', 1, 'src/img/avatars/pessoa-1.webp', 1, NULL, 1);
 
 --
 -- Indexes for dumped tables
@@ -2308,7 +3155,8 @@ ALTER TABLE `logs`
 ALTER TABLE `mural`
   ADD PRIMARY KEY (`id`),
   ADD KEY `autor` (`autor`),
-  ADD KEY `curso_alvo` (`curso_alvo`);
+  ADD KEY `curso_alvo` (`curso_alvo`),
+  ADD KEY `identificador` (`identificador`);
 
 --
 -- Indexes for table `opcoes_de_campos`
@@ -2383,7 +3231,7 @@ ALTER TABLE `usuario`
 -- AUTO_INCREMENT for table `campos_solicitacao`
 --
 ALTER TABLE `campos_solicitacao`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `codigos`
@@ -2395,7 +3243,7 @@ ALTER TABLE `codigos`
 -- AUTO_INCREMENT for table `comentarios`
 --
 ALTER TABLE `comentarios`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `curso`
@@ -2407,7 +3255,7 @@ ALTER TABLE `curso`
 -- AUTO_INCREMENT for table `empresas`
 --
 ALTER TABLE `empresas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `enum_etapas`
@@ -2419,7 +3267,7 @@ ALTER TABLE `enum_etapas`
 -- AUTO_INCREMENT for table `estagio`
 --
 ALTER TABLE `estagio`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `etapas_processo`
@@ -2431,25 +3279,25 @@ ALTER TABLE `etapas_processo`
 -- AUTO_INCREMENT for table `fila_emails`
 --
 ALTER TABLE `fila_emails`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `horas_formativas`
 --
 ALTER TABLE `horas_formativas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `logins`
 --
 ALTER TABLE `logins`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=156;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=182;
 
 --
 -- AUTO_INCREMENT for table `logs`
 --
 ALTER TABLE `logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1628;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2364;
 
 --
 -- AUTO_INCREMENT for table `mural`
@@ -2467,7 +3315,7 @@ ALTER TABLE `opcoes_de_campos`
 -- AUTO_INCREMENT for table `processo`
 --
 ALTER TABLE `processo`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT for table `respostas_processo`
@@ -2485,25 +3333,25 @@ ALTER TABLE `tentativas_login`
 -- AUTO_INCREMENT for table `timelines`
 --
 ALTER TABLE `timelines`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
 
 --
 -- AUTO_INCREMENT for table `tipos_campos`
 --
 ALTER TABLE `tipos_campos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `tipo_solicitacao`
 --
 ALTER TABLE `tipo_solicitacao`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 
 --
 -- Constraints for dumped tables
