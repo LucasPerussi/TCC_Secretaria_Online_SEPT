@@ -4,7 +4,7 @@ export const Timeline = async (titulo: string, referencia: string, descricao: st
     const registerTimeline = await prisma.timelines.create({
         data: {
             titulo,
-            referencia,
+            referencia:String(referencia),
             descricao,
             tipo,
             usuario
