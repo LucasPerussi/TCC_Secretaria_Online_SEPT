@@ -6,6 +6,7 @@ import { numberGenerator } from '../../middlewares/randomCodeGenerator';
 import { addMonths, parseISO } from 'date-fns';
 import { CheckUserExists } from '../../middlewares/checkUserExists';
 import { CheckEmpresaExists } from '../../middlewares/checkCompanyExists';
+import { CompanyTypeInfo } from '../../enum/empresas';
 
 
 export const routerCompanies = Router()
@@ -81,6 +82,10 @@ routerCompanies.get('/all', validateJWT, async (req, res) => {
         Logger(`GET - COMPANY - all-companies`, `Error fetching companies. ${JSON.stringify(error)} `, "error");
         res.status(500).json({ message: 'Error fetching companies.' });
     }
+});
+
+routerCompanies.get('/types', validateJWT, async (req, res) => {
+    res.status(200).send(JSON.stringify(CompanyTypeInfo));
 });
 
 
