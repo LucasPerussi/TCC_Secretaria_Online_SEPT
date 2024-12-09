@@ -672,6 +672,56 @@ routerRequests.get('/processes-student/:student', validateJWT, async (req, res) 
     }
 });
 
+routerRequests.get('/all', validateJWT, async (req, res) => {
+    try {
+        const steps = await prisma.processo.findMany({
+            include: {
+                usuario_processo_alunoTousuario: {
+                    select: {
+                        nome: true,
+                        sobrenome: true,
+                        email: true,
+                        foto: true,
+                    },
+                },
+                usuario_processo_professor_avaliadorTousuario: {
+                    select: {
+                        nome: true,
+                        sobrenome: true,
+                        email: true,
+                        foto: true,
+                    },
+                },
+                usuario_processo_servidor_responsavelTousuario: {
+                    select: {
+                        nome: true,
+                        sobrenome: true,
+                        email: true,
+                        foto: true,
+                    },
+                },
+                tipo_solicitacao_processo_tipo_solicitacaoTotipo_solicitacao: {
+                    select: {
+                        nome: true,
+                    },
+                }
+            }
+
+        })
+
+        if (steps) {
+            Logger(`GET - REQUESTS - /all`, `200 - Found and Authorized`, "success");
+            res.status(200).send(JSON.stringify(steps));
+        } else {
+            Logger(`GET - REQUESTS - /all`, `404 - Not Found`, "error");
+            res.status(404).send({ error: true, message: 'Field type not found!' });
+        }
+    } catch (error) {
+        Logger(`GET - REQUESTS - /all`, `Error fetching requested Field type. ${JSON.stringify(error)} `, "error");
+        res.status(500).json({ message: 'Error fetching requested Field type.' });
+    }
+});
+
 routerRequests.get('/processes-student-open/:student', validateJWT, async (req, res) => {
     const aluno = Number(req.params.student);
     try {
@@ -943,7 +993,7 @@ routerRequests.get('/processes-servidor-open/:servidor', validateJWT, async (req
 routerRequests.get('/res-servidor-open/:servidor', validateJWT, async (req, res) => {
     const servidor = Number(req.params.servidor);
     try {
-        const steps = await prisma.processo.findFirst({
+        const steps = await prisma.processo.findMany({
             where: {
                 servidor_responsavel: servidor,
                 status: 1
@@ -996,7 +1046,7 @@ routerRequests.get('/res-servidor-open/:servidor', validateJWT, async (req, res)
 
 routerRequests.get('/all-without-server', validateJWT, async (req, res) => {
     try {
-        const steps = await prisma.processo.findFirst({
+        const steps = await prisma.processo.findMany({
             where: {
                 servidor_responsavel: null,
             },
@@ -1048,7 +1098,7 @@ routerRequests.get('/all-without-server', validateJWT, async (req, res) => {
 
 routerRequests.get('/all-without-professor', validateJWT, async (req, res) => {
     try {
-        const steps = await prisma.processo.findFirst({
+        const steps = await prisma.processo.findMany({
             where: {
                 professor_avaliador: null,
             },
