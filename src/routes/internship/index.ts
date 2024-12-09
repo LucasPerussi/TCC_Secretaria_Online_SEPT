@@ -88,6 +88,10 @@ routerInternship.get('/id/:id', validateJWT, async (req, res) => {
         const internshipData = await prisma.estagio.findFirst({
             where: {
                 id: id
+            }, 
+            include: {
+                usuario_estagio_alunoTousuario: true,
+                empresas: true
             }
         })
 
@@ -112,7 +116,11 @@ routerInternship.get('/recent-by-student/:id', validateJWT, async (req, res) => 
                 aluno: id
             },
             orderBy: {
-                id: 'desc' 
+                id: 'desc'
+            },
+            include: {
+                usuario_estagio_alunoTousuario: true,
+                empresas: true
             }
         });
 
@@ -157,10 +165,15 @@ routerInternship.get('/code/:code', validateJWT, async (req, res) => {
         const internshipData = await prisma.estagio.findFirst({
             where: {
                 codigo_estagio: code
+            },
+            include: {
+                usuario_estagio_alunoTousuario: true,
+                empresas: true
             }
         })
 
         if (internshipData) {
+
             Logger(`GET - INTERNSHIP - code/${code}`, `200 - Found and Authorized`, "success");
             res.status(200).send(JSON.stringify(internshipData));
         } else {
@@ -205,10 +218,25 @@ routerInternship.patch('/update-status', validateJWT, async (req, res) => {
 
 routerInternship.get('/all-internships', validateJWT, async (req, res) => {
     try {
-        const internshipData = await prisma.estagio.findMany()
-        if (internshipData) {
+        const InternshipData = await prisma.estagio.findMany({
+            include: {
+                usuario_estagio_alunoTousuario: true,
+                empresas: true
+            }
+        }
+
+        )
+        if (InternshipData) {
+            const response = InternshipData.map((internship) => {
+                const { senha, ...alunoSemSenha } = internship.usuario_estagio_alunoTousuario || {};
+                return {
+                    ...internship,
+                    usuario_estagio_alunoTousuario: alunoSemSenha
+                };
+            });
+
             Logger(`GET - INTERNSHIPS - all-internships`, `200 - Found and Authorized`, "success");
-            res.status(200).send(JSON.stringify(internshipData));
+            res.status(200).send(JSON.stringify(response));
         } else {
             Logger(`GET - INTERNSHIPS - all-internships`, `404 - Not Found`, "error");
             res.status(404).send({ error: true, message: 'No internship found' });
@@ -225,12 +253,24 @@ routerInternship.get('/all/:user', validateJWT, async (req, res) => {
         const InternshipData = await prisma.estagio.findMany({
             where: {
                 aluno: user
+            },
+            include: {
+                usuario_estagio_alunoTousuario: true,
+                empresas: true
             }
         })
 
         if (InternshipData) {
+            const response = InternshipData.map((internship) => {
+                const { senha, ...alunoSemSenha } = internship.usuario_estagio_alunoTousuario || {};
+                return {
+                    ...internship,
+                    usuario_estagio_alunoTousuario: alunoSemSenha
+                };
+            });
+
             Logger(`GET - INTERNSHIP - internships/${user}`, `200 - Found and Authorized`, "success");
-            res.status(200).send(JSON.stringify(InternshipData));
+            res.status(200).send(JSON.stringify(response));
         } else {
             Logger(`GET - INTERNSHIP - internships/${user}`, `404 - Not Found`, "error");
             res.status(404).send({ error: true, message: 'Internship not found!' });
@@ -241,8 +281,35 @@ routerInternship.get('/all/:user', validateJWT, async (req, res) => {
     }
 });
 
+routerInternship.get('/all', validateJWT, async (req, res) => {
+    try {
+        const InternshipData = await prisma.estagio.findMany({
+            include: {
+                usuario_estagio_alunoTousuario: true,
+                empresas: true
+            }
+        });
 
+        if (InternshipData) {
+            const response = InternshipData.map((internship) => {
+                const { senha, ...alunoSemSenha } = internship.usuario_estagio_alunoTousuario || {};
+                return {
+                    ...internship,
+                    usuario_estagio_alunoTousuario: alunoSemSenha
+                };
+            });
 
+            Logger(`GET - INTERNSHIP - internships`, `200 - Found and Authorized`, "success");
+            res.status(200).json(response);
+        } else {
+            Logger(`GET - INTERNSHIP - internships`, `404 - Not Found`, "error");
+            res.status(404).send({ error: true, message: 'Internship not found!' });
+        }
+    } catch (error) {
+        Logger(`GET - INTERNSHIP - internships`, `Error fetching internships. ${JSON.stringify(error)} `, "error");
+        res.status(500).json({ message: 'Error fetching internships.' });
+    }
+});
 
 
 
