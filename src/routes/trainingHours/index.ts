@@ -19,6 +19,36 @@ export const routerTrainingHours = Router();
 
 routerTrainingHours.get('/', (req, res) => res.send('API de Registro de horas formativas'));
 
+routerTrainingHours.post('/validate', validateJWT, async (req, res) => {
+    const { justificativa, horas_concedidas, validador, identificador} = req.body;
+
+    try {
+        const newRecord = await prisma.horas_formativas.update({
+            where: {
+               id: Number(identificador), 
+            },
+            data: {
+                horas_concedidas: Number(horas_concedidas),
+                servidor_avaliador: Number(validador),
+                status_aprovacao:2,
+                justificativa
+            },
+        });
+        Logger('POST - HOURS - /validate', `200 - New training hours record created: ID ${newRecord.id}`, 'success');
+        res.status(200).send({ message: 'Horas formativas criadas com sucesso!', record: newRecord });
+    } catch (error) {
+        if (error instanceof Error) {
+            Logger('POST - HOURS - /validate', `500 - Error creating training hours record: ${error.message}`, 'error');
+            console.error('Error creating training hours record:', error.message);
+            res.status(500).send({ message: 'Erro ao criar horas formativas', error: error.message });
+        } else {
+            Logger('POST - HOURS - /validate', '500 - Unknown error occurred', 'error');
+            console.error('Unknown error:', error);
+            res.status(500).send({ message: 'Erro ao criar horas formativas', error: 'Unknown error' });
+        }
+    }
+});
+
 routerTrainingHours.post('/new', validateJWT, async (req, res) => {
     const { aluno, data_evento, horas_solicitadas, descricao, tipo, comprovante }: CreateHours = req.body;
 
@@ -79,7 +109,6 @@ routerTrainingHours.delete('/id/:id', validateJWT, async (req, res) => {
 routerTrainingHours.get('/types', validateJWT, async (req, res) => {
     res.json(AtividadeFormativaTypeInfo);
 });
-
 
 routerTrainingHours.get('/percentual-por-tipo/:aluno', validateJWT, async (req, res) => {
     const aluno = Number(req.params.aluno);
@@ -210,7 +239,6 @@ routerTrainingHours.get('/horas-aluno/:aluno', validateJWT, async (req, res) => 
     }
 });
 
-
 routerTrainingHours.get('/types/:id', validateJWT, (req, res) => {
     const { id } = req.params;
 
@@ -231,16 +259,37 @@ routerTrainingHours.get('/types/:id', validateJWT, (req, res) => {
 routerTrainingHours.get('/id/:id', validateJWT, async (req, res) => {
     const recordId = Number(req.params.id);
     try {
-        const recordData = await prisma.horas_formativas.findFirst({
+        // Busca o registro pelo ID
+        const record = await prisma.horas_formativas.findFirst({
             where: { id: recordId },
+            include: {
+                usuario_horas_formativas_alunoTousuario: {
+                    select: {
+                        nome: true,
+                        sobrenome: true,
+                        email: true,
+                        foto: true
+                    }
+                }
+            }
         });
 
-        if (recordData) {
+        if (record) {
+            // Converte o tipo para AtividadeFormativaTypes
+            const tipo = record.tipo as unknown as AtividadeFormativaTypes;
+            const tipoInfo = AtividadeFormativaTypeInfo[tipo] || null;
+
+            // Enriquecer o registro com informações adicionais
+            const enrichedRecord = {
+                ...record,
+                tipoInfo
+            };
+
             Logger(`GET - HOURS - id/${recordId}`, `200 - Found and Authorized`, 'success');
-            res.status(200).json(recordData);
+            res.status(200).json(enrichedRecord);
         } else {
             Logger(`GET - HOURS - id/${recordId}`, `404 - Not Found`, 'error');
-            res.status(404).send({ error: true, message: 'Registro não encontrado!' });
+            res.status(404).json({ error: true, message: 'Registro não encontrado!' });
         }
     } catch (error) {
         if (error instanceof Error) {
@@ -293,3 +342,50 @@ routerTrainingHours.get('/all', validateJWT, async (req, res) => {
         }
     }
 });
+
+routerTrainingHours.get('/all-pending', validateJWT, async (req, res) => {
+    try {
+        const records = await prisma.horas_formativas.findMany({
+            where: {
+                status_aprovacao: 1
+            },
+            include: {
+                usuario_horas_formativas_alunoTousuario: {
+                    select: {
+                        nome: true,
+                        sobrenome: true,
+                        email: true,
+                        foto: true
+                    }
+                }
+            }
+        });
+
+        // Adiciona as características do tipo ao retorno
+        const enrichedRecords = records.map(record => {
+            // Converte o tipo para AtividadeFormativaTypes de forma explícita
+            const tipo = record.tipo as unknown as AtividadeFormativaTypes;
+
+            const tipoInfo = AtividadeFormativaTypeInfo[tipo];
+            return {
+                ...record,
+                tipoInfo: tipoInfo || null // Inclui informações do tipo ou null caso não encontrado
+            };
+        });
+
+        Logger('GET - HOURS - all-pending', `200 - Records fetched successfully`, 'success');
+        res.status(200).json(enrichedRecords);
+    } catch (error) {
+        if (error instanceof Error) {
+            Logger('GET - HOURS - all-pending', `500 - Error fetching records: ${error.message}`, 'error');
+            res.status(500).json({ message: 'Erro ao buscar os registros.', error: error.message });
+        } else {
+            Logger('GET - HOURS - all-pending', '500 - Unknown error occurred', 'error');
+            res.status(500).json({ message: 'Erro ao buscar os registros.', error: 'Unknown error' });
+        }
+    }
+});
+
+
+
+// status aprovação 1 - pendente - 2 - avaliado

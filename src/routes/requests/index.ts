@@ -314,10 +314,10 @@ routerRequests.patch('/add-server', validateJWT, async (req, res) => {
 
         const field = await prisma.processo.update({
             where: {
-                identificador
+                id: Number(identificador),
             },
             data: {
-                servidor_responsavel: servidor,
+                servidor_responsavel: Number(servidor),
             }
         });
         Timeline("Servidor UFPR Vinculado", identificador, "Um servidor já acolheu sua solicitação", Number(TimelineTypes.NEW_SERVER), Number(processoExistente.aluno))
@@ -621,7 +621,7 @@ routerRequests.get('/processes-without-server', validateJWT, async (req, res) =>
 routerRequests.get('/processes-student/:student', validateJWT, async (req, res) => {
     const aluno = Number(req.params.student);
     try {
-        const steps = await prisma.processo.findFirst({
+        const steps = await prisma.processo.findMany({
             where: {
                 aluno: aluno
             },
@@ -675,10 +675,41 @@ routerRequests.get('/processes-student/:student', validateJWT, async (req, res) 
 routerRequests.get('/processes-student-open/:student', validateJWT, async (req, res) => {
     const aluno = Number(req.params.student);
     try {
-        const steps = await prisma.processo.findFirst({
+        const steps = await prisma.processo.findMany({
             where: {
                 aluno: aluno,
                 status: 1
+            },
+            include: {
+                usuario_processo_alunoTousuario: {
+                    select: {
+                        nome: true,
+                        sobrenome: true,
+                        email: true,
+                        foto: true,
+                    },
+                },
+                usuario_processo_professor_avaliadorTousuario: {
+                    select: {
+                        nome: true,
+                        sobrenome: true,
+                        email: true,
+                        foto: true,
+                    },
+                },
+                usuario_processo_servidor_responsavelTousuario: {
+                    select: {
+                        nome: true,
+                        sobrenome: true,
+                        email: true,
+                        foto: true,
+                    },
+                },
+                tipo_solicitacao_processo_tipo_solicitacaoTotipo_solicitacao: {
+                    select: {
+                        nome: true,
+                    },
+                }
             }
         })
 
@@ -698,9 +729,40 @@ routerRequests.get('/processes-student-open/:student', validateJWT, async (req, 
 routerRequests.get('/processes-professor/:professor', validateJWT, async (req, res) => {
     const professor = Number(req.params.professor);
     try {
-        const steps = await prisma.processo.findFirst({
+        const steps = await prisma.processo.findMany({
             where: {
                 professor_avaliador: professor
+            },
+            include: {
+                usuario_processo_alunoTousuario: {
+                    select: {
+                        nome: true,
+                        sobrenome: true,
+                        email: true,
+                        foto: true,
+                    },
+                },
+                usuario_processo_professor_avaliadorTousuario: {
+                    select: {
+                        nome: true,
+                        sobrenome: true,
+                        email: true,
+                        foto: true,
+                    },
+                },
+                usuario_processo_servidor_responsavelTousuario: {
+                    select: {
+                        nome: true,
+                        sobrenome: true,
+                        email: true,
+                        foto: true,
+                    },
+                },
+                tipo_solicitacao_processo_tipo_solicitacaoTotipo_solicitacao: {
+                    select: {
+                        nome: true,
+                    },
+                }
             }
         })
 
@@ -720,10 +782,41 @@ routerRequests.get('/processes-professor/:professor', validateJWT, async (req, r
 routerRequests.get('/processes-professor-open/:professor', validateJWT, async (req, res) => {
     const professor = Number(req.params.professor);
     try {
-        const steps = await prisma.processo.findFirst({
+        const steps = await prisma.processo.findMany({
             where: {
                 professor_avaliador: professor,
                 status: 1
+            },
+            include: {
+                usuario_processo_alunoTousuario: {
+                    select: {
+                        nome: true,
+                        sobrenome: true,
+                        email: true,
+                        foto: true,
+                    },
+                },
+                usuario_processo_professor_avaliadorTousuario: {
+                    select: {
+                        nome: true,
+                        sobrenome: true,
+                        email: true,
+                        foto: true,
+                    },
+                },
+                usuario_processo_servidor_responsavelTousuario: {
+                    select: {
+                        nome: true,
+                        sobrenome: true,
+                        email: true,
+                        foto: true,
+                    },
+                },
+                tipo_solicitacao_processo_tipo_solicitacaoTotipo_solicitacao: {
+                    select: {
+                        nome: true,
+                    },
+                }
             }
         })
 
@@ -743,9 +836,40 @@ routerRequests.get('/processes-professor-open/:professor', validateJWT, async (r
 routerRequests.get('/processes-servidor/:servidor', validateJWT, async (req, res) => {
     const servidor = Number(req.params.servidor);
     try {
-        const steps = await prisma.processo.findFirst({
+        const steps = await prisma.processo.findMany({
             where: {
                 servidor_responsavel: servidor
+            },
+            include: {
+                usuario_processo_alunoTousuario: {
+                    select: {
+                        nome: true,
+                        sobrenome: true,
+                        email: true,
+                        foto: true,
+                    },
+                },
+                usuario_processo_professor_avaliadorTousuario: {
+                    select: {
+                        nome: true,
+                        sobrenome: true,
+                        email: true,
+                        foto: true,
+                    },
+                },
+                usuario_processo_servidor_responsavelTousuario: {
+                    select: {
+                        nome: true,
+                        sobrenome: true,
+                        email: true,
+                        foto: true,
+                    },
+                },
+                tipo_solicitacao_processo_tipo_solicitacaoTotipo_solicitacao: {
+                    select: {
+                        nome: true,
+                    },
+                }
             }
         })
 
@@ -765,10 +889,41 @@ routerRequests.get('/processes-servidor/:servidor', validateJWT, async (req, res
 routerRequests.get('/processes-servidor-open/:servidor', validateJWT, async (req, res) => {
     const servidor = Number(req.params.servidor);
     try {
-        const steps = await prisma.processo.findFirst({
+        const steps = await prisma.processo.findMany({
             where: {
                 servidor_responsavel: servidor,
                 status: 1
+            },
+            include: {
+                usuario_processo_alunoTousuario: {
+                    select: {
+                        nome: true,
+                        sobrenome: true,
+                        email: true,
+                        foto: true,
+                    },
+                },
+                usuario_processo_professor_avaliadorTousuario: {
+                    select: {
+                        nome: true,
+                        sobrenome: true,
+                        email: true,
+                        foto: true,
+                    },
+                },
+                usuario_processo_servidor_responsavelTousuario: {
+                    select: {
+                        nome: true,
+                        sobrenome: true,
+                        email: true,
+                        foto: true,
+                    },
+                },
+                tipo_solicitacao_processo_tipo_solicitacaoTotipo_solicitacao: {
+                    select: {
+                        nome: true,
+                    },
+                }
             }
         })
 
@@ -792,6 +947,37 @@ routerRequests.get('/res-servidor-open/:servidor', validateJWT, async (req, res)
             where: {
                 servidor_responsavel: servidor,
                 status: 1
+            },
+            include: {
+                usuario_processo_alunoTousuario: {
+                    select: {
+                        nome: true,
+                        sobrenome: true,
+                        email: true,
+                        foto: true,
+                    },
+                },
+                usuario_processo_professor_avaliadorTousuario: {
+                    select: {
+                        nome: true,
+                        sobrenome: true,
+                        email: true,
+                        foto: true,
+                    },
+                },
+                usuario_processo_servidor_responsavelTousuario: {
+                    select: {
+                        nome: true,
+                        sobrenome: true,
+                        email: true,
+                        foto: true,
+                    },
+                },
+                tipo_solicitacao_processo_tipo_solicitacaoTotipo_solicitacao: {
+                    select: {
+                        nome: true,
+                    },
+                }
             }
         })
 
@@ -813,6 +999,37 @@ routerRequests.get('/all-without-server', validateJWT, async (req, res) => {
         const steps = await prisma.processo.findFirst({
             where: {
                 servidor_responsavel: null,
+            },
+            include: {
+                usuario_processo_alunoTousuario: {
+                    select: {
+                        nome: true,
+                        sobrenome: true,
+                        email: true,
+                        foto: true,
+                    },
+                },
+                usuario_processo_professor_avaliadorTousuario: {
+                    select: {
+                        nome: true,
+                        sobrenome: true,
+                        email: true,
+                        foto: true,
+                    },
+                },
+                usuario_processo_servidor_responsavelTousuario: {
+                    select: {
+                        nome: true,
+                        sobrenome: true,
+                        email: true,
+                        foto: true,
+                    },
+                },
+                tipo_solicitacao_processo_tipo_solicitacaoTotipo_solicitacao: {
+                    select: {
+                        nome: true,
+                    },
+                }
             }
         })
 
@@ -834,6 +1051,37 @@ routerRequests.get('/all-without-professor', validateJWT, async (req, res) => {
         const steps = await prisma.processo.findFirst({
             where: {
                 professor_avaliador: null,
+            },
+            include: {
+                usuario_processo_alunoTousuario: {
+                    select: {
+                        nome: true,
+                        sobrenome: true,
+                        email: true,
+                        foto: true,
+                    },
+                },
+                usuario_processo_professor_avaliadorTousuario: {
+                    select: {
+                        nome: true,
+                        sobrenome: true,
+                        email: true,
+                        foto: true,
+                    },
+                },
+                usuario_processo_servidor_responsavelTousuario: {
+                    select: {
+                        nome: true,
+                        sobrenome: true,
+                        email: true,
+                        foto: true,
+                    },
+                },
+                tipo_solicitacao_processo_tipo_solicitacaoTotipo_solicitacao: {
+                    select: {
+                        nome: true,
+                    },
+                }
             }
         })
 

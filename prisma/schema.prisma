@@ -136,6 +136,7 @@ model horas_formativas {
   comprovante                                          String?  @db.Text
   horas_solicitadas                                    Float
   horas_concedidas                                     Float?
+  justificativa                                        String?  @db.VarChar(255)
   usuario_horas_formativas_alunoTousuario              usuario  @relation("horas_formativas_alunoTousuario", fields: [aluno], references: [id], onUpdate: Restrict, map: "horas_formativas_ibfk_1")
   usuario_horas_formativas_servidor_avaliadorTousuario usuario? @relation("horas_formativas_servidor_avaliadorTousuario", fields: [servidor_avaliador], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "horas_formativas_ibfk_2")
 

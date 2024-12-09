@@ -20,14 +20,14 @@ export const AtividadeFormativaTypeInfo: Record<AtividadeFormativaTypes, Ativida
         nome: "Participação em Seminário, Congresso, Encontro, Fórum e Workshops",
         maxHoras: 30,
         cargaHoraria: 20,
-        cor: "#FF5733",
+        cor: "#ff5c33",
     },
     [AtividadeFormativaTypes.PARTICIPACAO_PALESTRA]: {
         id: 2,
         nome: "Participação em Palestra",
         maxHoras: 30,
         cargaHoraria: 4,
-        cor: "#33FF57",
+        cor: "#218d72",
     },
     [AtividadeFormativaTypes.ORGANIZACAO_SEMINARIO]: {
         id: 3,
@@ -48,6 +48,6 @@ export const AtividadeFormativaTypeInfo: Record<AtividadeFormativaTypes, Ativida
         nome: "Estágio não obrigatório remunerado (ENOR), trabalho voluntário qualificado ou trabalho remunerado (todos na área de atuação do curso)",
         maxHoras: 30,
         cargaHoraria: 0,
-        cor: "#33FFF5",
+        cor: "#5f33ff",
     },
 };
